@@ -13,7 +13,9 @@
 // permissions and limitations under the License.
 //
 
+#if (TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE)
 #import <UIKit/UIKit.h>
+#endif
 #import <AWSCore/AWSCore.h>
 #import "AWSS3Service.h"
 #import "AWSS3TransferUtilityTasks.h"
@@ -394,9 +396,11 @@ FOUNDATION_EXPORT NSString *const AWSS3TransferUtilityURLSessionDidBecomeInvalid
  @param identifier        The identifier of the URL session requiring attention.
  @param completionHandler The completion handler to call when you finish processing the events.
  */
+#if (TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE)
 + (void)interceptApplication:(UIApplication *)application
 handleEventsForBackgroundURLSession:(NSString *)identifier
            completionHandler:(void (^)(void))completionHandler;
+#endif
 
 
 /**

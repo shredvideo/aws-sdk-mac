@@ -1996,6 +1996,7 @@ internalDictionaryToAddSubTaskTo: (NSMutableDictionary *) internalDictionaryToAd
     return [self.taskDictionary objectForKey:@(downloadTask.taskIdentifier)];
 }
 
+#if (TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE)
 #pragma mark - UIApplicationDelegate interceptor
 
 + (void)interceptApplication:(UIApplication *)application
@@ -2018,6 +2019,7 @@ handleEventsForBackgroundURLSession:(NSString *)identifier
         }
     }
 }
+#endif
 
 #pragma mark - NSURLSessionDelegate
 

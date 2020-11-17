@@ -14,7 +14,9 @@
 //
 
 #import "AWSClientContext.h"
+#if (TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE)
 #import <UIKit/UIKit.h>
+#endif
 #import <sys/types.h>
 #import <sys/sysctl.h>
 #import "AWSUICKeyChainStore.h"
@@ -66,12 +68,20 @@ static NSString *const AWSClientContextKeychainInstallationIdKey = @"com.amazona
         _appName = appName ? appName : AWSClientContextUnknown;
 
         //Device Details
+#if (TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE)
         UIDevice* currentDevice = [UIDevice currentDevice];
         NSString *autoUpdatingLoaleIdentifier = [[NSLocale autoupdatingCurrentLocale] localeIdentifier];
         _devicePlatform = [currentDevice systemName] ? [currentDevice systemName] : AWSClientContextUnknown;
         _deviceModel = [currentDevice model] ? [currentDevice model] : AWSClientContextUnknown;
-        _deviceModelVersion = [self deviceModelVersionCode] ? [self deviceModelVersionCode] : AWSClientContextUnknown;
+        _deviceModelVersion = [self deviceMachineVersionCode] ? [self deviceMachineVersionCode] : AWSClientContextUnknown;
         _devicePlatformVersion = [currentDevice systemVersion] ? [currentDevice systemVersion] : AWSClientContextUnknown;
+#else
+        NSString *autoUpdatingLoaleIdentifier = [[NSLocale autoupdatingCurrentLocale] localeIdentifier];
+        _devicePlatform = @"macOS";
+        _deviceModel = [self deviceModelVersionCode] ? [self deviceModelVersionCode] : AWSClientContextUnknown;
+        _deviceModelVersion = [self deviceModelVersionCode] ? [self deviceModelVersionCode] : AWSClientContextUnknown;
+        _devicePlatformVersion = [[[NSProcessInfo processInfo] operatingSystemVersionString] stringByReplacingOccurrencesOfString:@" " withString:@"-"];
+#endif
         _deviceManufacturer = @"apple";
         _deviceLocale = autoUpdatingLoaleIdentifier ? autoUpdatingLoaleIdentifier : AWSClientContextUnknown;
 
@@ -182,13 +192,29 @@ static NSString *const AWSClientContextKeychainInstallationIdKey = @"com.amazona
 #pragma mark - Internal
 
 //For model translations see http://theiphonewiki.com/wiki/Models
-- (NSString *)deviceModelVersionCode {
+- (NSString *)deviceMachineVersionCode {
     int mib[2];
     size_t len;
     char *machine;
 
     mib[0] = CTL_HW;
     mib[1] = HW_MACHINE;
+    sysctl(mib, 2, NULL, &len, NULL, 0);
+    machine = malloc(len);
+    sysctl(mib, 2, machine, &len, NULL, 0);
+
+    NSString *modelVersionCode = [NSString stringWithCString:machine encoding:NSASCIIStringEncoding];
+    free(machine);
+    return modelVersionCode;
+}
+
+- (NSString *)deviceModelVersionCode {
+    int mib[2];
+    size_t len;
+    char *machine;
+
+    mib[0] = CTL_HW;
+    mib[1] = HW_MODEL;
     sysctl(mib, 2, NULL, &len, NULL, 0);
     machine = malloc(len);
     sysctl(mib, 2, machine, &len, NULL, 0);
