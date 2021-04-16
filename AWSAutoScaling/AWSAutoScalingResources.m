@@ -1,5 +1,5 @@
 //
-// Copyright 2010-2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// Copyright 2010-2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License").
 // You may not use this file except in compliance with the License.
@@ -97,7 +97,7 @@
         {\"shape\":\"ResourceContentionFault\"},\
         {\"shape\":\"ServiceLinkedRoleFailure\"}\
       ],\
-      \"documentation\":\"<p>Attaches one or more target groups to the specified Auto Scaling group.</p> <p>To describe the target groups for an Auto Scaling group, call the <a>DescribeLoadBalancerTargetGroups</a> API. To detach the target group from the Auto Scaling group, call the <a>DetachLoadBalancerTargetGroups</a> API.</p> <p>With Application Load Balancers and Network Load Balancers, instances are registered as targets with a target group. With Classic Load Balancers, instances are registered with the load balancer. For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-load-balancer-asg.html\\\">Attaching a load balancer to your Auto Scaling group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>\"\
+      \"documentation\":\"<p>Attaches one or more target groups to the specified Auto Scaling group.</p> <p>This operation is used with the following load balancer types: </p> <ul> <li> <p> Application Load Balancer - Operates at the application layer (layer 7) and supports HTTP and HTTPS. </p> </li> <li> <p> Network Load Balancer - Operates at the transport layer (layer 4) and supports TCP, TLS, and UDP. </p> </li> <li> <p> Gateway Load Balancer - Operates at the network layer (layer 3).</p> </li> </ul> <p>To describe the target groups for an Auto Scaling group, call the <a>DescribeLoadBalancerTargetGroups</a> API. To detach the target group from the Auto Scaling group, call the <a>DetachLoadBalancerTargetGroups</a> API.</p> <p>For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-load-balancer.html\\\">Elastic Load Balancing and Amazon EC2 Auto Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>. </p>\"\
     },\
     \"AttachLoadBalancers\":{\
       \"name\":\"AttachLoadBalancers\",\
@@ -114,7 +114,7 @@
         {\"shape\":\"ResourceContentionFault\"},\
         {\"shape\":\"ServiceLinkedRoleFailure\"}\
       ],\
-      \"documentation\":\"<note> <p>To attach an Application Load Balancer or a Network Load Balancer, use the <a>AttachLoadBalancerTargetGroups</a> API operation instead.</p> </note> <p>Attaches one or more Classic Load Balancers to the specified Auto Scaling group. Amazon EC2 Auto Scaling registers the running instances with these Classic Load Balancers.</p> <p>To describe the load balancers for an Auto Scaling group, call the <a>DescribeLoadBalancers</a> API. To detach the load balancer from the Auto Scaling group, call the <a>DetachLoadBalancers</a> API.</p> <p>For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-load-balancer-asg.html\\\">Attaching a load balancer to your Auto Scaling group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>\"\
+      \"documentation\":\"<note> <p>To attach an Application Load Balancer, Network Load Balancer, or Gateway Load Balancer, use the <a>AttachLoadBalancerTargetGroups</a> API operation instead.</p> </note> <p>Attaches one or more Classic Load Balancers to the specified Auto Scaling group. Amazon EC2 Auto Scaling registers the running instances with these Classic Load Balancers.</p> <p>To describe the load balancers for an Auto Scaling group, call the <a>DescribeLoadBalancers</a> API. To detach the load balancer from the Auto Scaling group, call the <a>DetachLoadBalancers</a> API.</p> <p>For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-load-balancer.html\\\">Elastic Load Balancing and Amazon EC2 Auto Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>. </p>\"\
     },\
     \"BatchDeleteScheduledAction\":{\
       \"name\":\"BatchDeleteScheduledAction\",\
@@ -148,7 +148,7 @@
         {\"shape\":\"LimitExceededFault\"},\
         {\"shape\":\"ResourceContentionFault\"}\
       ],\
-      \"documentation\":\"<p>Creates or updates one or more scheduled scaling actions for an Auto Scaling group. If you leave a parameter unspecified when updating a scheduled scaling action, the corresponding value remains unchanged.</p>\"\
+      \"documentation\":\"<p>Creates or updates one or more scheduled scaling actions for an Auto Scaling group.</p>\"\
     },\
     \"CancelInstanceRefresh\":{\
       \"name\":\"CancelInstanceRefresh\",\
@@ -166,7 +166,7 @@
         {\"shape\":\"ResourceContentionFault\"},\
         {\"shape\":\"ActiveInstanceRefreshNotFoundFault\"}\
       ],\
-      \"documentation\":\"<p>Cancels an instance refresh operation in progress. Cancellation does not roll back any replacements that have already been completed, but it prevents new replacements from being started. </p> <p>For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-instance-refresh.html\\\">Replacing Auto Scaling Instances Based on an Instance Refresh</a>.</p>\"\
+      \"documentation\":\"<p>Cancels an instance refresh operation in progress. Cancellation does not roll back any replacements that have already been completed, but it prevents new replacements from being started. </p> <p>For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-instance-refresh.html\\\">Replacing Auto Scaling instances based on an instance refresh</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>\"\
     },\
     \"CompleteLifecycleAction\":{\
       \"name\":\"CompleteLifecycleAction\",\
@@ -197,7 +197,7 @@
         {\"shape\":\"ResourceContentionFault\"},\
         {\"shape\":\"ServiceLinkedRoleFailure\"}\
       ],\
-      \"documentation\":\"<p>Creates an Auto Scaling group with the specified name and attributes. </p> <p>If you exceed your maximum limit of Auto Scaling groups, the call fails. To query this limit, call the <a>DescribeAccountLimits</a> API. For information about updating this limit, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html\\\">Amazon EC2 Auto Scaling service quotas</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>For introductory exercises for creating an Auto Scaling group, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/GettingStartedTutorial.html\\\">Getting started with Amazon EC2 Auto Scaling</a> and <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-register-lbs-with-asg.html\\\">Tutorial: Set up a scaled and load-balanced application</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>. For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html\\\">Auto Scaling groups</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>Every Auto Scaling group has three size parameters (<code>DesiredCapacity</code>, <code>MaxSize</code>, and <code>MinSize</code>). Usually, you set these sizes based on a specific number of instances. However, if you configure a mixed instances policy that defines weights for the instance types, you must specify these sizes with the same units that you use for weighting instances.</p>\"\
+      \"documentation\":\"<p> <b>We strongly recommend using a launch template when calling this operation to ensure full functionality for Amazon EC2 Auto Scaling and Amazon EC2.</b> </p> <p>Creates an Auto Scaling group with the specified name and attributes. </p> <p>If you exceed your maximum limit of Auto Scaling groups, the call fails. To query this limit, call the <a>DescribeAccountLimits</a> API. For information about updating this limit, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html\\\">Amazon EC2 Auto Scaling service quotas</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>For introductory exercises for creating an Auto Scaling group, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/GettingStartedTutorial.html\\\">Getting started with Amazon EC2 Auto Scaling</a> and <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-register-lbs-with-asg.html\\\">Tutorial: Set up a scaled and load-balanced application</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>. For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html\\\">Auto Scaling groups</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>Every Auto Scaling group has three size parameters (<code>DesiredCapacity</code>, <code>MaxSize</code>, and <code>MinSize</code>). Usually, you set these sizes based on a specific number of instances. However, if you configure a mixed instances policy that defines weights for the instance types, you must specify these sizes with the same units that you use for weighting instances.</p>\"\
     },\
     \"CreateLaunchConfiguration\":{\
       \"name\":\"CreateLaunchConfiguration\",\
@@ -321,6 +321,25 @@
       ],\
       \"documentation\":\"<p>Deletes the specified tags.</p>\"\
     },\
+    \"DeleteWarmPool\":{\
+      \"name\":\"DeleteWarmPool\",\
+      \"http\":{\
+        \"method\":\"POST\",\
+        \"requestUri\":\"/\"\
+      },\
+      \"input\":{\"shape\":\"DeleteWarmPoolType\"},\
+      \"output\":{\
+        \"shape\":\"DeleteWarmPoolAnswer\",\
+        \"resultWrapper\":\"DeleteWarmPoolResult\"\
+      },\
+      \"errors\":[\
+        {\"shape\":\"LimitExceededFault\"},\
+        {\"shape\":\"ResourceContentionFault\"},\
+        {\"shape\":\"ScalingActivityInProgressFault\"},\
+        {\"shape\":\"ResourceInUseFault\"}\
+      ],\
+      \"documentation\":\"<p>Deletes the warm pool for the specified Auto Scaling group.</p>\"\
+    },\
     \"DescribeAccountLimits\":{\
       \"name\":\"DescribeAccountLimits\",\
       \"http\":{\
@@ -415,7 +434,7 @@
         {\"shape\":\"InvalidNextToken\"},\
         {\"shape\":\"ResourceContentionFault\"}\
       ],\
-      \"documentation\":\"<p>Describes one or more instance refreshes.</p> <p>You can determine the status of a request by looking at the <code>Status</code> parameter. The following are the possible statuses: </p> <ul> <li> <p> <code>Pending</code> - The request was created, but the operation has not started.</p> </li> <li> <p> <code>InProgress</code> - The operation is in progress.</p> </li> <li> <p> <code>Successful</code> - The operation completed successfully.</p> </li> <li> <p> <code>Failed</code> - The operation failed to complete. You can troubleshoot using the status reason and the scaling activities. </p> </li> <li> <p> <code>Cancelling</code> - An ongoing operation is being cancelled. Cancellation does not roll back any replacements that have already been completed, but it prevents new replacements from being started. </p> </li> <li> <p> <code>Cancelled</code> - The operation is cancelled. </p> </li> </ul> <p>For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-instance-refresh.html\\\">Replacing Auto Scaling Instances Based on an Instance Refresh</a>.</p>\"\
+      \"documentation\":\"<p>Describes one or more instance refreshes.</p> <p>You can determine the status of a request by looking at the <code>Status</code> parameter. The following are the possible statuses: </p> <ul> <li> <p> <code>Pending</code> - The request was created, but the operation has not started.</p> </li> <li> <p> <code>InProgress</code> - The operation is in progress.</p> </li> <li> <p> <code>Successful</code> - The operation completed successfully.</p> </li> <li> <p> <code>Failed</code> - The operation failed to complete. You can troubleshoot using the status reason and the scaling activities. </p> </li> <li> <p> <code>Cancelling</code> - An ongoing operation is being cancelled. Cancellation does not roll back any replacements that have already been completed, but it prevents new replacements from being started. </p> </li> <li> <p> <code>Cancelled</code> - The operation is cancelled. </p> </li> </ul> <p>For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-instance-refresh.html\\\">Replacing Auto Scaling instances based on an instance refresh</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>\"\
     },\
     \"DescribeLaunchConfigurations\":{\
       \"name\":\"DescribeLaunchConfigurations\",\
@@ -495,7 +514,7 @@
       \"errors\":[\
         {\"shape\":\"ResourceContentionFault\"}\
       ],\
-      \"documentation\":\"<p>Describes the load balancers for the specified Auto Scaling group.</p> <p>This operation describes only Classic Load Balancers. If you have Application Load Balancers or Network Load Balancers, use the <a>DescribeLoadBalancerTargetGroups</a> API instead.</p>\"\
+      \"documentation\":\"<p>Describes the load balancers for the specified Auto Scaling group.</p> <p>This operation describes only Classic Load Balancers. If you have Application Load Balancers, Network Load Balancers, or Gateway Load Balancers, use the <a>DescribeLoadBalancerTargetGroups</a> API instead.</p>\"\
     },\
     \"DescribeMetricCollectionTypes\":{\
       \"name\":\"DescribeMetricCollectionTypes\",\
@@ -562,7 +581,7 @@
         {\"shape\":\"InvalidNextToken\"},\
         {\"shape\":\"ResourceContentionFault\"}\
       ],\
-      \"documentation\":\"<p>Describes one or more scaling activities for the specified Auto Scaling group.</p>\"\
+      \"documentation\":\"<p>Describes one or more scaling activities for the specified Auto Scaling group.</p> <p>To view the scaling activities from the Amazon EC2 Auto Scaling console, choose the <b>Activity</b> tab of the Auto Scaling group. When scaling events occur, you see scaling activity messages in the <b>Activity history</b>. For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-verify-scaling-activity.html\\\">Verifying a scaling activity for an Auto Scaling group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>\"\
     },\
     \"DescribeScalingProcessTypes\":{\
       \"name\":\"DescribeScalingProcessTypes\",\
@@ -628,6 +647,24 @@
       ],\
       \"documentation\":\"<p>Describes the termination policies supported by Amazon EC2 Auto Scaling.</p> <p>For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html\\\">Controlling which Auto Scaling instances terminate during scale in</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>\"\
     },\
+    \"DescribeWarmPool\":{\
+      \"name\":\"DescribeWarmPool\",\
+      \"http\":{\
+        \"method\":\"POST\",\
+        \"requestUri\":\"/\"\
+      },\
+      \"input\":{\"shape\":\"DescribeWarmPoolType\"},\
+      \"output\":{\
+        \"shape\":\"DescribeWarmPoolAnswer\",\
+        \"resultWrapper\":\"DescribeWarmPoolResult\"\
+      },\
+      \"errors\":[\
+        {\"shape\":\"InvalidNextToken\"},\
+        {\"shape\":\"LimitExceededFault\"},\
+        {\"shape\":\"ResourceContentionFault\"}\
+      ],\
+      \"documentation\":\"<p>Describes a warm pool and its instances.</p>\"\
+    },\
     \"DetachInstances\":{\
       \"name\":\"DetachInstances\",\
       \"http\":{\
@@ -674,7 +711,7 @@
       \"errors\":[\
         {\"shape\":\"ResourceContentionFault\"}\
       ],\
-      \"documentation\":\"<p>Detaches one or more Classic Load Balancers from the specified Auto Scaling group.</p> <p>This operation detaches only Classic Load Balancers. If you have Application Load Balancers or Network Load Balancers, use the <a>DetachLoadBalancerTargetGroups</a> API instead.</p> <p>When you detach a load balancer, it enters the <code>Removing</code> state while deregistering the instances in the group. When all instances are deregistered, then you can no longer describe the load balancer using the <a>DescribeLoadBalancers</a> API call. The instances remain running.</p>\"\
+      \"documentation\":\"<p>Detaches one or more Classic Load Balancers from the specified Auto Scaling group.</p> <p>This operation detaches only Classic Load Balancers. If you have Application Load Balancers, Network Load Balancers, or Gateway Load Balancers, use the <a>DetachLoadBalancerTargetGroups</a> API instead.</p> <p>When you detach a load balancer, it enters the <code>Removing</code> state while deregistering the instances in the group. When all instances are deregistered, then you can no longer describe the load balancer using the <a>DescribeLoadBalancers</a> API call. The instances remain running.</p>\"\
     },\
     \"DisableMetricsCollection\":{\
       \"name\":\"DisableMetricsCollection\",\
@@ -806,7 +843,24 @@
         {\"shape\":\"LimitExceededFault\"},\
         {\"shape\":\"ResourceContentionFault\"}\
       ],\
-      \"documentation\":\"<p>Creates or updates a scheduled scaling action for an Auto Scaling group. If you leave a parameter unspecified when updating a scheduled scaling action, the corresponding value remains unchanged.</p> <p>For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/schedule_time.html\\\">Scheduled scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>\"\
+      \"documentation\":\"<p>Creates or updates a scheduled scaling action for an Auto Scaling group.</p> <p>For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/schedule_time.html\\\">Scheduled scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>\"\
+    },\
+    \"PutWarmPool\":{\
+      \"name\":\"PutWarmPool\",\
+      \"http\":{\
+        \"method\":\"POST\",\
+        \"requestUri\":\"/\"\
+      },\
+      \"input\":{\"shape\":\"PutWarmPoolType\"},\
+      \"output\":{\
+        \"shape\":\"PutWarmPoolAnswer\",\
+        \"resultWrapper\":\"PutWarmPoolResult\"\
+      },\
+      \"errors\":[\
+        {\"shape\":\"LimitExceededFault\"},\
+        {\"shape\":\"ResourceContentionFault\"}\
+      ],\
+      \"documentation\":\"<p>Adds a warm pool to the specified Auto Scaling group. A warm pool is a pool of pre-initialized EC2 instances that sits alongside the Auto Scaling group. Whenever your application needs to scale out, the Auto Scaling group can draw on the warm pool to meet its new desired capacity. For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-warm-pools.html\\\">Warm pools for Amazon EC2 Auto Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>This operation must be called from the Region in which the Auto Scaling group was created. This operation cannot be called on an Auto Scaling group that has a mixed instances policy or a launch template or launch configuration that requests Spot Instances.</p> <p>You can view the instances in the warm pool using the <a>DescribeWarmPool</a> API call. If you are no longer using a warm pool, you can delete it by calling the <a>DeleteWarmPool</a> API.</p>\"\
     },\
     \"RecordLifecycleActionHeartbeat\":{\
       \"name\":\"RecordLifecycleActionHeartbeat\",\
@@ -822,7 +876,7 @@
       \"errors\":[\
         {\"shape\":\"ResourceContentionFault\"}\
       ],\
-      \"documentation\":\"<p>Records a heartbeat for the lifecycle action associated with the specified token or instance. This extends the timeout by the length of time defined using the <a>PutLifecycleHook</a> API call.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p> <b>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</b> </p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action.</p> </li> </ol> <p>For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroupLifecycle.html\\\">Auto Scaling lifecycle</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>\"\
+      \"documentation\":\"<p>Records a heartbeat for the lifecycle action associated with the specified token or instance. This extends the timeout by the length of time defined using the <a>PutLifecycleHook</a> API call.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p> <b>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</b> </p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action.</p> </li> </ol> <p>For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html\\\">Amazon EC2 Auto Scaling lifecycle hooks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>\"\
     },\
     \"ResumeProcesses\":{\
       \"name\":\"ResumeProcesses\",\
@@ -877,7 +931,7 @@
         {\"shape\":\"LimitExceededFault\"},\
         {\"shape\":\"ResourceContentionFault\"}\
       ],\
-      \"documentation\":\"<p>Updates the instance protection settings of the specified instances.</p> <p>For more information about preventing instances that are part of an Auto Scaling group from terminating on scale in, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html#instance-protection\\\">Instance scale-in protection</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>If you exceed your maximum limit of instance IDs, which is 50 per Auto Scaling group, the call fails.</p>\"\
+      \"documentation\":\"<p>Updates the instance protection settings of the specified instances. This operation cannot be called on instances in a warm pool.</p> <p>For more information about preventing instances that are part of an Auto Scaling group from terminating on scale in, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html#instance-protection\\\">Instance scale-in protection</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>If you exceed your maximum limit of instance IDs, which is 50 per Auto Scaling group, the call fails.</p>\"\
     },\
     \"StartInstanceRefresh\":{\
       \"name\":\"StartInstanceRefresh\",\
@@ -895,7 +949,7 @@
         {\"shape\":\"ResourceContentionFault\"},\
         {\"shape\":\"InstanceRefreshInProgressFault\"}\
       ],\
-      \"documentation\":\"<p>Starts a new instance refresh operation, which triggers a rolling replacement of all previously launched instances in the Auto Scaling group with a new group of instances.</p> <p>If successful, this call creates a new instance refresh request with a unique ID that you can use to track its progress. To query its status, call the <a>DescribeInstanceRefreshes</a> API. To describe the instance refreshes that have already run, call the <a>DescribeInstanceRefreshes</a> API. To cancel an instance refresh operation in progress, use the <a>CancelInstanceRefresh</a> API. </p> <p>For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-instance-refresh.html\\\">Replacing Auto Scaling Instances Based on an Instance Refresh</a>.</p>\"\
+      \"documentation\":\"<p>Starts a new instance refresh operation, which triggers a rolling replacement of previously launched instances in the Auto Scaling group with a new group of instances.</p> <p>If successful, this call creates a new instance refresh request with a unique ID that you can use to track its progress. To query its status, call the <a>DescribeInstanceRefreshes</a> API. To describe the instance refreshes that have already run, call the <a>DescribeInstanceRefreshes</a> API. To cancel an instance refresh operation in progress, use the <a>CancelInstanceRefresh</a> API. </p> <p>For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-instance-refresh.html\\\">Replacing Auto Scaling instances based on an instance refresh</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>\"\
     },\
     \"SuspendProcesses\":{\
       \"name\":\"SuspendProcesses\",\
@@ -925,7 +979,7 @@
         {\"shape\":\"ScalingActivityInProgressFault\"},\
         {\"shape\":\"ResourceContentionFault\"}\
       ],\
-      \"documentation\":\"<p>Terminates the specified instance and optionally adjusts the desired group size. </p> <p>This call simply makes a termination request. The instance is not terminated immediately. When an instance is terminated, the instance status changes to <code>terminated</code>. You can't connect to or start an instance after you've terminated it.</p> <p>If you do not specify the option to decrement the desired capacity, Amazon EC2 Auto Scaling launches instances to replace the ones that are terminated. </p> <p>By default, Amazon EC2 Auto Scaling balances instances across all Availability Zones. If you decrement the desired capacity, your Auto Scaling group can become unbalanced between Availability Zones. Amazon EC2 Auto Scaling tries to rebalance the group, and rebalancing might terminate instances in other zones. For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/auto-scaling-benefits.html#AutoScalingBehavior.InstanceUsage\\\">Rebalancing activities</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>\"\
+      \"documentation\":\"<p>Terminates the specified instance and optionally adjusts the desired group size. This operation cannot be called on instances in a warm pool.</p> <p>This call simply makes a termination request. The instance is not terminated immediately. When an instance is terminated, the instance status changes to <code>terminated</code>. You can't connect to or start an instance after you've terminated it.</p> <p>If you do not specify the option to decrement the desired capacity, Amazon EC2 Auto Scaling launches instances to replace the ones that are terminated. </p> <p>By default, Amazon EC2 Auto Scaling balances instances across all Availability Zones. If you decrement the desired capacity, your Auto Scaling group can become unbalanced between Availability Zones. Amazon EC2 Auto Scaling tries to rebalance the group, and rebalancing might terminate instances in other zones. For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/auto-scaling-benefits.html#AutoScalingBehavior.InstanceUsage\\\">Rebalancing activities</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>\"\
     },\
     \"UpdateAutoScalingGroup\":{\
       \"name\":\"UpdateAutoScalingGroup\",\
@@ -939,7 +993,7 @@
         {\"shape\":\"ResourceContentionFault\"},\
         {\"shape\":\"ServiceLinkedRoleFailure\"}\
       ],\
-      \"documentation\":\"<p>Updates the configuration for the specified Auto Scaling group.</p> <p>To update an Auto Scaling group, specify the name of the group and the parameter that you want to change. Any parameters that you don't specify are not changed by this update request. The new settings take effect on any scaling activities after this call returns. </p> <p>If you associate a new launch configuration or template with an Auto Scaling group, all new instances will get the updated configuration. Existing instances continue to run with the configuration that they were originally launched with. When you update a group to specify a mixed instances policy instead of a launch configuration or template, existing instances may be replaced to match the new purchasing options that you specified in the policy. For example, if the group currently has 100% On-Demand capacity and the policy specifies 50% Spot capacity, this means that half of your instances will be gradually terminated and relaunched as Spot Instances. When replacing instances, Amazon EC2 Auto Scaling launches new instances before terminating the old ones, so that updating your group does not compromise the performance or availability of your application.</p> <p>Note the following about changing <code>DesiredCapacity</code>, <code>MaxSize</code>, or <code>MinSize</code>:</p> <ul> <li> <p>If a scale-in activity occurs as a result of a new <code>DesiredCapacity</code> value that is lower than the current size of the group, the Auto Scaling group uses its termination policy to determine which instances to terminate.</p> </li> <li> <p>If you specify a new value for <code>MinSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MinSize</code> is larger than the current size of the group, this sets the group's <code>DesiredCapacity</code> to the new <code>MinSize</code> value.</p> </li> <li> <p>If you specify a new value for <code>MaxSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MaxSize</code> is smaller than the current size of the group, this sets the group's <code>DesiredCapacity</code> to the new <code>MaxSize</code> value.</p> </li> </ul> <p>To see which parameters have been set, call the <a>DescribeAutoScalingGroups</a> API. To view the scaling policies for an Auto Scaling group, call the <a>DescribePolicies</a> API. If the group has scaling policies, you can update them by calling the <a>PutScalingPolicy</a> API.</p>\"\
+      \"documentation\":\"<p> <b>We strongly recommend that all Auto Scaling groups use launch templates to ensure full functionality for Amazon EC2 Auto Scaling and Amazon EC2.</b> </p> <p>Updates the configuration for the specified Auto Scaling group.</p> <p>To update an Auto Scaling group, specify the name of the group and the parameter that you want to change. Any parameters that you don't specify are not changed by this update request. The new settings take effect on any scaling activities after this call returns. </p> <p>If you associate a new launch configuration or template with an Auto Scaling group, all new instances will get the updated configuration. Existing instances continue to run with the configuration that they were originally launched with. When you update a group to specify a mixed instances policy instead of a launch configuration or template, existing instances may be replaced to match the new purchasing options that you specified in the policy. For example, if the group currently has 100% On-Demand capacity and the policy specifies 50% Spot capacity, this means that half of your instances will be gradually terminated and relaunched as Spot Instances. When replacing instances, Amazon EC2 Auto Scaling launches new instances before terminating the old ones, so that updating your group does not compromise the performance or availability of your application.</p> <p>Note the following about changing <code>DesiredCapacity</code>, <code>MaxSize</code>, or <code>MinSize</code>:</p> <ul> <li> <p>If a scale-in activity occurs as a result of a new <code>DesiredCapacity</code> value that is lower than the current size of the group, the Auto Scaling group uses its termination policy to determine which instances to terminate.</p> </li> <li> <p>If you specify a new value for <code>MinSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MinSize</code> is larger than the current size of the group, this sets the group's <code>DesiredCapacity</code> to the new <code>MinSize</code> value.</p> </li> <li> <p>If you specify a new value for <code>MaxSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MaxSize</code> is smaller than the current size of the group, this sets the group's <code>DesiredCapacity</code> to the new <code>MaxSize</code> value.</p> </li> </ul> <p>To see which parameters have been set, call the <a>DescribeAutoScalingGroups</a> API. To view the scaling policies for an Auto Scaling group, call the <a>DescribePolicies</a> API. If the group has scaling policies, you can update them by calling the <a>PutScalingPolicy</a> API.</p>\"\
     }\
   },\
   \"shapes\":{\
@@ -1023,6 +1077,14 @@
         \"Details\":{\
           \"shape\":\"XmlString\",\
           \"documentation\":\"<p>The details about the activity.</p>\"\
+        },\
+        \"AutoScalingGroupState\":{\
+          \"shape\":\"AutoScalingGroupState\",\
+          \"documentation\":\"<p>The state of the Auto Scaling group, which is either <code>InService</code> or <code>Deleted</code>.</p>\"\
+        },\
+        \"AutoScalingGroupARN\":{\
+          \"shape\":\"ResourceName\",\
+          \"documentation\":\"<p>The Amazon Resource Name (ARN) of the Auto Scaling group.</p>\"\
         }\
       },\
       \"documentation\":\"<p>Describes scaling activity, which is a long-running process that represents a change to your Auto Scaling group, such as changing its size or replacing an instance.</p>\"\
@@ -1104,7 +1166,7 @@
           \"documentation\":\"<p>The IDs of the instances. You can specify up to 20 instances.</p>\"\
         },\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
         }\
       }\
@@ -1122,12 +1184,12 @@
       ],\
       \"members\":{\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
         },\
         \"TargetGroupARNs\":{\
           \"shape\":\"TargetGroupARNs\",\
-          \"documentation\":\"<p>The Amazon Resource Names (ARN) of the target groups. You can specify up to 10 target groups.</p>\"\
+          \"documentation\":\"<p>The Amazon Resource Names (ARN) of the target groups. You can specify up to 10 target groups. To get the ARN of a target group, use the Elastic Load Balancing <a href=\\\"https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_DescribeTargetGroups.html\\\">DescribeTargetGroups</a> API operation.</p>\"\
         }\
       }\
     },\
@@ -1144,7 +1206,7 @@
       ],\
       \"members\":{\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
         },\
         \"LoadBalancerNames\":{\
@@ -1273,6 +1335,14 @@
         \"CapacityRebalance\":{\
           \"shape\":\"CapacityRebalanceEnabled\",\
           \"documentation\":\"<p>Indicates whether Capacity Rebalancing is enabled.</p>\"\
+        },\
+        \"WarmPoolConfiguration\":{\
+          \"shape\":\"WarmPoolConfiguration\",\
+          \"documentation\":\"<p>The warm pool for the group.</p>\"\
+        },\
+        \"WarmPoolSize\":{\
+          \"shape\":\"WarmPoolSize\",\
+          \"documentation\":\"<p>The current size of the warm pool.</p>\"\
         }\
       },\
       \"documentation\":\"<p>Describes an Auto Scaling group.</p>\"\
@@ -1282,7 +1352,7 @@
     \"AutoScalingGroupMinSize\":{\"type\":\"integer\"},\
     \"AutoScalingGroupNames\":{\
       \"type\":\"list\",\
-      \"member\":{\"shape\":\"ResourceName\"}\
+      \"member\":{\"shape\":\"XmlStringMaxLen255\"}\
     },\
     \"AutoScalingGroupNamesType\":{\
       \"type\":\"structure\",\
@@ -1300,6 +1370,11 @@
           \"documentation\":\"<p>The maximum number of items to return with this call. The default value is <code>50</code> and the maximum value is <code>100</code>.</p>\"\
         }\
       }\
+    },\
+    \"AutoScalingGroupState\":{\
+      \"type\":\"string\",\
+      \"max\":32,\
+      \"min\":1\
     },\
     \"AutoScalingGroups\":{\
       \"type\":\"list\",\
@@ -1348,7 +1423,7 @@
         },\
         \"LifecycleState\":{\
           \"shape\":\"XmlStringMaxLen32\",\
-          \"documentation\":\"<p>The lifecycle state for the instance.</p>\"\
+          \"documentation\":\"<p>The lifecycle state for the instance. The <code>Quarantined</code> state is not used. For information about lifecycle states, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroupLifecycle.html\\\">Instance lifecycle</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>. </p> <p>Valid Values: <code>Pending</code> | <code>Pending:Wait</code> | <code>Pending:Proceed</code> | <code>Quarantined</code> | <code>InService</code> | <code>Terminating</code> | <code>Terminating:Wait</code> | <code>Terminating:Proceed</code> | <code>Terminated</code> | <code>Detaching</code> | <code>Detached</code> | <code>EnteringStandby</code> | <code>Standby</code> | <code>Warmed:Pending</code> | <code>Warmed:Pending:Wait</code> | <code>Warmed:Pending:Proceed</code> | <code>Warmed:Terminating</code> | <code>Warmed:Terminating:Wait</code> | <code>Warmed:Terminating:Proceed</code> | <code>Warmed:Terminated</code> | <code>Warmed:Stopped</code> | <code>Warmed:Running</code> </p>\"\
         },\
         \"HealthStatus\":{\
           \"shape\":\"XmlStringMaxLen32\",\
@@ -1396,8 +1471,7 @@
     },\
     \"AvailabilityZones\":{\
       \"type\":\"list\",\
-      \"member\":{\"shape\":\"XmlStringMaxLen255\"},\
-      \"min\":1\
+      \"member\":{\"shape\":\"XmlStringMaxLen255\"}\
     },\
     \"BatchDeleteScheduledActionAnswer\":{\
       \"type\":\"structure\",\
@@ -1416,7 +1490,7 @@
       ],\
       \"members\":{\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
         },\
         \"ScheduledActionNames\":{\
@@ -1442,7 +1516,7 @@
       ],\
       \"members\":{\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
         },\
         \"ScheduledUpdateGroupActions\":{\
@@ -1515,6 +1589,15 @@
       }\
     },\
     \"CapacityRebalanceEnabled\":{\"type\":\"boolean\"},\
+    \"CheckpointDelay\":{\
+      \"type\":\"integer\",\
+      \"max\":172800,\
+      \"min\":0\
+    },\
+    \"CheckpointPercentages\":{\
+      \"type\":\"list\",\
+      \"member\":{\"shape\":\"NonZeroIntPercent\"}\
+    },\
     \"ClassicLinkVPCSecurityGroups\":{\
       \"type\":\"list\",\
       \"member\":{\"shape\":\"XmlStringMaxLen255\"}\
@@ -1568,16 +1651,16 @@
           \"documentation\":\"<p>The name of the Auto Scaling group. This name must be unique per Region per account.</p>\"\
         },\
         \"LaunchConfigurationName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the launch configuration to use to launch instances. </p> <p>Conditional: You must specify either a launch template (<code>LaunchTemplate</code> or <code>MixedInstancesPolicy</code>) or a launch configuration (<code>LaunchConfigurationName</code> or <code>InstanceId</code>).</p>\"\
         },\
         \"LaunchTemplate\":{\
           \"shape\":\"LaunchTemplateSpecification\",\
-          \"documentation\":\"<p>Parameters used to specify the <a href=\\\"https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-launchtemplate.html\\\">launch template</a> and version to use to launch instances. </p> <p>Conditional: You must specify either a launch template (<code>LaunchTemplate</code> or <code>MixedInstancesPolicy</code>) or a launch configuration (<code>LaunchConfigurationName</code> or <code>InstanceId</code>).</p> <note> <p>The launch template that is specified must be configured for use with an Auto Scaling group. For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/create-launch-template.html\\\">Creating a launch template for an Auto Scaling group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> </note>\"\
+          \"documentation\":\"<p>Parameters used to specify the launch template and version to use to launch instances. </p> <p>Conditional: You must specify either a launch template (<code>LaunchTemplate</code> or <code>MixedInstancesPolicy</code>) or a launch configuration (<code>LaunchConfigurationName</code> or <code>InstanceId</code>).</p> <note> <p>The launch template that is specified must be configured for use with an Auto Scaling group. For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/create-launch-template.html\\\">Creating a launch template for an Auto Scaling group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> </note>\"\
         },\
         \"MixedInstancesPolicy\":{\
           \"shape\":\"MixedInstancesPolicy\",\
-          \"documentation\":\"<p>An embedded object that specifies a mixed instances policy. The required parameters must be specified. If optional parameters are unspecified, their default values are used.</p> <p>The policy includes parameters that not only define the distribution of On-Demand Instances and Spot Instances, the maximum price to pay for Spot Instances, and how the Auto Scaling group allocates instance types to fulfill On-Demand and Spot capacities, but also the parameters that specify the instance configuration informationâthe launch template and instance types. The policy can also include a weight for each instance type. For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-purchase-options.html\\\">Auto Scaling groups with multiple instance types and purchase options</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>Conditional: You must specify either a launch template (<code>LaunchTemplate</code> or <code>MixedInstancesPolicy</code>) or a launch configuration (<code>LaunchConfigurationName</code> or <code>InstanceId</code>).</p>\"\
+          \"documentation\":\"<p>An embedded object that specifies a mixed instances policy. The required properties must be specified. If optional properties are unspecified, their default values are used.</p> <p>The policy includes properties that not only define the distribution of On-Demand Instances and Spot Instances, the maximum price to pay for Spot Instances, and how the Auto Scaling group allocates instance types to fulfill On-Demand and Spot capacities, but also the properties that specify the instance configuration informationâthe launch template and instance types. The policy can also include a weight for each instance type and different launch templates for individual instance types. For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-purchase-options.html\\\">Auto Scaling groups with multiple instance types and purchase options</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>\"\
         },\
         \"InstanceId\":{\
           \"shape\":\"XmlStringMaxLen19\",\
@@ -1605,7 +1688,7 @@
         },\
         \"LoadBalancerNames\":{\
           \"shape\":\"LoadBalancerNames\",\
-          \"documentation\":\"<p>A list of Classic Load Balancers associated with this Auto Scaling group. For Application Load Balancers and Network Load Balancers, specify <code>TargetGroupARNs</code> instead.</p>\"\
+          \"documentation\":\"<p>A list of Classic Load Balancers associated with this Auto Scaling group. For Application Load Balancers, Network Load Balancers, and Gateway Load Balancers, specify the <code>TargetGroupARNs</code> property instead.</p>\"\
         },\
         \"TargetGroupARNs\":{\
           \"shape\":\"TargetGroupARNs\",\
@@ -1687,7 +1770,7 @@
         },\
         \"UserData\":{\
           \"shape\":\"XmlStringUserData\",\
-          \"documentation\":\"<p>The Base64-encoded user data to make available to the launched EC2 instances. For more information, see <a href=\\\"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html\\\">Instance metadata and user data</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>\"\
+          \"documentation\":\"<p>The user data to make available to the launched EC2 instances. For more information, see <a href=\\\"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html\\\">Instance metadata and user data</a> (Linux) and <a href=\\\"https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2-instance-metadata.html\\\">Instance metadata and user data</a> (Windows). If you are using a command line tool, base64-encoding is performed for you, and you can load the text from a file. Otherwise, you must provide base64-encoded text. User data is limited to 16 KB.</p>\"\
         },\
         \"InstanceId\":{\
           \"shape\":\"XmlStringMaxLen19\",\
@@ -1695,7 +1778,7 @@
         },\
         \"InstanceType\":{\
           \"shape\":\"XmlStringMaxLen255\",\
-          \"documentation\":\"<p>Specifies the instance type of the EC2 instance.</p> <p>For information about available instance types, see <a href=\\\"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#AvailableInstanceTypes\\\">Available Instance Types</a> in the <i>Amazon EC2 User Guide for Linux Instances.</i> </p> <p>If you do not specify <code>InstanceId</code>, you must specify <code>InstanceType</code>.</p>\"\
+          \"documentation\":\"<p>Specifies the instance type of the EC2 instance.</p> <p>For information about available instance types, see <a href=\\\"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#AvailableInstanceTypes\\\">Available Instance Types</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p> <p>If you do not specify <code>InstanceId</code>, you must specify <code>InstanceType</code>.</p>\"\
         },\
         \"KernelId\":{\
           \"shape\":\"XmlStringMaxLen255\",\
@@ -1731,7 +1814,7 @@
         },\
         \"PlacementTenancy\":{\
           \"shape\":\"XmlStringMaxLen64\",\
-          \"documentation\":\"<p>The tenancy of the instance. An instance with <code>dedicated</code> tenancy runs on isolated, single-tenant hardware and can only be launched into a VPC.</p> <p>To launch dedicated instances into a shared tenancy VPC (a VPC with the instance placement tenancy attribute set to <code>default</code>), you must set the value of this parameter to <code>dedicated</code>.</p> <p>If you specify <code>PlacementTenancy</code>, you must specify at least one subnet for <code>VPCZoneIdentifier</code> when you create your group.</p> <p>For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling/ec2/userguide/auto-scaling-dedicated-instances.html\\\">Configuring instance tenancy with Amazon EC2 Auto Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>Valid Values: <code>default</code> | <code>dedicated</code> </p>\"\
+          \"documentation\":\"<p>The tenancy of the instance. An instance with <code>dedicated</code> tenancy runs on isolated, single-tenant hardware and can only be launched into a VPC.</p> <p>To launch dedicated instances into a shared tenancy VPC (a VPC with the instance placement tenancy attribute set to <code>default</code>), you must set the value of this parameter to <code>dedicated</code>.</p> <p>If you specify <code>PlacementTenancy</code>, you must specify at least one subnet for <code>VPCZoneIdentifier</code> when you create your group.</p> <p>For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/auto-scaling-dedicated-instances.html\\\">Configuring instance tenancy with Amazon EC2 Auto Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>Valid Values: <code>default</code> | <code>dedicated</code> </p>\"\
         },\
         \"MetadataOptions\":{\
           \"shape\":\"InstanceMetadataOptions\",\
@@ -1785,12 +1868,12 @@
       \"required\":[\"AutoScalingGroupName\"],\
       \"members\":{\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
         },\
         \"ForceDelete\":{\
           \"shape\":\"ForceDelete\",\
-          \"documentation\":\"<p>Specifies that the group is to be deleted along with all instances associated with the group, without waiting for all instances to be terminated. This parameter also deletes any lifecycle actions associated with the group.</p>\"\
+          \"documentation\":\"<p>Specifies that the group is to be deleted along with all instances associated with the group, without waiting for all instances to be terminated. This parameter also deletes any outstanding lifecycle actions associated with the group.</p>\"\
         }\
       }\
     },\
@@ -1811,7 +1894,7 @@
           \"documentation\":\"<p>The name of the lifecycle hook.</p>\"\
         },\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
         }\
       }\
@@ -1824,11 +1907,11 @@
       ],\
       \"members\":{\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
         },\
         \"TopicARN\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (Amazon SNS) topic.</p>\"\
         }\
       }\
@@ -1838,7 +1921,7 @@
       \"required\":[\"PolicyName\"],\
       \"members\":{\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
         },\
         \"PolicyName\":{\
@@ -1855,11 +1938,11 @@
       ],\
       \"members\":{\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
         },\
         \"ScheduledActionName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the action to delete.</p>\"\
         }\
       }\
@@ -1871,6 +1954,25 @@
         \"Tags\":{\
           \"shape\":\"Tags\",\
           \"documentation\":\"<p>One or more tags.</p>\"\
+        }\
+      }\
+    },\
+    \"DeleteWarmPoolAnswer\":{\
+      \"type\":\"structure\",\
+      \"members\":{\
+      }\
+    },\
+    \"DeleteWarmPoolType\":{\
+      \"type\":\"structure\",\
+      \"required\":[\"AutoScalingGroupName\"],\
+      \"members\":{\
+        \"AutoScalingGroupName\":{\
+          \"shape\":\"XmlStringMaxLen255\",\
+          \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
+        },\
+        \"ForceDelete\":{\
+          \"shape\":\"ForceDelete\",\
+          \"documentation\":\"<p>Specifies that the warm pool is to be deleted along with all instances associated with the warm pool, without waiting for all instances to be terminated. This parameter also deletes any outstanding lifecycle actions associated with the warm pool instances.</p>\"\
         }\
       }\
     },\
@@ -1988,7 +2090,7 @@
       \"required\":[\"AutoScalingGroupName\"],\
       \"members\":{\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
         },\
         \"LifecycleHookNames\":{\
@@ -2002,7 +2104,7 @@
       \"required\":[\"AutoScalingGroupName\"],\
       \"members\":{\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
         },\
         \"NextToken\":{\
@@ -2033,7 +2135,7 @@
       \"required\":[\"AutoScalingGroupName\"],\
       \"members\":{\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
         },\
         \"NextToken\":{\
@@ -2107,7 +2209,7 @@
       \"type\":\"structure\",\
       \"members\":{\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
         },\
         \"PolicyNames\":{\
@@ -2136,8 +2238,12 @@
           \"documentation\":\"<p>The activity IDs of the desired scaling activities. You can specify up to 50 IDs. If you omit this parameter, all activities for the past six weeks are described. If unknown activities are requested, they are ignored with no error. If you specify an Auto Scaling group, the results are limited to that group.</p>\"\
         },\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
+        },\
+        \"IncludeDeletedGroups\":{\
+          \"shape\":\"IncludeDeletedGroups\",\
+          \"documentation\":\"<p>Indicates whether to include scaling activity from deleted Auto Scaling groups.</p>\"\
         },\
         \"MaxRecords\":{\
           \"shape\":\"MaxRecords\",\
@@ -2153,7 +2259,7 @@
       \"type\":\"structure\",\
       \"members\":{\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
         },\
         \"ScheduledActionNames\":{\
@@ -2204,6 +2310,41 @@
         }\
       }\
     },\
+    \"DescribeWarmPoolAnswer\":{\
+      \"type\":\"structure\",\
+      \"members\":{\
+        \"WarmPoolConfiguration\":{\
+          \"shape\":\"WarmPoolConfiguration\",\
+          \"documentation\":\"<p>The warm pool configuration details. </p>\"\
+        },\
+        \"Instances\":{\
+          \"shape\":\"Instances\",\
+          \"documentation\":\"<p>The instances that are currently in the warm pool.</p>\"\
+        },\
+        \"NextToken\":{\
+          \"shape\":\"XmlString\",\
+          \"documentation\":\"<p>The token for the next set of items to return. (You received this token from a previous call.)</p>\"\
+        }\
+      }\
+    },\
+    \"DescribeWarmPoolType\":{\
+      \"type\":\"structure\",\
+      \"required\":[\"AutoScalingGroupName\"],\
+      \"members\":{\
+        \"AutoScalingGroupName\":{\
+          \"shape\":\"XmlStringMaxLen255\",\
+          \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
+        },\
+        \"MaxRecords\":{\
+          \"shape\":\"MaxRecords\",\
+          \"documentation\":\"<p>The maximum number of instances to return with this call. The maximum value is <code>50</code>.</p>\"\
+        },\
+        \"NextToken\":{\
+          \"shape\":\"XmlString\",\
+          \"documentation\":\"<p>The token for the next set of instances to return. (You received this token from a previous call.)</p>\"\
+        }\
+      }\
+    },\
     \"DetachInstancesAnswer\":{\
       \"type\":\"structure\",\
       \"members\":{\
@@ -2225,7 +2366,7 @@
           \"documentation\":\"<p>The IDs of the instances. You can specify up to 20 instances.</p>\"\
         },\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
         },\
         \"ShouldDecrementDesiredCapacity\":{\
@@ -2247,7 +2388,7 @@
       ],\
       \"members\":{\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
         },\
         \"TargetGroupARNs\":{\
@@ -2269,7 +2410,7 @@
       ],\
       \"members\":{\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
         },\
         \"LoadBalancerNames\":{\
@@ -2283,12 +2424,12 @@
       \"required\":[\"AutoScalingGroupName\"],\
       \"members\":{\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
         },\
         \"Metrics\":{\
           \"shape\":\"Metrics\",\
-          \"documentation\":\"<p>Specifies one or more of the following metrics:</p> <ul> <li> <p> <code>GroupMinSize</code> </p> </li> <li> <p> <code>GroupMaxSize</code> </p> </li> <li> <p> <code>GroupDesiredCapacity</code> </p> </li> <li> <p> <code>GroupInServiceInstances</code> </p> </li> <li> <p> <code>GroupPendingInstances</code> </p> </li> <li> <p> <code>GroupStandbyInstances</code> </p> </li> <li> <p> <code>GroupTerminatingInstances</code> </p> </li> <li> <p> <code>GroupTotalInstances</code> </p> </li> <li> <p> <code>GroupInServiceCapacity</code> </p> </li> <li> <p> <code>GroupPendingCapacity</code> </p> </li> <li> <p> <code>GroupStandbyCapacity</code> </p> </li> <li> <p> <code>GroupTerminatingCapacity</code> </p> </li> <li> <p> <code>GroupTotalCapacity</code> </p> </li> </ul> <p>If you omit this parameter, all metrics are disabled. </p>\"\
+          \"documentation\":\"<p>Specifies one or more of the following metrics:</p> <ul> <li> <p> <code>GroupMinSize</code> </p> </li> <li> <p> <code>GroupMaxSize</code> </p> </li> <li> <p> <code>GroupDesiredCapacity</code> </p> </li> <li> <p> <code>GroupInServiceInstances</code> </p> </li> <li> <p> <code>GroupPendingInstances</code> </p> </li> <li> <p> <code>GroupStandbyInstances</code> </p> </li> <li> <p> <code>GroupTerminatingInstances</code> </p> </li> <li> <p> <code>GroupTotalInstances</code> </p> </li> <li> <p> <code>GroupInServiceCapacity</code> </p> </li> <li> <p> <code>GroupPendingCapacity</code> </p> </li> <li> <p> <code>GroupStandbyCapacity</code> </p> </li> <li> <p> <code>GroupTerminatingCapacity</code> </p> </li> <li> <p> <code>GroupTotalCapacity</code> </p> </li> <li> <p> <code>WarmPoolDesiredCapacity</code> </p> </li> <li> <p> <code>WarmPoolWarmedCapacity</code> </p> </li> <li> <p> <code>WarmPoolPendingCapacity</code> </p> </li> <li> <p> <code>WarmPoolTerminatingCapacity</code> </p> </li> <li> <p> <code>WarmPoolTotalCapacity</code> </p> </li> <li> <p> <code>GroupAndWarmPoolDesiredCapacity</code> </p> </li> <li> <p> <code>GroupAndWarmPoolTotalCapacity</code> </p> </li> </ul> <p>If you omit this parameter, all metrics are disabled. </p>\"\
         }\
       }\
     },\
@@ -2332,12 +2473,12 @@
       ],\
       \"members\":{\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
         },\
         \"Metrics\":{\
           \"shape\":\"Metrics\",\
-          \"documentation\":\"<p>Specifies which group-level metrics to start collecting. You can specify one or more of the following metrics:</p> <ul> <li> <p> <code>GroupMinSize</code> </p> </li> <li> <p> <code>GroupMaxSize</code> </p> </li> <li> <p> <code>GroupDesiredCapacity</code> </p> </li> <li> <p> <code>GroupInServiceInstances</code> </p> </li> <li> <p> <code>GroupPendingInstances</code> </p> </li> <li> <p> <code>GroupStandbyInstances</code> </p> </li> <li> <p> <code>GroupTerminatingInstances</code> </p> </li> <li> <p> <code>GroupTotalInstances</code> </p> </li> </ul> <p>The instance weighting feature supports the following additional metrics: </p> <ul> <li> <p> <code>GroupInServiceCapacity</code> </p> </li> <li> <p> <code>GroupPendingCapacity</code> </p> </li> <li> <p> <code>GroupStandbyCapacity</code> </p> </li> <li> <p> <code>GroupTerminatingCapacity</code> </p> </li> <li> <p> <code>GroupTotalCapacity</code> </p> </li> </ul> <p>If you omit this parameter, all metrics are enabled. </p>\"\
+          \"documentation\":\"<p>Specifies which group-level metrics to start collecting. You can specify one or more of the following metrics:</p> <ul> <li> <p> <code>GroupMinSize</code> </p> </li> <li> <p> <code>GroupMaxSize</code> </p> </li> <li> <p> <code>GroupDesiredCapacity</code> </p> </li> <li> <p> <code>GroupInServiceInstances</code> </p> </li> <li> <p> <code>GroupPendingInstances</code> </p> </li> <li> <p> <code>GroupStandbyInstances</code> </p> </li> <li> <p> <code>GroupTerminatingInstances</code> </p> </li> <li> <p> <code>GroupTotalInstances</code> </p> </li> </ul> <p>The instance weighting feature supports the following additional metrics: </p> <ul> <li> <p> <code>GroupInServiceCapacity</code> </p> </li> <li> <p> <code>GroupPendingCapacity</code> </p> </li> <li> <p> <code>GroupStandbyCapacity</code> </p> </li> <li> <p> <code>GroupTerminatingCapacity</code> </p> </li> <li> <p> <code>GroupTotalCapacity</code> </p> </li> </ul> <p>The warm pools feature supports the following additional metrics: </p> <ul> <li> <p> <code>WarmPoolDesiredCapacity</code> </p> </li> <li> <p> <code>WarmPoolWarmedCapacity</code> </p> </li> <li> <p> <code>WarmPoolPendingCapacity</code> </p> </li> <li> <p> <code>WarmPoolTerminatingCapacity</code> </p> </li> <li> <p> <code>WarmPoolTotalCapacity</code> </p> </li> <li> <p> <code>GroupAndWarmPoolDesiredCapacity</code> </p> </li> <li> <p> <code>GroupAndWarmPoolTotalCapacity</code> </p> </li> </ul> <p>If you omit this parameter, all metrics are enabled. </p>\"\
         },\
         \"Granularity\":{\
           \"shape\":\"XmlStringMaxLen255\",\
@@ -2350,7 +2491,7 @@
       \"members\":{\
         \"Metric\":{\
           \"shape\":\"XmlStringMaxLen255\",\
-          \"documentation\":\"<p>One of the following metrics:</p> <ul> <li> <p> <code>GroupMinSize</code> </p> </li> <li> <p> <code>GroupMaxSize</code> </p> </li> <li> <p> <code>GroupDesiredCapacity</code> </p> </li> <li> <p> <code>GroupInServiceInstances</code> </p> </li> <li> <p> <code>GroupPendingInstances</code> </p> </li> <li> <p> <code>GroupStandbyInstances</code> </p> </li> <li> <p> <code>GroupTerminatingInstances</code> </p> </li> <li> <p> <code>GroupTotalInstances</code> </p> </li> <li> <p> <code>GroupInServiceCapacity</code> </p> </li> <li> <p> <code>GroupPendingCapacity</code> </p> </li> <li> <p> <code>GroupStandbyCapacity</code> </p> </li> <li> <p> <code>GroupTerminatingCapacity</code> </p> </li> <li> <p> <code>GroupTotalCapacity</code> </p> </li> </ul>\"\
+          \"documentation\":\"<p>One of the following metrics:</p> <ul> <li> <p> <code>GroupMinSize</code> </p> </li> <li> <p> <code>GroupMaxSize</code> </p> </li> <li> <p> <code>GroupDesiredCapacity</code> </p> </li> <li> <p> <code>GroupInServiceInstances</code> </p> </li> <li> <p> <code>GroupPendingInstances</code> </p> </li> <li> <p> <code>GroupStandbyInstances</code> </p> </li> <li> <p> <code>GroupTerminatingInstances</code> </p> </li> <li> <p> <code>GroupTotalInstances</code> </p> </li> <li> <p> <code>GroupInServiceCapacity</code> </p> </li> <li> <p> <code>GroupPendingCapacity</code> </p> </li> <li> <p> <code>GroupStandbyCapacity</code> </p> </li> <li> <p> <code>GroupTerminatingCapacity</code> </p> </li> <li> <p> <code>GroupTotalCapacity</code> </p> </li> <li> <p> <code>WarmPoolDesiredCapacity</code> </p> </li> <li> <p> <code>WarmPoolWarmedCapacity</code> </p> </li> <li> <p> <code>WarmPoolPendingCapacity</code> </p> </li> <li> <p> <code>WarmPoolTerminatingCapacity</code> </p> </li> <li> <p> <code>WarmPoolTotalCapacity</code> </p> </li> <li> <p> <code>GroupAndWarmPoolDesiredCapacity</code> </p> </li> <li> <p> <code>GroupAndWarmPoolTotalCapacity</code> </p> </li> </ul>\"\
         },\
         \"Granularity\":{\
           \"shape\":\"XmlStringMaxLen255\",\
@@ -2384,7 +2525,7 @@
           \"documentation\":\"<p>The IDs of the instances. You can specify up to 20 instances.</p>\"\
         },\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
         },\
         \"ShouldDecrementDesiredCapacity\":{\
@@ -2399,7 +2540,7 @@
       \"required\":[\"PolicyName\"],\
       \"members\":{\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
         },\
         \"PolicyName\":{\
@@ -2438,7 +2579,7 @@
           \"documentation\":\"<p>The IDs of the instances. You can specify up to 20 instances.</p>\"\
         },\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
         }\
       }\
@@ -2489,6 +2630,7 @@
     \"HealthCheckGracePeriod\":{\"type\":\"integer\"},\
     \"HeartbeatTimeout\":{\"type\":\"integer\"},\
     \"HonorCooldown\":{\"type\":\"boolean\"},\
+    \"IncludeDeletedGroups\":{\"type\":\"boolean\"},\
     \"Instance\":{\
       \"type\":\"structure\",\
       \"required\":[\
@@ -2513,7 +2655,7 @@
         },\
         \"LifecycleState\":{\
           \"shape\":\"LifecycleState\",\
-          \"documentation\":\"<p>A description of the current lifecycle state. The <code>Quarantined</code> state is not used.</p>\"\
+          \"documentation\":\"<p>A description of the current lifecycle state. The <code>Quarantined</code> state is not used. For information about lifecycle states, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroupLifecycle.html\\\">Instance lifecycle</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>. </p>\"\
         },\
         \"HealthStatus\":{\
           \"shape\":\"XmlStringMaxLen32\",\
@@ -2570,7 +2712,7 @@
         },\
         \"HttpPutResponseHopLimit\":{\
           \"shape\":\"InstanceMetadataHttpPutResponseHopLimit\",\
-          \"documentation\":\"<p>The desired HTTP PUT response hop limit for instance metadata requests. The larger the number, the further instance metadata requests can travel.</p> <p>Default: 1</p> <p>Possible values: Integers from 1 to 64</p>\"\
+          \"documentation\":\"<p>The desired HTTP PUT response hop limit for instance metadata requests. The larger the number, the further instance metadata requests can travel.</p> <p>Default: 1</p>\"\
         },\
         \"HttpEndpoint\":{\
           \"shape\":\"InstanceMetadataEndpointState\",\
@@ -2624,6 +2766,10 @@
         \"InstancesToUpdate\":{\
           \"shape\":\"InstancesToUpdate\",\
           \"documentation\":\"<p>The number of instances remaining to update before the instance refresh is complete.</p>\"\
+        },\
+        \"ProgressDetails\":{\
+          \"shape\":\"InstanceRefreshProgressDetails\",\
+          \"documentation\":\"<p>Additional progress details for an Auto Scaling group that has a warm pool.</p>\"\
         }\
       },\
       \"documentation\":\"<p>Describes an instance refresh for an Auto Scaling group. </p>\"\
@@ -2645,6 +2791,34 @@
       },\
       \"exception\":true\
     },\
+    \"InstanceRefreshLivePoolProgress\":{\
+      \"type\":\"structure\",\
+      \"members\":{\
+        \"PercentageComplete\":{\
+          \"shape\":\"IntPercent\",\
+          \"documentation\":\"<p>The percentage of instances in the Auto Scaling group that have been replaced. For each instance replacement, Amazon EC2 Auto Scaling tracks the instance's health status and warm-up time. When the instance's health status changes to healthy and the specified warm-up time passes, the instance is considered updated and added to the percentage complete.</p>\"\
+        },\
+        \"InstancesToUpdate\":{\
+          \"shape\":\"InstancesToUpdate\",\
+          \"documentation\":\"<p>The number of instances remaining to update.</p>\"\
+        }\
+      },\
+      \"documentation\":\"<p>Reports the progress of an instance fresh on instances that are in the Auto Scaling group.</p>\"\
+    },\
+    \"InstanceRefreshProgressDetails\":{\
+      \"type\":\"structure\",\
+      \"members\":{\
+        \"LivePoolProgress\":{\
+          \"shape\":\"InstanceRefreshLivePoolProgress\",\
+          \"documentation\":\"<p>Indicates the progress of an instance fresh on instances that are in the Auto Scaling group.</p>\"\
+        },\
+        \"WarmPoolProgress\":{\
+          \"shape\":\"InstanceRefreshWarmPoolProgress\",\
+          \"documentation\":\"<p>Indicates the progress of an instance fresh on instances that are in the warm pool.</p>\"\
+        }\
+      },\
+      \"documentation\":\"<p>Reports the progress of an instance refresh on an Auto Scaling group that has a warm pool. This includes separate details for instances in the warm pool and instances in the Auto Scaling group (the live pool).</p>\"\
+    },\
     \"InstanceRefreshStatus\":{\
       \"type\":\"string\",\
       \"enum\":[\
@@ -2655,6 +2829,20 @@
         \"Cancelling\",\
         \"Cancelled\"\
       ]\
+    },\
+    \"InstanceRefreshWarmPoolProgress\":{\
+      \"type\":\"structure\",\
+      \"members\":{\
+        \"PercentageComplete\":{\
+          \"shape\":\"IntPercent\",\
+          \"documentation\":\"<p>The percentage of instances in the warm pool that have been replaced. For each instance replacement, Amazon EC2 Auto Scaling tracks the instance's health status and warm-up time. When the instance's health status changes to healthy and the specified warm-up time passes, the instance is considered updated and added to the percentage complete.</p>\"\
+        },\
+        \"InstancesToUpdate\":{\
+          \"shape\":\"InstancesToUpdate\",\
+          \"documentation\":\"<p>The number of instances remaining to update.</p>\"\
+        }\
+      },\
+      \"documentation\":\"<p>Reports the progress of an instance fresh on instances that are in the warm pool.</p>\"\
     },\
     \"InstanceRefreshes\":{\
       \"type\":\"list\",\
@@ -2669,7 +2857,7 @@
       \"members\":{\
         \"OnDemandAllocationStrategy\":{\
           \"shape\":\"XmlString\",\
-          \"documentation\":\"<p>Indicates how to allocate instance types to fulfill On-Demand capacity. The only valid value is <code>prioritized</code>, which is also the default value. This strategy uses the order of instance types in the overrides to define the launch priority of each instance type. The first instance type in the array is prioritized higher than the last. If all your On-Demand capacity cannot be fulfilled using your highest priority instance, then the Auto Scaling groups launches the remaining capacity using the second priority instance type, and so on.</p>\"\
+          \"documentation\":\"<p>Indicates how to allocate instance types to fulfill On-Demand capacity. The only valid value is <code>prioritized</code>, which is also the default value. This strategy uses the order of instance types in the <code>LaunchTemplateOverrides</code> to define the launch priority of each instance type. The first instance type in the array is prioritized higher than the last. If all your On-Demand capacity cannot be fulfilled using your highest priority instance, then the Auto Scaling groups launches the remaining capacity using the second priority instance type, and so on.</p>\"\
         },\
         \"OnDemandBaseCapacity\":{\
           \"shape\":\"OnDemandBaseCapacity\",\
@@ -2681,15 +2869,15 @@
         },\
         \"SpotAllocationStrategy\":{\
           \"shape\":\"XmlString\",\
-          \"documentation\":\"<p>Indicates how to allocate instances across Spot Instance pools. If the allocation strategy is <code>lowest-price</code>, the Auto Scaling group launches instances using the Spot pools with the lowest price, and evenly allocates your instances across the number of Spot pools that you specify. If the allocation strategy is <code>capacity-optimized</code>, the Auto Scaling group launches instances using Spot pools that are optimally chosen based on the available Spot capacity. Defaults to <code>lowest-price</code> if not specified.</p>\"\
+          \"documentation\":\"<p>Indicates how to allocate instances across Spot Instance pools. </p> <p>If the allocation strategy is <code>lowest-price</code>, the Auto Scaling group launches instances using the Spot pools with the lowest price, and evenly allocates your instances across the number of Spot pools that you specify. Defaults to <code>lowest-price</code> if not specified.</p> <p>If the allocation strategy is <code>capacity-optimized</code> (recommended), the Auto Scaling group launches instances using Spot pools that are optimally chosen based on the available Spot capacity. Alternatively, you can use <code>capacity-optimized-prioritized</code> and set the order of instance types in the list of launch template overrides from highest to lowest priority (from first to last in the list). Amazon EC2 Auto Scaling honors the instance type priorities on a best-effort basis but optimizes for capacity first. </p>\"\
         },\
         \"SpotInstancePools\":{\
           \"shape\":\"SpotInstancePools\",\
-          \"documentation\":\"<p>The number of Spot Instance pools across which to allocate your Spot Instances. The Spot pools are determined from the different instance types in the overrides. Defaults to 2 if not specified. Valid only when the Spot allocation strategy is <code>lowest-price</code>.</p> <p>Valid Range: Minimum value of 1. Maximum value of 20.</p>\"\
+          \"documentation\":\"<p>The number of Spot Instance pools across which to allocate your Spot Instances. The Spot pools are determined from the different instance types in the overrides. Valid only when the Spot allocation strategy is <code>lowest-price</code>. Value must be in the range of 1 to 20. Defaults to 2 if not specified.</p>\"\
         },\
         \"SpotMaxPrice\":{\
           \"shape\":\"MixedInstanceSpotPrice\",\
-          \"documentation\":\"<p>The maximum price per unit hour that you are willing to pay for a Spot Instance. If you leave the value of this parameter blank (which is the default), the maximum Spot price is set at the On-Demand price. To remove a value that you previously set, include the parameter but leave the value blank.</p>\"\
+          \"documentation\":\"<p>The maximum price per unit hour that you are willing to pay for a Spot Instance. If you leave the value at its default (empty), Amazon EC2 Auto Scaling uses the On-Demand price as the maximum Spot price. To remove a value that you previously set, include the property but specify an empty string (\\\"\\\") for the value.</p>\"\
         }\
       },\
       \"documentation\":\"<p>Describes an instances distribution for an Auto Scaling group with a <a>MixedInstancesPolicy</a>.</p> <p>The instances distribution specifies the distribution of On-Demand Instances and Spot Instances, the maximum price to pay for Spot Instances, and how the Auto Scaling group allocates instance types to fulfill On-Demand and Spot capacities.</p> <p>When you update <code>SpotAllocationStrategy</code>, <code>SpotInstancePools</code>, or <code>SpotMaxPrice</code>, this update action does not deploy any changes across the running Amazon EC2 instances in the group. Your existing Spot Instances continue to run as long as the maximum price for those instances is higher than the current Spot price. When scale out occurs, Amazon EC2 Auto Scaling launches instances based on the new settings. When scale in occurs, Amazon EC2 Auto Scaling terminates instances according to the group's termination policies.</p>\"\
@@ -2758,11 +2946,11 @@
         },\
         \"UserData\":{\
           \"shape\":\"XmlStringUserData\",\
-          \"documentation\":\"<p>The Base64-encoded user data to make available to the launched EC2 instances. For more information, see <a href=\\\"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html\\\">Instance metadata and user data</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>\"\
+          \"documentation\":\"<p>The user data to make available to the launched EC2 instances. For more information, see <a href=\\\"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html\\\">Instance metadata and user data</a> (Linux) and <a href=\\\"https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2-instance-metadata.html\\\">Instance metadata and user data</a> (Windows). If you are using a command line tool, base64-encoding is performed for you, and you can load the text from a file. Otherwise, you must provide base64-encoded text. User data is limited to 16 KB.</p>\"\
         },\
         \"InstanceType\":{\
           \"shape\":\"XmlStringMaxLen255\",\
-          \"documentation\":\"<p>The instance type for the instances.</p> <p>For information about available instance types, see <a href=\\\"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#AvailableInstanceTypes\\\">Available Instance Types</a> in the <i>Amazon EC2 User Guide for Linux Instances.</i> </p>\"\
+          \"documentation\":\"<p>The instance type for the instances.</p> <p>For information about available instance types, see <a href=\\\"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#AvailableInstanceTypes\\\">Available Instance Types</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>\"\
         },\
         \"KernelId\":{\
           \"shape\":\"XmlStringMaxLen255\",\
@@ -2816,14 +3004,14 @@
       \"required\":[\"LaunchConfigurationName\"],\
       \"members\":{\
         \"LaunchConfigurationName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the launch configuration.</p>\"\
         }\
       }\
     },\
     \"LaunchConfigurationNames\":{\
       \"type\":\"list\",\
-      \"member\":{\"shape\":\"ResourceName\"}\
+      \"member\":{\"shape\":\"XmlStringMaxLen255\"}\
     },\
     \"LaunchConfigurationNamesType\":{\
       \"type\":\"structure\",\
@@ -2869,41 +3057,45 @@
         },\
         \"Overrides\":{\
           \"shape\":\"Overrides\",\
-          \"documentation\":\"<p>Any parameters that you specify override the same parameters in the launch template. Currently, the only supported override is instance type. You can specify between 1 and 20 instance types. If not provided, Amazon EC2 Auto Scaling will use the instance type specified in the launch template when it launches an instance. </p>\"\
+          \"documentation\":\"<p>Any properties that you specify override the same properties in the launch template. If not provided, Amazon EC2 Auto Scaling uses the instance type specified in the launch template when it launches an instance. </p>\"\
         }\
       },\
-      \"documentation\":\"<p>Describes a launch template and overrides.</p> <p>The overrides are used to override the instance type specified by the launch template with multiple instance types that can be used to launch On-Demand Instances and Spot Instances.</p> <p>When you update the launch template or overrides, existing Amazon EC2 instances continue to run. When scale out occurs, Amazon EC2 Auto Scaling launches instances to match the new settings. When scale in occurs, Amazon EC2 Auto Scaling terminates instances according to the group's termination policies.</p>\"\
+      \"documentation\":\"<p>Describes a launch template and overrides. </p> <p>You specify these properties as part of a mixed instances policy. </p> <p>When you update the launch template or overrides, existing Amazon EC2 instances continue to run. When scale out occurs, Amazon EC2 Auto Scaling launches instances to match the new settings. When scale in occurs, Amazon EC2 Auto Scaling terminates instances according to the group's termination policies.</p>\"\
     },\
     \"LaunchTemplateName\":{\
       \"type\":\"string\",\
       \"max\":128,\
       \"min\":3,\
-      \"pattern\":\"[a-zA-Z0-9\\\\(\\\\)\\\\.-/_]+\"\
+      \"pattern\":\"[a-zA-Z0-9\\\\(\\\\)\\\\.\\\\-/_]+\"\
     },\
     \"LaunchTemplateOverrides\":{\
       \"type\":\"structure\",\
       \"members\":{\
         \"InstanceType\":{\
           \"shape\":\"XmlStringMaxLen255\",\
-          \"documentation\":\"<p>The instance type, such as <code>m3.xlarge</code>. You must use an instance type that is supported in your requested Region and Availability Zones. For information about available instance types, see <a href=\\\"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#AvailableInstanceTypes\\\">Available instance types</a> in the <i>Amazon Elastic Compute Cloud User Guide.</i> </p>\"\
+          \"documentation\":\"<p>The instance type, such as <code>m3.xlarge</code>. You must use an instance type that is supported in your requested Region and Availability Zones. For more information, see <a href=\\\"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html\\\">Instance types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>\"\
         },\
         \"WeightedCapacity\":{\
           \"shape\":\"XmlStringMaxLen32\",\
-          \"documentation\":\"<p>The number of capacity units provided by the specified instance type in terms of virtual CPUs, memory, storage, throughput, or other relative performance characteristic. When a Spot or On-Demand Instance is provisioned, the capacity units count toward the desired capacity. Amazon EC2 Auto Scaling provisions instances until the desired capacity is totally fulfilled, even if this results in an overage. For example, if there are 2 units remaining to fulfill capacity, and Amazon EC2 Auto Scaling can only provision an instance with a <code>WeightedCapacity</code> of 5 units, the instance is provisioned, and the desired capacity is exceeded by 3 units. For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-instance-weighting.html\\\">Instance weighting for Amazon EC2 Auto Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>. </p> <p>Valid Range: Minimum value of 1. Maximum value of 999.</p>\"\
+          \"documentation\":\"<p>The number of capacity units provided by the specified instance type in terms of virtual CPUs, memory, storage, throughput, or other relative performance characteristic. When a Spot or On-Demand Instance is provisioned, the capacity units count toward the desired capacity. Amazon EC2 Auto Scaling provisions instances until the desired capacity is totally fulfilled, even if this results in an overage. For example, if there are 2 units remaining to fulfill capacity, and Amazon EC2 Auto Scaling can only provision an instance with a <code>WeightedCapacity</code> of 5 units, the instance is provisioned, and the desired capacity is exceeded by 3 units. For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-instance-weighting.html\\\">Instance weighting for Amazon EC2 Auto Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>. Value must be in the range of 1 to 999.</p>\"\
+        },\
+        \"LaunchTemplateSpecification\":{\
+          \"shape\":\"LaunchTemplateSpecification\",\
+          \"documentation\":\"<p>Provides the launch template to be used when launching the instance type. For example, some instance types might require a launch template with a different AMI. If not provided, Amazon EC2 Auto Scaling uses the launch template that's defined for your mixed instances policy. For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-launch-template-overrides.html\\\">Specifying a different launch template for an instance type</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>. </p>\"\
         }\
       },\
-      \"documentation\":\"<p>Describes an override for a launch template. Currently, the only supported override is instance type.</p> <p>The maximum number of instance type overrides that can be associated with an Auto Scaling group is 20.</p>\"\
+      \"documentation\":\"<p>Describes an override for a launch template. The maximum number of instance types that can be associated with an Auto Scaling group is 40. The maximum number of distinct launch templates you can define for an Auto Scaling group is 20. For more information about configuring overrides, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-override-options.html\\\">Configuring overrides</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>. </p>\"\
     },\
     \"LaunchTemplateSpecification\":{\
       \"type\":\"structure\",\
       \"members\":{\
         \"LaunchTemplateId\":{\
           \"shape\":\"XmlStringMaxLen255\",\
-          \"documentation\":\"<p>The ID of the launch template. To get the template ID, use the Amazon EC2 <a href=\\\"https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeLaunchTemplates.html\\\">DescribeLaunchTemplates</a> API operation. New launch templates can be created using the Amazon EC2 <a href=\\\"https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateLaunchTemplate.html\\\">CreateLaunchTemplate</a> API. You must specify either a <code>LaunchTemplateId</code> or a <code>LaunchTemplateName</code>.</p>\"\
+          \"documentation\":\"<p>The ID of the launch template. To get the template ID, use the Amazon EC2 <a href=\\\"https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeLaunchTemplates.html\\\">DescribeLaunchTemplates</a> API operation. New launch templates can be created using the Amazon EC2 <a href=\\\"https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateLaunchTemplate.html\\\">CreateLaunchTemplate</a> API. </p> <p>Conditional: You must specify either a <code>LaunchTemplateId</code> or a <code>LaunchTemplateName</code>.</p>\"\
         },\
         \"LaunchTemplateName\":{\
           \"shape\":\"LaunchTemplateName\",\
-          \"documentation\":\"<p>The name of the launch template. To get the template name, use the Amazon EC2 <a href=\\\"https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeLaunchTemplates.html\\\">DescribeLaunchTemplates</a> API operation. New launch templates can be created using the Amazon EC2 <a href=\\\"https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateLaunchTemplate.html\\\">CreateLaunchTemplate</a> API. You must specify either a <code>LaunchTemplateId</code> or a <code>LaunchTemplateName</code>.</p>\"\
+          \"documentation\":\"<p>The name of the launch template. To get the template name, use the Amazon EC2 <a href=\\\"https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeLaunchTemplates.html\\\">DescribeLaunchTemplates</a> API operation. New launch templates can be created using the Amazon EC2 <a href=\\\"https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateLaunchTemplate.html\\\">CreateLaunchTemplate</a> API. </p> <p>Conditional: You must specify either a <code>LaunchTemplateId</code> or a <code>LaunchTemplateName</code>.</p>\"\
         },\
         \"Version\":{\
           \"shape\":\"XmlStringMaxLen255\",\
@@ -2926,7 +3118,7 @@
           \"documentation\":\"<p>The name of the lifecycle hook.</p>\"\
         },\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group for the lifecycle hook.</p>\"\
         },\
         \"LifecycleTransition\":{\
@@ -2934,11 +3126,11 @@
           \"documentation\":\"<p>The state of the EC2 instance to which to attach the lifecycle hook. The following are possible values:</p> <ul> <li> <p>autoscaling:EC2_INSTANCE_LAUNCHING</p> </li> <li> <p>autoscaling:EC2_INSTANCE_TERMINATING</p> </li> </ul>\"\
         },\
         \"NotificationTargetARN\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"NotificationTargetResourceName\",\
           \"documentation\":\"<p>The ARN of the target that Amazon EC2 Auto Scaling sends notifications to when an instance is in the transition state for the lifecycle hook. The notification target can be either an SQS queue or an SNS topic.</p>\"\
         },\
         \"RoleARN\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The ARN of the IAM role that allows the Auto Scaling group to publish to the specified notification target.</p>\"\
         },\
         \"NotificationMetadata\":{\
@@ -2997,7 +3189,7 @@
           \"documentation\":\"<p>The ARN of the target that Amazon EC2 Auto Scaling sends notifications to when an instance is in the transition state for the lifecycle hook. The notification target can be either an SQS queue or an SNS topic.</p>\"\
         },\
         \"RoleARN\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The ARN of the IAM role that allows the Auto Scaling group to publish to the specified notification target, for example, an Amazon SNS topic or an Amazon SQS queue.</p>\"\
         }\
       },\
@@ -3026,7 +3218,16 @@
         \"Detaching\",\
         \"Detached\",\
         \"EnteringStandby\",\
-        \"Standby\"\
+        \"Standby\",\
+        \"Warmed:Pending\",\
+        \"Warmed:Pending:Wait\",\
+        \"Warmed:Pending:Proceed\",\
+        \"Warmed:Terminating\",\
+        \"Warmed:Terminating:Wait\",\
+        \"Warmed:Terminating:Proceed\",\
+        \"Warmed:Terminated\",\
+        \"Warmed:Stopped\",\
+        \"Warmed:Running\"\
       ]\
     },\
     \"LifecycleTransition\":{\"type\":\"string\"},\
@@ -3086,6 +3287,10 @@
       \"type\":\"list\",\
       \"member\":{\"shape\":\"LoadBalancerTargetGroupState\"}\
     },\
+    \"MaxGroupPreparedCapacity\":{\
+      \"type\":\"integer\",\
+      \"min\":-1\
+    },\
     \"MaxInstanceLifetime\":{\"type\":\"integer\"},\
     \"MaxNumberOfAutoScalingGroups\":{\"type\":\"integer\"},\
     \"MaxNumberOfLaunchConfigurations\":{\"type\":\"integer\"},\
@@ -3095,7 +3300,7 @@
       \"members\":{\
         \"Metric\":{\
           \"shape\":\"XmlStringMaxLen255\",\
-          \"documentation\":\"<p>One of the following metrics:</p> <ul> <li> <p> <code>GroupMinSize</code> </p> </li> <li> <p> <code>GroupMaxSize</code> </p> </li> <li> <p> <code>GroupDesiredCapacity</code> </p> </li> <li> <p> <code>GroupInServiceInstances</code> </p> </li> <li> <p> <code>GroupPendingInstances</code> </p> </li> <li> <p> <code>GroupStandbyInstances</code> </p> </li> <li> <p> <code>GroupTerminatingInstances</code> </p> </li> <li> <p> <code>GroupTotalInstances</code> </p> </li> <li> <p> <code>GroupInServiceCapacity</code> </p> </li> <li> <p> <code>GroupPendingCapacity</code> </p> </li> <li> <p> <code>GroupStandbyCapacity</code> </p> </li> <li> <p> <code>GroupTerminatingCapacity</code> </p> </li> <li> <p> <code>GroupTotalCapacity</code> </p> </li> </ul>\"\
+          \"documentation\":\"<p>One of the following metrics:</p> <ul> <li> <p> <code>GroupMinSize</code> </p> </li> <li> <p> <code>GroupMaxSize</code> </p> </li> <li> <p> <code>GroupDesiredCapacity</code> </p> </li> <li> <p> <code>GroupInServiceInstances</code> </p> </li> <li> <p> <code>GroupPendingInstances</code> </p> </li> <li> <p> <code>GroupStandbyInstances</code> </p> </li> <li> <p> <code>GroupTerminatingInstances</code> </p> </li> <li> <p> <code>GroupTotalInstances</code> </p> </li> <li> <p> <code>GroupInServiceCapacity</code> </p> </li> <li> <p> <code>GroupPendingCapacity</code> </p> </li> <li> <p> <code>GroupStandbyCapacity</code> </p> </li> <li> <p> <code>GroupTerminatingCapacity</code> </p> </li> <li> <p> <code>GroupTotalCapacity</code> </p> </li> <li> <p> <code>WarmPoolDesiredCapacity</code> </p> </li> <li> <p> <code>WarmPoolWarmedCapacity</code> </p> </li> <li> <p> <code>WarmPoolPendingCapacity</code> </p> </li> <li> <p> <code>WarmPoolTerminatingCapacity</code> </p> </li> <li> <p> <code>WarmPoolTotalCapacity</code> </p> </li> <li> <p> <code>GroupAndWarmPoolDesiredCapacity</code> </p> </li> <li> <p> <code>GroupAndWarmPoolTotalCapacity</code> </p> </li> </ul>\"\
         }\
       },\
       \"documentation\":\"<p>Describes a metric.</p>\"\
@@ -3188,22 +3393,27 @@
         },\
         \"InstancesDistribution\":{\
           \"shape\":\"InstancesDistribution\",\
-          \"documentation\":\"<p>Specifies the instances distribution. If not provided, the value for each parameter in <code>InstancesDistribution</code> uses a default value.</p>\"\
+          \"documentation\":\"<p>Specifies the instances distribution. If not provided, the value for each property in <code>InstancesDistribution</code> uses a default value.</p>\"\
         }\
       },\
-      \"documentation\":\"<p>Describes a mixed instances policy for an Auto Scaling group. With mixed instances, your Auto Scaling group can provision a combination of On-Demand Instances and Spot Instances across multiple instance types. For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-purchase-options.html\\\">Auto Scaling Groups with Multiple Instance Types and Purchase Options</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>You can create a mixed instances policy for a new Auto Scaling group, or you can create it for an existing group by updating the group to specify <code>MixedInstancesPolicy</code> as the top-level parameter instead of a launch configuration or launch template.</p>\"\
+      \"documentation\":\"<p>Describes a mixed instances policy for an Auto Scaling group. With mixed instances, your Auto Scaling group can provision a combination of On-Demand Instances and Spot Instances across multiple instance types. For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-purchase-options.html\\\">Auto Scaling groups with multiple instance types and purchase options</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>You can create a mixed instances policy for a new Auto Scaling group, or you can create it for an existing group by updating the group to specify <code>MixedInstancesPolicy</code> as the top-level property instead of a launch configuration or launch template.</p>\"\
     },\
     \"MonitoringEnabled\":{\"type\":\"boolean\"},\
     \"NoDevice\":{\"type\":\"boolean\"},\
+    \"NonZeroIntPercent\":{\
+      \"type\":\"integer\",\
+      \"max\":100,\
+      \"min\":1\
+    },\
     \"NotificationConfiguration\":{\
       \"type\":\"structure\",\
       \"members\":{\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
         },\
         \"TopicARN\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (Amazon SNS) topic.</p>\"\
         },\
         \"NotificationType\":{\
@@ -3219,7 +3429,7 @@
     },\
     \"NotificationTargetResourceName\":{\
       \"type\":\"string\",\
-      \"max\":1600,\
+      \"max\":255,\
       \"min\":0,\
       \"pattern\":\"[\\\\u0020-\\\\uD7FF\\\\uE000-\\\\uFFFD\\\\uD800\\\\uDC00-\\\\uDBFF\\\\uDFFF\\\\r\\\\n\\\\t]*\"\
     },\
@@ -3330,7 +3540,7 @@
           \"documentation\":\"<p>The name of the lifecycle hook.</p>\"\
         },\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
         },\
         \"LifecycleTransition\":{\
@@ -3338,7 +3548,7 @@
           \"documentation\":\"<p>The instance state to which you want to attach the lifecycle hook. The valid values are:</p> <ul> <li> <p>autoscaling:EC2_INSTANCE_LAUNCHING</p> </li> <li> <p>autoscaling:EC2_INSTANCE_TERMINATING</p> </li> </ul> <p>Required for new lifecycle hooks, but optional when updating existing hooks.</p>\"\
         },\
         \"RoleARN\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The ARN of the IAM role that allows the Auto Scaling group to publish to the specified notification target, for example, an Amazon SNS topic or an Amazon SQS queue.</p> <p>Required for new lifecycle hooks, but optional when updating existing hooks.</p>\"\
         },\
         \"NotificationTargetARN\":{\
@@ -3368,11 +3578,11 @@
       ],\
       \"members\":{\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
         },\
         \"TopicARN\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (Amazon SNS) topic.</p>\"\
         },\
         \"NotificationTypes\":{\
@@ -3389,7 +3599,7 @@
       ],\
       \"members\":{\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
         },\
         \"PolicyName\":{\
@@ -3450,7 +3660,7 @@
       ],\
       \"members\":{\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
         },\
         \"ScheduledActionName\":{\
@@ -3467,11 +3677,11 @@
         },\
         \"EndTime\":{\
           \"shape\":\"TimestampType\",\
-          \"documentation\":\"<p>The date and time for the recurring schedule to end. Amazon EC2 Auto Scaling does not perform the action after this time.</p>\"\
+          \"documentation\":\"<p>The date and time for the recurring schedule to end, in UTC.</p>\"\
         },\
         \"Recurrence\":{\
           \"shape\":\"XmlStringMaxLen255\",\
-          \"documentation\":\"<p>The recurring schedule for this action, in Unix cron syntax format. This format consists of five fields separated by white spaces: [Minute] [Hour] [Day_of_Month] [Month_of_Year] [Day_of_Week]. The value must be in quotes (for example, <code>\\\"30 0 1 1,6,12 *\\\"</code>). For more information about this format, see <a href=\\\"http://crontab.org\\\">Crontab</a>.</p> <p>When <code>StartTime</code> and <code>EndTime</code> are specified with <code>Recurrence</code>, they form the boundaries of when the recurring action starts and stops.</p>\"\
+          \"documentation\":\"<p>The recurring schedule for this action. This format consists of five fields separated by white spaces: [Minute] [Hour] [Day_of_Month] [Month_of_Year] [Day_of_Week]. The value must be in quotes (for example, <code>\\\"30 0 1 1,6,12 *\\\"</code>). For more information about this format, see <a href=\\\"http://crontab.org\\\">Crontab</a>.</p> <p>When <code>StartTime</code> and <code>EndTime</code> are specified with <code>Recurrence</code>, they form the boundaries of when the recurring action starts and stops.</p> <p>Cron expressions use Universal Coordinated Time (UTC) by default.</p>\"\
         },\
         \"MinSize\":{\
           \"shape\":\"AutoScalingGroupMinSize\",\
@@ -3484,6 +3694,37 @@
         \"DesiredCapacity\":{\
           \"shape\":\"AutoScalingGroupDesiredCapacity\",\
           \"documentation\":\"<p>The desired capacity is the initial capacity of the Auto Scaling group after the scheduled action runs and the capacity it attempts to maintain. It can scale beyond this capacity if you add more scaling conditions. </p>\"\
+        },\
+        \"TimeZone\":{\
+          \"shape\":\"XmlStringMaxLen255\",\
+          \"documentation\":\"<p>Specifies the time zone for a cron expression. If a time zone is not provided, UTC is used by default. </p> <p>Valid values are the canonical names of the IANA time zones, derived from the IANA Time Zone Database (such as <code>Etc/GMT+9</code> or <code>Pacific/Tahiti</code>). For more information, see <a href=\\\"https://en.wikipedia.org/wiki/List_of_tz_database_time_zones\\\">https://en.wikipedia.org/wiki/List_of_tz_database_time_zones</a>.</p>\"\
+        }\
+      }\
+    },\
+    \"PutWarmPoolAnswer\":{\
+      \"type\":\"structure\",\
+      \"members\":{\
+      }\
+    },\
+    \"PutWarmPoolType\":{\
+      \"type\":\"structure\",\
+      \"required\":[\"AutoScalingGroupName\"],\
+      \"members\":{\
+        \"AutoScalingGroupName\":{\
+          \"shape\":\"XmlStringMaxLen255\",\
+          \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
+        },\
+        \"MaxGroupPreparedCapacity\":{\
+          \"shape\":\"MaxGroupPreparedCapacity\",\
+          \"documentation\":\"<p>Specifies the total maximum number of instances that are allowed to be in the warm pool or in any state except <code>Terminated</code> for the Auto Scaling group. This is an optional property. Specify it only if the warm pool size should not be determined by the difference between the group's maximum capacity and its desired capacity. </p> <important> <p>Amazon EC2 Auto Scaling will launch and maintain either the difference between the group's maximum capacity and its desired capacity, if a value for <code>MaxGroupPreparedCapacity</code> is not specified, or the difference between the <code>MaxGroupPreparedCapacity</code> and the desired capacity, if a value for <code>MaxGroupPreparedCapacity</code> is specified. </p> <p>The size of the warm pool is dynamic. Only when <code>MaxGroupPreparedCapacity</code> and <code>MinSize</code> are set to the same value does the warm pool have an absolute size.</p> </important> <p>If the desired capacity of the Auto Scaling group is higher than the <code>MaxGroupPreparedCapacity</code>, the capacity of the warm pool is 0. To remove a value that you previously set, include the property but specify -1 for the value. </p>\"\
+        },\
+        \"MinSize\":{\
+          \"shape\":\"WarmPoolMinSize\",\
+          \"documentation\":\"<p>Specifies the minimum number of instances to maintain in the warm pool. This helps you to ensure that there is always a certain number of warmed instances available to handle traffic spikes. Defaults to 0 if not specified.</p>\"\
+        },\
+        \"PoolState\":{\
+          \"shape\":\"WarmPoolState\",\
+          \"documentation\":\"<p>Sets the instance state to transition to after the lifecycle hooks finish. Valid values are: <code>Stopped</code> (default) or <code>Running</code>.</p>\"\
         }\
       }\
     },\
@@ -3531,9 +3772,17 @@
         \"InstanceWarmup\":{\
           \"shape\":\"RefreshInstanceWarmup\",\
           \"documentation\":\"<p>The number of seconds until a newly launched instance is configured and ready to use. During this time, Amazon EC2 Auto Scaling does not immediately move on to the next replacement. The default is to use the value for the health check grace period defined for the group.</p>\"\
+        },\
+        \"CheckpointPercentages\":{\
+          \"shape\":\"CheckpointPercentages\",\
+          \"documentation\":\"<p>Threshold values for each checkpoint in ascending order. Each number must be unique. To replace all instances in the Auto Scaling group, the last number in the array must be <code>100</code>.</p> <p>For usage examples, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-adding-checkpoints-instance-refresh.html\\\">Adding checkpoints to an instance refresh</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>\"\
+        },\
+        \"CheckpointDelay\":{\
+          \"shape\":\"CheckpointDelay\",\
+          \"documentation\":\"<p>The amount of time, in seconds, to wait after a checkpoint before continuing. This property is optional, but if you specify a value for it, you must also specify a value for <code>CheckpointPercentages</code>. If you specify a value for <code>CheckpointPercentages</code> and not for <code>CheckpointDelay</code>, the <code>CheckpointDelay</code> defaults to <code>3600</code> (1 hour). </p>\"\
         }\
       },\
-      \"documentation\":\"<p>Describes information used to start an instance refresh. </p>\"\
+      \"documentation\":\"<p>Describes information used to start an instance refresh. </p> <p>All properties are optional. However, if you specify a value for <code>CheckpointDelay</code>, you must also provide a value for <code>CheckpointPercentages</code>. </p>\"\
     },\
     \"RefreshStrategy\":{\
       \"type\":\"string\",\
@@ -3686,7 +3935,7 @@
       \"required\":[\"AutoScalingGroupName\"],\
       \"members\":{\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
         },\
         \"ScalingProcesses\":{\
@@ -3697,7 +3946,7 @@
     },\
     \"ScheduledActionNames\":{\
       \"type\":\"list\",\
-      \"member\":{\"shape\":\"ResourceName\"}\
+      \"member\":{\"shape\":\"XmlStringMaxLen255\"}\
     },\
     \"ScheduledActionsType\":{\
       \"type\":\"structure\",\
@@ -3754,6 +4003,10 @@
         \"DesiredCapacity\":{\
           \"shape\":\"AutoScalingGroupDesiredCapacity\",\
           \"documentation\":\"<p>The desired capacity is the initial capacity of the Auto Scaling group after the scheduled action runs and the capacity it attempts to maintain.</p>\"\
+        },\
+        \"TimeZone\":{\
+          \"shape\":\"XmlStringMaxLen255\",\
+          \"documentation\":\"<p>The time zone for the cron expression.</p>\"\
         }\
       },\
       \"documentation\":\"<p>Describes a scheduled scaling action.</p>\"\
@@ -3772,11 +4025,11 @@
         },\
         \"EndTime\":{\
           \"shape\":\"TimestampType\",\
-          \"documentation\":\"<p>The date and time for the recurring schedule to end. Amazon EC2 Auto Scaling does not perform the action after this time.</p>\"\
+          \"documentation\":\"<p>The date and time for the recurring schedule to end, in UTC.</p>\"\
         },\
         \"Recurrence\":{\
           \"shape\":\"XmlStringMaxLen255\",\
-          \"documentation\":\"<p>The recurring schedule for the action, in Unix cron syntax format. This format consists of five fields separated by white spaces: [Minute] [Hour] [Day_of_Month] [Month_of_Year] [Day_of_Week]. The value must be in quotes (for example, <code>\\\"30 0 1 1,6,12 *\\\"</code>). For more information about this format, see <a href=\\\"http://crontab.org\\\">Crontab</a>.</p> <p>When <code>StartTime</code> and <code>EndTime</code> are specified with <code>Recurrence</code>, they form the boundaries of when the recurring action starts and stops.</p>\"\
+          \"documentation\":\"<p>The recurring schedule for the action, in Unix cron syntax format. This format consists of five fields separated by white spaces: [Minute] [Hour] [Day_of_Month] [Month_of_Year] [Day_of_Week]. The value must be in quotes (for example, <code>\\\"30 0 1 1,6,12 *\\\"</code>). For more information about this format, see <a href=\\\"http://crontab.org\\\">Crontab</a>.</p> <p>When <code>StartTime</code> and <code>EndTime</code> are specified with <code>Recurrence</code>, they form the boundaries of when the recurring action starts and stops.</p> <p>Cron expressions use Universal Coordinated Time (UTC) by default.</p>\"\
         },\
         \"MinSize\":{\
           \"shape\":\"AutoScalingGroupMinSize\",\
@@ -3789,9 +4042,13 @@
         \"DesiredCapacity\":{\
           \"shape\":\"AutoScalingGroupDesiredCapacity\",\
           \"documentation\":\"<p>The desired capacity is the initial capacity of the Auto Scaling group after the scheduled action runs and the capacity it attempts to maintain.</p>\"\
+        },\
+        \"TimeZone\":{\
+          \"shape\":\"XmlStringMaxLen255\",\
+          \"documentation\":\"<p>Specifies the time zone for a cron expression. If a time zone is not provided, UTC is used by default. </p> <p>Valid values are the canonical names of the IANA time zones, derived from the IANA Time Zone Database (such as <code>Etc/GMT+9</code> or <code>Pacific/Tahiti</code>). For more information, see <a href=\\\"https://en.wikipedia.org/wiki/List_of_tz_database_time_zones\\\">https://en.wikipedia.org/wiki/List_of_tz_database_time_zones</a>.</p>\"\
         }\
       },\
-      \"documentation\":\"<p>Describes information used for one or more scheduled scaling action updates in a <a>BatchPutScheduledUpdateGroupAction</a> operation.</p> <p>When updating a scheduled scaling action, all optional parameters are left unchanged if not specified.</p>\"\
+      \"documentation\":\"<p>Describes information used for one or more scheduled scaling action updates in a <a>BatchPutScheduledUpdateGroupAction</a> operation.</p>\"\
     },\
     \"ScheduledUpdateGroupActionRequests\":{\
       \"type\":\"list\",\
@@ -3826,7 +4083,7 @@
       ],\
       \"members\":{\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
         },\
         \"DesiredCapacity\":{\
@@ -3878,7 +4135,7 @@
           \"documentation\":\"<p>One or more instance IDs. You can specify up to 50 instances.</p>\"\
         },\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
         },\
         \"ProtectedFromScaleIn\":{\
@@ -4103,11 +4360,11 @@
       \"required\":[\"AutoScalingGroupName\"],\
       \"members\":{\
         \"AutoScalingGroupName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the Auto Scaling group.</p>\"\
         },\
         \"LaunchConfigurationName\":{\
-          \"shape\":\"ResourceName\",\
+          \"shape\":\"XmlStringMaxLen255\",\
           \"documentation\":\"<p>The name of the launch configuration. If you specify <code>LaunchConfigurationName</code> in your update request, you can't specify <code>LaunchTemplate</code> or <code>MixedInstancesPolicy</code>.</p>\"\
         },\
         \"LaunchTemplate\":{\
@@ -4116,7 +4373,7 @@
         },\
         \"MixedInstancesPolicy\":{\
           \"shape\":\"MixedInstancesPolicy\",\
-          \"documentation\":\"<p>An embedded object that specifies a mixed instances policy. When you make changes to an existing policy, all optional parameters are left unchanged if not specified. For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-purchase-options.html\\\">Auto Scaling Groups with Multiple Instance Types and Purchase Options</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>\"\
+          \"documentation\":\"<p>An embedded object that specifies a mixed instances policy. When you make changes to an existing policy, all optional properties are left unchanged if not specified. For more information, see <a href=\\\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-purchase-options.html\\\">Auto Scaling groups with multiple instance types and purchase options</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>\"\
         },\
         \"MinSize\":{\
           \"shape\":\"AutoScalingGroupMinSize\",\
@@ -4179,6 +4436,44 @@
     \"Values\":{\
       \"type\":\"list\",\
       \"member\":{\"shape\":\"XmlString\"}\
+    },\
+    \"WarmPoolConfiguration\":{\
+      \"type\":\"structure\",\
+      \"members\":{\
+        \"MaxGroupPreparedCapacity\":{\
+          \"shape\":\"MaxGroupPreparedCapacity\",\
+          \"documentation\":\"<p>The total maximum number of instances that are allowed to be in the warm pool or in any state except <code>Terminated</code> for the Auto Scaling group.</p>\"\
+        },\
+        \"MinSize\":{\
+          \"shape\":\"WarmPoolMinSize\",\
+          \"documentation\":\"<p>The minimum number of instances to maintain in the warm pool.</p>\"\
+        },\
+        \"PoolState\":{\
+          \"shape\":\"WarmPoolState\",\
+          \"documentation\":\"<p>The instance state to transition to after the lifecycle actions are complete: <code>Stopped</code> or <code>Running</code>.</p>\"\
+        },\
+        \"Status\":{\
+          \"shape\":\"WarmPoolStatus\",\
+          \"documentation\":\"<p>The status of a warm pool that is marked for deletion.</p>\"\
+        }\
+      },\
+      \"documentation\":\"<p>Describes a warm pool configuration. </p>\"\
+    },\
+    \"WarmPoolMinSize\":{\
+      \"type\":\"integer\",\
+      \"min\":0\
+    },\
+    \"WarmPoolSize\":{\"type\":\"integer\"},\
+    \"WarmPoolState\":{\
+      \"type\":\"string\",\
+      \"enum\":[\
+        \"Stopped\",\
+        \"Running\"\
+      ]\
+    },\
+    \"WarmPoolStatus\":{\
+      \"type\":\"string\",\
+      \"enum\":[\"PendingDelete\"]\
     },\
     \"XmlString\":{\
       \"type\":\"string\",\

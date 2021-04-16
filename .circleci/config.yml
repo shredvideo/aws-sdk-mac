@@ -2,6 +2,14 @@
 #
 # Check https://circleci.com/docs/2.0/ios-migrating-from-1-2/ for more details
 #
+
+################################################################################
+# NOTE: If you make changes to this file, evaluate whether they also need to be
+# made in the .circleci/config.yml files in the bump_sdk_version and gh-pages
+# branches. The gh-pages config is quite straightforward and probably won't
+# need the changes, but the bump_sdk_version branch has more build logic in it.
+################################################################################
+
 version: 2.1
 
 commands:
@@ -27,7 +35,7 @@ commands:
             sdkName=aws-ios-sdk
             echo "export sdkName=$sdkName" >> $BASH_ENV
 
-            release_bucket=${S3_RELEASE_BUCKET}
+            release_bucket=${XCF_RELEASE_BUCKET}
             echo "export release_bucket=$release_bucket" >> $BASH_ENV
 
             release_tag=${CIRCLE_TAG}
@@ -135,8 +143,8 @@ commands:
       - run:
           name: Configure AWS profiles
           command: |
-            aws configure --profile sdk_s3_release set region us-east-1
-            echo -e "[sdk_s3_release]\naws_access_key_id=${S3_RELEASE_AWS_ACCESS_KEY_ID}\naws_secret_access_key=${S3_RELEASE_AWS_SECRET_ACCESS_KEY}\n" >> ~/.aws/credentials
+            aws configure --profile sdk_xcf_release set region us-east-1
+            echo -e "[sdk_xcf_release]\naws_access_key_id=${XCF_AWS_ACCESS_KEY_ID}\naws_secret_access_key=${XCF_AWS_SECRET_ACCESS_KEY}\naws_session_token=${XCF_AWS_SESSION_TOKEN}\n" >> ~/.aws/credentials
 
   pre_start_simulator:
     description: >-
@@ -173,16 +181,6 @@ commands:
                  echo "The release was triggered by CircleCI. Skip the job"
                  circleci step halt
               fi
-            fi
-      - run:
-          name: Skip the test job if this was merged from develop by CircleCI
-          command: |
-            skipflag=$(echo "${SKIPTEST_FOR_MAIN}") | tr '[:upper:]' '[:lower:]'
-            commitmessage=$(git log --format=%B -n 1 ${CIRCLE_SHA1})
-            if [ "$skipflag" == "true" ] && [[ "$commitmessage" =~ .*"[Merge develop to main by circleci]".* ]]
-            then
-               echo "This is merged from develop by CircleCI. Skip the test job"
-               circleci step halt
             fi
 
   skip_job_unless_required:
@@ -381,15 +379,6 @@ jobs:
 
       - when:
           condition:
-            equal: [ << parameters.scheme >>, "AWSMobileAnalytics" ]
-          steps:
-            - run:
-                name: Additional AWSMobileAnalytics test targets
-                command: |
-                  xcodebuild test-without-building -project << parameters.project >> -scheme << parameters.scheme >> -sdk iphonesimulator -destination "${destination}" -derivedDataPath ./testing_derived_data -only-testing:AWSMobileAnalyticsLegacyTests | tee "artifacts/integ-test-AWSMobileAnalyticsLegacyTests.log" | xcpretty --simple --color --report junit
-
-      - when:
-          condition:
             equal: [ << parameters.scheme >>, "AWSMobileClient" ]
           steps:
             - run:
@@ -418,32 +407,27 @@ jobs:
             tagname="AWS SDK for iOS "${CIRCLE_TAG}
             echo "$tagdescription" | github-release release -s ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -t ${CIRCLE_TAG} --name "$tagname" -d -
 
-  build_carthage:
+  build_xcframeworks:
     macos:
-      xcode: "12.1.0"
+      xcode: "12.3.0"
     steps:
       - skip_job_unless_required
       - checkout_with_cache
       - pre_start_simulator
       - update_brew
       - run:
-          name: Upgrade Carthage
+          name: Build XCFrameworks
           command: |
-            HOMEBREW_NO_AUTO_UPDATE=1 brew upgrade carthage
-      - run:
-          name: Build Carthage
-          command: |
-            # Build Carthage via this script to workaround lipo error due to multiple architectures in same file
-            bash ./CircleciScripts/carthage-build.sh --no-skip-current --platform iOS | tee buildout.txt
+            python3 ./CircleciScripts/create_xcframeworks.py
           no_output_timeout: 100m
       - save_cache:
-          key: carthage_build_result-{{ .Revision }}
+          key: build_xcframeworks-result-{{ .Revision }}
           paths:
-            - Carthage
+            - xcframeworks
 
   release_carthage:
     macos:
-      xcode: "12.1.0"
+      xcode: "12.3.0"
     steps:
       - skip_job_unless_required
       - checkout_with_cache
@@ -452,12 +436,8 @@ jobs:
       - run:
           name: Install github-release
           command: HOMEBREW_NO_AUTO_UPDATE=1 brew install github-release
-      - run:
-          name: Upgrade Carthage
-          command: |
-            HOMEBREW_NO_AUTO_UPDATE=1 brew upgrade carthage
       - restore_cache:
-          key: carthage_build_result-{{ .Revision }}
+          key: build_xcframeworks-result-{{ .Revision }}
       - run:
           name: Create Carthage archive
           command: python3 ./CircleciScripts/create_carthage_archive.py
@@ -546,7 +526,56 @@ jobs:
           name: Build projects
           command:
             python3 CircleciScripts/build_iossample.py "$(pwd)/aws-sdk-ios-samples"
-  release_ios_s3:
+  
+  release_xcframeworks:
+    macos:
+      xcode: "12.3.0"
+    steps:
+      - skip_job_unless_required
+      - checkout_with_cache
+      - set_environment_variables
+      - configure_aws
+      - restore_cache:
+          key: build_xcframeworks-result-{{ .Revision }}
+      - run:
+          name: Install boto3
+          command: sudo pip3 install boto3
+      - run:
+          name: Clone spm github repo and reset release branch
+          command: |
+            git clone "https://${GITHUB_SPM_RELEASE_TOKEN}@github.com/aws-amplify/aws-sdk-ios-spm.git"
+            cd aws-sdk-ios-spm
+            git checkout -b pre-release-${release_version}
+            git fetch
+            git checkout release
+            git reset --hard main
+            git push -f
+            cd ..
+      - run:
+          name: Prepare xcframework archives and update Package.swift manifest
+          command:
+            python3 CircleciScripts/prepare_xcframework_archives.py $release_version
+      - run:
+          name: Upload xcframework archives
+          command:
+            python3 CircleciScripts/upload_xcframeworks.py $release_bucket $release_version sdk_xcf_release
+      - run:
+          name: Create PR for SPM package manifest
+          command: |
+            cd aws-sdk-ios-spm
+            head_branch=pre-release-${release_version} 
+            target_branch="release"
+            title="release: Version and checksum update for ${release_version}"
+            content="Update for package manifest and version for the next release"
+            git checkout ${head_branch}
+            git config --local user.name "${GITHUB_SPM_RELEASE_USER}"
+            git add Package.swift
+            git commit -m "$title"
+            git push origin ${head_branch}
+            cd ..
+            python3 ./CircleciScripts/create_pullrequest.py "${GITHUB_SPM_RELEASE_USER}" "${GITHUB_SPM_RELEASE_TOKEN}" "$title" "$content" "$target_branch" "${head_branch}" "aws-amplify" "aws-sdk-ios-spm"
+
+  release_xcframeworks_combined:
     macos:
       xcode: "12.1.0"
     environment:
@@ -558,13 +587,13 @@ jobs:
       - set_environment_variables
       - configure_aws
       - restore_cache:
-          key: carthage_build_result-{{ .Revision }}
+          key: build_xcframeworks-result-{{ .Revision }}
       - run:
           name: Make directory structure
           command: |
             mkdir -p "$sdkNameWithVersion"
-            mv "Carthage/Build/iOS" "$sdkNameWithVersion/frameworks"
-            rm -rf "Carthage/Build"
+            mv "xcframeworks/output/XCF/" "$sdkNameWithVersion/frameworks"
+            rm -rf "xcframeworks/output/"
       - run:
           name: Copy SDK resource files
           command: |
@@ -583,12 +612,12 @@ jobs:
       - run:
           name: Upload to S3
           command: |
-            aws s3api put-object --bucket "$release_bucket" --key "$sdkNameWithVersion.zip" --body "$sdkNameWithVersion.zip" --content-disposition "attachment;filename=$sdkNameWithVersion.zip" --acl public-read --profile sdk_s3_release
-            aws s3api put-object --bucket "$release_bucket" --key "latest/$sdkName.zip" --body "$sdkNameWithVersion.zip" --content-disposition "attachment;filename=$sdkNameWithVersion.zip" --acl public-read --profile sdk_s3_release
+            aws s3api put-object --bucket "$release_bucket" --key "aws-sdk-ios/$sdkNameWithVersion.zip" --body "$sdkNameWithVersion.zip" --content-disposition "attachment;filename=$sdkNameWithVersion.zip" --profile sdk_xcf_release
+            aws s3api put-object --bucket "$release_bucket" --key "aws-sdk-ios/latest/$sdkName.zip" --body "$sdkNameWithVersion.zip" --content-disposition "attachment;filename=$sdkNameWithVersion.zip" --profile sdk_xcf_release
       - run:
           name: Invalidate cloudfront
           command: |
-            python3 CircleciScripts/cloudfront_invalidate.py sdk_s3_release "${S3_RELEASE_DISTRIBUTION_ID}" "latest/$sdkName.zip"
+            python3 CircleciScripts/cloudfront_invalidate.py sdk_xcf_release "${XCF_RELEASE_DISTRIBUTION_ID}" "aws-sdk-ios/latest/$sdkName.zip"
 
   bump_sdk_version:
     macos:
@@ -630,7 +659,7 @@ jobs:
 
             bump_version_message="[bump version $release_version]"
             bump_version_pr_title="bump iOS sdk version to ${release_version}"
-            target_branch=develop
+            target_branch=main
             echo "export bumpversion_repo_user=$bumpversion_repo_user" >> $BASH_ENV
             echo "export bumpversion_repo_name=$bumpversion_repo_name" >> $BASH_ENV
             echo "export release_version=$release_version" >> $BASH_ENV
@@ -645,41 +674,6 @@ jobs:
             cp -R ${bumpversion_repo_name}/CircleciScripts/ CircleciScripts/
             python3 CircleciScripts/bump_sdk_version.py "$(pwd)/${bumpversion_repo_name}" $release_version
       - bump_version_post
-
-  merge_to_main:
-    docker:
-      - image: circleci/android:api-27-alpha
-    environment:
-      JVM_OPTS: -Xmx1024m
-    steps:
-      - skip_job_unless_required
-      - checkout
-      - set_environment_variables
-      - run:
-          name: Merge change to main
-          command: |
-            git config --local user.name AWS
-            git checkout main
-            git fetch origin
-            git reset origin/main
-            git checkout .
-            git clean -fd .
-            commitlog=$(git log main -20)
-            currentcommit="${CIRCLE_SHA1}"
-            echo "currentcommit=$currentcommit"
-            echo "$commitlog"
-            if [[ "$commitlog" =~ .*"commit $currentcommit".* ]]
-            then
-               echo "The change is already merged"
-            else
-              echo "Merging change from develop to main"
-              currentcommit="${CIRCLE_SHA1}"
-              lastcommitmessage=$(git log --format=%B -n 1 ${currentcommit})
-
-              git merge develop --no-edit --commit -m "[Merge develop to main by circleci] $lastcommitmessage"
-              echo "push change"
-              git push -q https://${GITHUB_TOKEN}@github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}.git
-            fi
 
   prepare_release_sdk:
     docker:
@@ -707,7 +701,7 @@ jobs:
       - run:
           name: Create pull request
           command: |
-            target_branch="develop"
+            target_branch="main"
             title=${CIRCLE_BRANCH}
             content="${CIRCLE_BRANCH}"
             python3 ./CircleciScripts/create_pullrequest.py "${GITHUB_USER}" "${GITHUB_TOKEN}" "$title" "$content" "$target_branch" "${CIRCLE_PROJECT_USERNAME}:${CIRCLE_BRANCH}" ${CIRCLE_PROJECT_USERNAME} ${CIRCLE_PROJECT_REPONAME}
@@ -718,7 +712,6 @@ all_integ_test_requires: &all_integ_test_requires
     - integ_test_AWSMobileClient
     - integ_test_AWSAutoScaling
     - integ_test_AWSCloudWatch
-    - integ_test_AWSCognito
     - integ_test_AWSComprehend
     - integ_test_AWSCore
     - integ_test_AWSDynamoDB
@@ -730,7 +723,6 @@ all_integ_test_requires: &all_integ_test_requires
     - integ_test_AWSKinesisVideoSignaling
     - integ_test_AWSLambda
     - integ_test_AWSLex
-    - integ_test_AWSMobileAnalytics
     - integ_test_AWSPinpoint
     - integ_test_AWSPolly
     - integ_test_AWSRekognition
@@ -753,6 +745,7 @@ workflows:
             branches:
               only:
                 - bump_sdk_version
+  
   build_and_test:
     jobs:
       - build:
@@ -807,16 +800,6 @@ workflows:
       - unit_test:
           scheme: AWSCognitoIdentityProvider
           name: unit_test_AWSCognitoIdentityProvider
-          requires:
-            - build
-            - build_test_host_apps
-          filters:
-            branches:
-              ignore: bump_sdk_version
-
-      - unit_test:
-          scheme: AWSCognito
-          name: unit_test_AWSCognito
           requires:
             - build
             - build_test_host_apps
@@ -995,16 +978,6 @@ workflows:
               ignore: bump_sdk_version
 
       - unit_test:
-          scheme: AWSMobileAnalytics
-          name: unit_test_AWSMobileAnalytics
-          requires:
-            - build
-            - build_test_host_apps
-          filters:
-            branches:
-              ignore: bump_sdk_version
-
-      - unit_test:
           project: AWSAuthSDK/AWSAuthSDK.xcodeproj
           scheme: AWSMobileClient
           name: unit_test_AWSMobileClient
@@ -1144,6 +1117,16 @@ workflows:
           filters:
             branches:
               ignore: bump_sdk_version
+      
+      - unit_test:
+          scheme: AWSLocation
+          name: unit_test_AWSLocation
+          requires:
+            - build
+            - build_test_host_apps
+          filters:
+            branches:
+              ignore: bump_sdk_version
 
       - create_pullrequest_for_modelupdate:
           filters:
@@ -1160,7 +1143,6 @@ workflows:
           filters:
             branches:
               only:
-                - develop
                 - main
 
       - integ_test:
@@ -1171,7 +1153,6 @@ workflows:
           filters:
             branches:
               only:
-                - develop
                 - main
 
       - integ_test:
@@ -1182,18 +1163,6 @@ workflows:
           filters:
             branches:
               only:
-                - develop
-                - main
-
-      - integ_test:
-          scheme: AWSCognito
-          name: integ_test_AWSCognito
-          requires:
-            - unit_test_AWSCognito
-          filters:
-            branches:
-              only:
-                - develop
                 - main
 
       - integ_test:
@@ -1204,7 +1173,6 @@ workflows:
           filters:
             branches:
               only:
-                - develop
                 - main
 
       - integ_test:
@@ -1215,7 +1183,6 @@ workflows:
           filters:
             branches:
               only:
-                - develop
                 - main
 
       - integ_test:
@@ -1226,7 +1193,6 @@ workflows:
           filters:
             branches:
               only:
-                - develop
                 - main
 
       - integ_test:
@@ -1237,7 +1203,6 @@ workflows:
           filters:
             branches:
               only:
-                - develop
                 - main
 
       - integ_test:
@@ -1248,7 +1213,6 @@ workflows:
           filters:
             branches:
               only:
-                - develop
                 - main
 
       - integ_test:
@@ -1259,7 +1223,6 @@ workflows:
           filters:
             branches:
               only:
-                - develop
                 - main
 
       - integ_test:
@@ -1270,7 +1233,6 @@ workflows:
           filters:
             branches:
               only:
-                - develop
                 - main
 
       - integ_test:
@@ -1281,7 +1243,6 @@ workflows:
           filters:
             branches:
               only:
-                - develop
                 - main
 
       - integ_test:
@@ -1292,7 +1253,6 @@ workflows:
           filters:
             branches:
               only:
-                - develop
                 - main
 
       - integ_test:
@@ -1303,7 +1263,6 @@ workflows:
           filters:
             branches:
               only:
-                - develop
                 - main
 
       - integ_test:
@@ -1314,18 +1273,6 @@ workflows:
           filters:
             branches:
               only:
-                - develop
-                - main
-
-      - integ_test:
-          scheme: AWSMobileAnalytics
-          name: integ_test_AWSMobileAnalytics
-          requires:
-            - unit_test_AWSMobileAnalytics
-          filters:
-            branches:
-              only:
-                - develop
                 - main
 
       - integ_test:
@@ -1336,7 +1283,6 @@ workflows:
           filters:
             branches:
               only:
-                - develop
                 - main
 
       - integ_test:
@@ -1347,7 +1293,6 @@ workflows:
           filters:
             branches:
               only:
-                - develop
                 - main
 
       - integ_test:
@@ -1358,7 +1303,6 @@ workflows:
           filters:
             branches:
               only:
-                - develop
                 - main
 
       - integ_test:
@@ -1369,7 +1313,6 @@ workflows:
           filters:
             branches:
               only:
-                - develop
                 - main
 
       - integ_test:
@@ -1380,7 +1323,6 @@ workflows:
           filters:
             branches:
               only:
-                - develop
                 - main
 
       - integ_test:
@@ -1391,7 +1333,6 @@ workflows:
           filters:
             branches:
               only:
-                - develop
                 - main
 
       - integ_test:
@@ -1402,7 +1343,6 @@ workflows:
           filters:
             branches:
               only:
-                - develop
                 - main
 
       - integ_test:
@@ -1413,7 +1353,6 @@ workflows:
           filters:
             branches:
               only:
-                - develop
                 - main
 
       - integ_test:
@@ -1424,7 +1363,6 @@ workflows:
           filters:
             branches:
               only:
-                - develop
                 - main
 
       - integ_test:
@@ -1435,7 +1373,6 @@ workflows:
           filters:
             branches:
               only:
-                - develop
                 - main
 
       - integ_test:
@@ -1446,16 +1383,8 @@ workflows:
           filters:
             branches:
               only:
-                - develop
                 - main
 
-
-      - merge_to_main:
-          <<: *all_integ_test_requires
-          filters:
-            branches:
-              only:
-                - develop
 
       - prepare_release_sdk:
           <<: *all_integ_test_requires
@@ -1472,7 +1401,7 @@ workflows:
               ignore: /.*/
             tags:
               only: /^[0-9]+.[0-9]+.[0-9]+$/
-      - build_carthage:
+      - build_xcframeworks:
           requires:
             - build
           filters:
@@ -1480,9 +1409,17 @@ workflows:
               ignore: /.*/
             tags:
               only: /^[0-9]+.[0-9]+.[0-9]+$/
-      - release_ios_s3:
+      - release_xcframeworks:
           requires:
-            - build_carthage
+            - build_xcframeworks
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^[0-9]+.[0-9]+.[0-9]+$/
+      - release_xcframeworks_combined:
+          requires:
+            - release_xcframeworks
           filters:
             branches:
               ignore: /.*/
@@ -1497,7 +1434,7 @@ workflows:
       - release_docs:
           requires:
             - release_tag
-            - release_ios_s3
+            - release_xcframeworks_combined
           filters:
             branches:
               ignore: /.*/
@@ -1521,7 +1458,7 @@ workflows:
               only: /^[0-9]+.[0-9]+.[0-9]+$/
       - release_carthage:
           requires:
-            - build_carthage
+            - build_xcframeworks
             - add_doc_tag
           filters:
             branches:
@@ -1531,7 +1468,7 @@ workflows:
       - bump_ios_sampleapp_version:
           requires:
             - release_tag
-            - release_ios_s3
+            - release_xcframeworks_combined
             - release_cocoapods
           filters:
             branches:

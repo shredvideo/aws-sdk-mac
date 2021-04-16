@@ -13,9 +13,8 @@
 // permissions and limitations under the License.
 //
 
-#import <AWSMobileClient/AWSCognitoAuth.h>
-
 NS_ASSUME_NONNULL_BEGIN
+@class AWSCognitoAuthConfiguration;
 
 @interface AWSCognitoAuthConfiguration(Extension)
 
@@ -33,7 +32,8 @@ NS_ASSUME_NONNULL_BEGIN
            signInUriQueryParameters:(nullable NSDictionary<NSString *, NSString *> *) signInUriQueryParameters
           signOutUriQueryParameters:(nullable NSDictionary<NSString *, NSString *> *) signOutUriQueryParameters
             tokenUriQueryParameters:(nullable NSDictionary<NSString *, NSString *> *) tokenUriQueryParameters
-       userPoolServiceConfiguration:(nullable AWSServiceConfiguration *)serviceConfiguration;
+       userPoolServiceConfiguration:(nullable AWSServiceConfiguration *)serviceConfiguration
+               signInPrivateSession:(BOOL)signInPrivateSession;
 
 @end
 

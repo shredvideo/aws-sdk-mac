@@ -26,7 +26,7 @@
 @implementation AWSS3Tests
 
 NSUInteger const AWSS3Test256KB = 1024 * 256;
-NSUInteger const AWSS3TestsTransferManagerMinimumPartSize = 5 * 1024 * 1024;
+NSUInteger const AWSS3TestsMinimumPartSize = 5 * 1024 * 1024;
 NSString *AWSS3TestBucketNamePrefix = nil;
 
 static NSURL *tempLargeURL = nil;
@@ -531,6 +531,64 @@ static NSMutableArray<NSString *> *testBucketsCreated;
         return nil;
     }] waitUntilFinished];
 
+}
+
+/// Test put/get to a transfer-accelerate-enabled bucket:
+/// https://docs.aws.amazon.com/AmazonS3/latest/userguide/transfer-acceleration.html
+- (void)testTransferAcceleration {
+    NSString *bucketName = [AWSS3Tests transferAccelerationBucketName];
+    AWSRegionType region = [AWSTestUtility getRegionFromTestConfiguration];
+
+    id<AWSCredentialsProvider> credentialsProvider = [AWSTestUtility getDefaultCredentialsProvider];
+    AWSEndpoint *customEndpoint = [[AWSEndpoint alloc]initWithURLString:@"https://s3-accelerate.amazonaws.com"];
+
+    AWSServiceConfiguration *serviceConfiguration = [[AWSServiceConfiguration alloc]initWithRegion:region
+                                                                                          endpoint:customEndpoint
+                                                                               credentialsProvider:credentialsProvider];
+
+    [AWSS3 registerS3WithConfiguration:serviceConfiguration forKey:@"testTransferAcceleration"];
+    AWSS3 *s3 = [AWSS3 S3ForKey:@"testTransferAcceleration"];
+
+    NSString *testObjectStr = @"a test object string.";
+
+    NSTimeInterval timestamp = [NSDate timeIntervalSinceReferenceDate];
+    NSString *keyName = [NSString stringWithFormat:@"ios-test-transfer-acceleration-%lld", (int64_t)timestamp];
+    NSData *testObjectData = [testObjectStr dataUsingEncoding:NSUTF8StringEncoding];
+
+    AWSS3PutObjectRequest *putObjectRequest = [AWSS3PutObjectRequest new];
+    putObjectRequest.bucket = bucketName;
+    putObjectRequest.key = keyName;
+    putObjectRequest.body = testObjectData;
+    putObjectRequest.contentLength = [NSNumber numberWithUnsignedInteger:[testObjectData length]];
+    putObjectRequest.contentType = @"application/octet-stream";
+
+    [[[s3 putObject:putObjectRequest] continueWithBlock:^id(AWSTask<AWSS3PutObjectOutput *> *task) {
+        XCTAssertNil(task.error);
+        XCTAssertNotNil(task.result.ETag);
+        return nil;
+    }] waitUntilFinished];
+
+    AWSS3GetObjectRequest *getObjectRequest = [AWSS3GetObjectRequest new];
+    getObjectRequest.bucket = bucketName;
+    getObjectRequest.key = keyName;
+
+    [[[s3 getObject:getObjectRequest] continueWithBlock:^id(AWSTask<AWSS3GetObjectOutput *> *task) {
+        XCTAssertNil(task.error);
+        XCTAssertNotNil(task.result);
+        XCTAssertEqualObjects(task.result.body, testObjectData);
+        return nil;
+    }] waitUntilFinished];
+
+    AWSS3DeleteObjectRequest *deleteObjectRequest = [AWSS3DeleteObjectRequest new];
+    deleteObjectRequest.bucket = bucketName;
+    deleteObjectRequest.key = keyName;
+    [[[s3 deleteObject:deleteObjectRequest] continueWithBlock:^id(AWSTask<AWSS3DeleteObjectOutput *> *task) {
+        XCTAssertNil(task.error);
+        XCTAssertNotNil(task.result);
+        return nil;
+    }] waitUntilFinished];
+
+    [AWSS3 removeS3ForKey:@"testTransferAcceleration"];
 }
 
 - (void)testPutHeadGetAndDeleteObject {
@@ -1274,7 +1332,7 @@ static NSMutableArray<NSString *> *testBucketsCreated;
     __block NSString *uploadId = @"";
     __block NSString *resultETag = @"";
 
-    NSUInteger partCount = ceil((double)[testData length] / AWSS3TestsTransferManagerMinimumPartSize);
+    NSUInteger partCount = ceil((double)[testData length] / AWSS3TestsMinimumPartSize);
     NSMutableArray *completedParts = [NSMutableArray arrayWithCapacity:partCount];
     for (int32_t i = 0; i < partCount; i++) {
         [completedParts addObject:[NSNull null]];
@@ -1293,8 +1351,8 @@ static NSMutableArray<NSString *> *testBucketsCreated;
         NSMutableArray *partUploadTasks = [NSMutableArray arrayWithCapacity:partCount];
 
         for (int32_t i = 1; i < partCount + 1; i++) {
-            NSUInteger dataLength = i == partCount ? [testData length] - ((i - 1) * AWSS3TestsTransferManagerMinimumPartSize) : AWSS3TestsTransferManagerMinimumPartSize;
-            NSData *partData = [testData subdataWithRange:NSMakeRange((i - 1) * AWSS3TestsTransferManagerMinimumPartSize, dataLength)];
+            NSUInteger dataLength = i == partCount ? [testData length] - ((i - 1) * AWSS3TestsMinimumPartSize) : AWSS3TestsMinimumPartSize;
+            NSData *partData = [testData subdataWithRange:NSMakeRange((i - 1) * AWSS3TestsMinimumPartSize, dataLength)];
 
             AWSS3UploadPartRequest *uploadPartRequest = [AWSS3UploadPartRequest new];
             uploadPartRequest.bucket = testBucketNameGeneral;
@@ -1533,5 +1591,11 @@ static NSMutableArray<NSString *> *testBucketsCreated;
 }
 
 #pragma mark - Utilities
+
++ (NSString *)transferAccelerationBucketName {
+    NSString *bucketName = [AWSTestUtility getIntegrationTestConfigurationValueForPackageId:@"s3"
+                                                                                    configKey:@"bucket_name_transfer_acceleration"];
+    return bucketName;
+}
 
 @end

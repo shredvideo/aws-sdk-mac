@@ -1,5 +1,5 @@
 //
-// Copyright 2010-2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// Copyright 2010-2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License").
 // You may not use this file except in compliance with the License.
@@ -44,6 +44,11 @@ typedef NS_ENUM(NSInteger, AWSPinpointTargetingAttributeType) {
     AWSPinpointTargetingAttributeTypeUnknown,
     AWSPinpointTargetingAttributeTypeInclusive,
     AWSPinpointTargetingAttributeTypeExclusive,
+    AWSPinpointTargetingAttributeTypeContains,
+    AWSPinpointTargetingAttributeTypeBefore,
+    AWSPinpointTargetingAttributeTypeAfter,
+    AWSPinpointTargetingAttributeTypeOn,
+    AWSPinpointTargetingAttributeTypeBetween,
 };
 
 typedef NS_ENUM(NSInteger, AWSPinpointTargetingCampaignStatus) {
@@ -184,6 +189,7 @@ typedef NS_ENUM(NSInteger, AWSPinpointTargetingState) {
     AWSPinpointTargetingStateCompleted,
     AWSPinpointTargetingStateCancelled,
     AWSPinpointTargetingStateClosed,
+    AWSPinpointTargetingStatePaused,
 };
 
 typedef NS_ENUM(NSInteger, AWSPinpointTargetingTemplateType) {
@@ -1769,7 +1775,7 @@ typedef NS_ENUM(NSInteger, AWSPinpointTargeting__EndpointTypesElement) {
 
 
 /**
- <p>The type of segment dimension to use. Valid values are: INCLUSIVE, endpoints that match the criteria are included in the segment; and, EXCLUSIVE, endpoints that match the criteria are excluded from the segment.</p>
+ <p>The type of segment dimension to use. Valid values are: <ul><li>INCLUSIVE - endpoints that have attributes matching the values are included in the segment.</li><li>EXCLUSIVE - endpoints that have attributes matching the values are excluded in the segment.</li><li>CONTAINS - endpoints that have attributes' substrings match the values are included in the segment.</li><li>BEFORE - endpoints with attributes read as ISO_INSTANT datetimes before the value are included in the segment.</li><li>AFTER - endpoints with attributes read as ISO_INSTANT datetimes after the value are included in the segment.</li><li>ON - endpoints with attributes read as ISO_INSTANT dates on the value are included in the segment. Time is ignored in this comparison.</li><li>BETWEEN - endpoints with attributes read as ISO_INSTANT datetimes between the values are included in the segment.</li></p>
  */
 @property (nonatomic, assign) AWSPinpointTargetingAttributeType attributeType;
 
@@ -2280,14 +2286,29 @@ typedef NS_ENUM(NSInteger, AWSPinpointTargeting__EndpointTypesElement) {
 @property (nonatomic, strong) NSString * _Nullable body;
 
 /**
+ <p>The entity ID or Principal Entity (PE) id received from the regulatory body for sending SMS in your country.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable entityId;
+
+/**
  <p>The SMS message type. Valid values are TRANSACTIONAL (for messages that are critical or time-sensitive, such as a one-time passwords) and PROMOTIONAL (for messsages that aren't critical or time-sensitive, such as marketing messages).</p>
  */
 @property (nonatomic, assign) AWSPinpointTargetingMessageType messageType;
 
 /**
+ <p>The long code to send the SMS message from. This value should be one of the dedicated long codes that's assigned to your AWS account. Although it isn't required, we recommend that you specify the long code using an E.164 format to ensure prompt and accurate delivery of the message. For example, +12065550100.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable originationNumber;
+
+/**
  <p>The sender ID to display on recipients' devices when they receive the SMS message.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable senderId;
+
+/**
+ <p>The template ID received from the regulatory body for sending SMS in your country.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable templateId;
 
 @end
 
@@ -6878,6 +6899,11 @@ typedef NS_ENUM(NSInteger, AWSPinpointTargeting__EndpointTypesElement) {
 @property (nonatomic, strong) NSNumber * _Nullable endpointReentryCap;
 
 /**
+ <p>Minimum time that must pass before an endpoint can re-enter a given journey. The duration should use an ISO 8601 format, such as PT1H. </p>
+ */
+@property (nonatomic, strong) NSString * _Nullable endpointReentryInterval;
+
+/**
  <p>The maximum number of messages that the journey can send each second.</p>
  */
 @property (nonatomic, strong) NSNumber * _Nullable messagesPerSecond;
@@ -6955,6 +6981,11 @@ typedef NS_ENUM(NSInteger, AWSPinpointTargeting__EndpointTypesElement) {
 @property (nonatomic, strong) NSString * _Nullable refreshFrequency;
 
 /**
+ <p>Specifies whether a journey should be refreshed on segment update.</p>
+ */
+@property (nonatomic, strong) NSNumber * _Nullable refreshOnSegmentUpdate;
+
+/**
  <p>The schedule settings for the journey.</p>
  */
 @property (nonatomic, strong) AWSPinpointTargetingJourneySchedule * _Nullable schedule;
@@ -6975,6 +7006,11 @@ typedef NS_ENUM(NSInteger, AWSPinpointTargeting__EndpointTypesElement) {
 @property (nonatomic, assign) AWSPinpointTargetingState state;
 
 /**
+ <p>Specifies whether endpoints in quiet hours should enter a wait till the end of their quiet hours.</p>
+ */
+@property (nonatomic, strong) NSNumber * _Nullable waitForQuietTime;
+
+/**
  <p>This object is not used or supported.</p>
  */
 @property (nonatomic, strong) NSDictionary<NSString *, NSString *> * _Nullable tags;
@@ -6988,14 +7024,29 @@ typedef NS_ENUM(NSInteger, AWSPinpointTargeting__EndpointTypesElement) {
 
 
 /**
+ <p>The entity ID or Principal Entity (PE) id received from the regulatory body for sending SMS in your country.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable entityId;
+
+/**
  <p>The SMS message type. Valid values are TRANSACTIONAL (for messages that are critical or time-sensitive, such as a one-time passwords) and PROMOTIONAL (for messsages that aren't critical or time-sensitive, such as marketing messages).</p>
  */
 @property (nonatomic, assign) AWSPinpointTargetingMessageType messageType;
 
 /**
+ <p>The long code to send the SMS message from. This value should be one of the dedicated long codes that's assigned to your AWS account. Although it isn't required, we recommend that you specify the long code using an E.164 format to ensure prompt and accurate delivery of the message. For example, +12065550100.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable originationNumber;
+
+/**
  <p>The sender ID to display as the sender of the message on a recipient's device. Support for sender IDs varies by country or region. For more information, see <a href="https://docs.aws.amazon.com/pinpoint/latest/userguide/channels-sms-countries.html">Supported Countries and Regions</a> in the Amazon Pinpoint User Guide.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable senderId;
+
+/**
+ <p>The template ID received from the regulatory body for sending SMS in your country.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable templateId;
 
 @end
 
@@ -7029,7 +7080,7 @@ typedef NS_ENUM(NSInteger, AWSPinpointTargeting__EndpointTypesElement) {
 
 
 /**
- <p>The status of the journey. Currently, the only supported value is CANCELLED.</p><p>If you cancel a journey, Amazon Pinpoint continues to perform activities that are currently in progress, until those activities are complete. Amazon Pinpoint also continues to collect and aggregate analytics data for those activities, until they are complete, and any activities that were complete when you cancelled the journey.</p><p>After you cancel a journey, you can't add, change, or remove any activities from the journey. In addition, Amazon Pinpoint stops evaluating the journey and doesn't perform any activities that haven't started.</p>
+ <p>The status of the journey. Currently, Supported values are ACTIVE, PAUSED, and CANCELLED</p><p>If you cancel a journey, Amazon Pinpoint continues to perform activities that are currently in progress, until those activities are complete. Amazon Pinpoint also continues to collect and aggregate analytics data for those activities, until they are complete, and any activities that were complete when you cancelled the journey.</p><p>After you cancel a journey, you can't add, change, or remove any activities from the journey. In addition, Amazon Pinpoint stops evaluating the journey and doesn't perform any activities that haven't started.</p><p>When the journey is paused, Amazon Pinpoint continues to perform activities that are currently in progress, until those activities are complete. Endpoints will stop entering journeys when the journey is paused and will resume entering the journey after the journey is resumed. For wait activities, wait time is paused when the journey is paused. Currently, PAUSED only supports journeys with a segment refresh interval.</p>
  */
 @property (nonatomic, assign) AWSPinpointTargetingState state;
 
@@ -8268,6 +8319,11 @@ typedef NS_ENUM(NSInteger, AWSPinpointTargeting__EndpointTypesElement) {
 @property (nonatomic, strong) NSString * _Nullable body;
 
 /**
+ <p>The entity ID or Principal Entity (PE) id received from the regulatory body for sending SMS in your country.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable entityId;
+
+/**
  <p>The SMS program name that you provided to AWS Support when you requested your dedicated number.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable keyword;
@@ -8296,6 +8352,11 @@ typedef NS_ENUM(NSInteger, AWSPinpointTargeting__EndpointTypesElement) {
  <p>The message variables to use in the SMS message. You can override the default variables with individual address variables.</p>
  */
 @property (nonatomic, strong) NSDictionary<NSString *, NSArray<NSString *> *> * _Nullable substitutions;
+
+/**
+ <p>The template ID received from the regulatory body for sending SMS in your country.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable templateId;
 
 @end
 
@@ -10631,6 +10692,11 @@ typedef NS_ENUM(NSInteger, AWSPinpointTargeting__EndpointTypesElement) {
 @property (nonatomic, strong) NSString * _Nullable refreshFrequency;
 
 /**
+ <p>Specifies whether a journey should be refreshed on segment update.</p>
+ */
+@property (nonatomic, strong) NSNumber * _Nullable refreshOnSegmentUpdate;
+
+/**
  <p>The schedule settings for the journey.</p>
  */
 @property (nonatomic, strong) AWSPinpointTargetingJourneySchedule * _Nullable schedule;
@@ -10646,9 +10712,14 @@ typedef NS_ENUM(NSInteger, AWSPinpointTargeting__EndpointTypesElement) {
 @property (nonatomic, strong) AWSPinpointTargetingStartCondition * _Nullable startCondition;
 
 /**
- <p>The status of the journey. Valid values are:</p><ul><li><p>DRAFT - Saves the journey and doesn't publish it.</p></li><li><p>ACTIVE - Saves and publishes the journey. Depending on the journey's schedule, the journey starts running immediately or at the scheduled start time. If a journey's status is ACTIVE, you can't add, change, or remove activities from it.</p></li></ul><p>The CANCELLED, COMPLETED, and CLOSED values are not supported in requests to create or update a journey. To cancel a journey, use the <linklinkend="apps-application-id-journeys-journey-id-state">Journey State</link> resource.</p>
+ <p>The status of the journey. Valid values are:</p><ul><li><p>DRAFT - Saves the journey and doesn't publish it.</p></li><li><p>ACTIVE - Saves and publishes the journey. Depending on the journey's schedule, the journey starts running immediately or at the scheduled start time. If a journey's status is ACTIVE, you can't add, change, or remove activities from it.</p></li></ul><p>PAUSED, CANCELLED, COMPLETED, and CLOSED states are not supported in requests to create or update a journey. To cancel, pause, or resume a journey, use the <linklinkend="apps-application-id-journeys-journey-id-state">Journey State</link> resource.</p>
  */
 @property (nonatomic, assign) AWSPinpointTargetingState state;
+
+/**
+ <p>Specifies whether endpoints in quiet hours should enter a wait till the end of their quiet hours.</p>
+ */
+@property (nonatomic, strong) NSNumber * _Nullable waitForQuietTime;
 
 @end
 

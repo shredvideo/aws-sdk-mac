@@ -1,5 +1,5 @@
 //
-// Copyright 2010-2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// Copyright 2010-2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License").
 // You may not use this file except in compliance with the License.
@@ -23,7 +23,9 @@ FOUNDATION_EXPORT NSString *const AWSLambdaErrorDomain;
 
 typedef NS_ENUM(NSInteger, AWSLambdaErrorType) {
     AWSLambdaErrorUnknown,
+    AWSLambdaErrorCodeSigningConfigNotFound,
     AWSLambdaErrorCodeStorageExceeded,
+    AWSLambdaErrorCodeVerificationFailed,
     AWSLambdaErrorEC2AccessDenied,
     AWSLambdaErrorEC2Throttled,
     AWSLambdaErrorEC2Unexpected,
@@ -32,6 +34,7 @@ typedef NS_ENUM(NSInteger, AWSLambdaErrorType) {
     AWSLambdaErrorEFSMountFailure,
     AWSLambdaErrorEFSMountTimeout,
     AWSLambdaErrorENILimitReached,
+    AWSLambdaErrorInvalidCodeSignature,
     AWSLambdaErrorInvalidParameterValue,
     AWSLambdaErrorInvalidRequestContent,
     AWSLambdaErrorInvalidRuntime,
@@ -56,11 +59,27 @@ typedef NS_ENUM(NSInteger, AWSLambdaErrorType) {
     AWSLambdaErrorUnsupportedMediaType,
 };
 
+typedef NS_ENUM(NSInteger, AWSLambdaCodeSigningPolicy) {
+    AWSLambdaCodeSigningPolicyUnknown,
+    AWSLambdaCodeSigningPolicyWarn,
+    AWSLambdaCodeSigningPolicyEnforce,
+};
+
+typedef NS_ENUM(NSInteger, AWSLambdaEndPointType) {
+    AWSLambdaEndPointTypeUnknown,
+    AWSLambdaEndPointTypeKafkaBootstrapServers,
+};
+
 typedef NS_ENUM(NSInteger, AWSLambdaEventSourcePosition) {
     AWSLambdaEventSourcePositionUnknown,
     AWSLambdaEventSourcePositionTrimHorizon,
     AWSLambdaEventSourcePositionLatest,
     AWSLambdaEventSourcePositionAtTimestamp,
+};
+
+typedef NS_ENUM(NSInteger, AWSLambdaFunctionResponseType) {
+    AWSLambdaFunctionResponseTypeUnknown,
+    AWSLambdaFunctionResponseTypeReportBatchItemFailures,
 };
 
 typedef NS_ENUM(NSInteger, AWSLambdaFunctionVersion) {
@@ -91,12 +110,21 @@ typedef NS_ENUM(NSInteger, AWSLambdaLastUpdateStatusReasonCode) {
     AWSLambdaLastUpdateStatusReasonCodeSubnetOutOfIPAddresses,
     AWSLambdaLastUpdateStatusReasonCodeInvalidSubnet,
     AWSLambdaLastUpdateStatusReasonCodeInvalidSecurityGroup,
+    AWSLambdaLastUpdateStatusReasonCodeImageDeleted,
+    AWSLambdaLastUpdateStatusReasonCodeImageAccessDenied,
+    AWSLambdaLastUpdateStatusReasonCodeInvalidImage,
 };
 
 typedef NS_ENUM(NSInteger, AWSLambdaLogType) {
     AWSLambdaLogTypeUnknown,
     AWSLambdaLogTypeNone,
     AWSLambdaLogTypeTail,
+};
+
+typedef NS_ENUM(NSInteger, AWSLambdaPackageType) {
+    AWSLambdaPackageTypeUnknown,
+    AWSLambdaPackageTypeZip,
+    AWSLambdaPackageTypeImage,
 };
 
 typedef NS_ENUM(NSInteger, AWSLambdaProvisionedConcurrencyStatusEnum) {
@@ -114,6 +142,7 @@ typedef NS_ENUM(NSInteger, AWSLambdaRuntime) {
     AWSLambdaRuntimeNodejs810,
     AWSLambdaRuntimeNodejs10X,
     AWSLambdaRuntimeNodejs12X,
+    AWSLambdaRuntimeNodejs14X,
     AWSLambdaRuntimeJava8,
     AWSLambdaRuntimeJava8Al2,
     AWSLambdaRuntimeJava11,
@@ -136,6 +165,10 @@ typedef NS_ENUM(NSInteger, AWSLambdaRuntime) {
 typedef NS_ENUM(NSInteger, AWSLambdaSourceAccessType) {
     AWSLambdaSourceAccessTypeUnknown,
     AWSLambdaSourceAccessTypeBasicAuth,
+    AWSLambdaSourceAccessTypeVpcSubnet,
+    AWSLambdaSourceAccessTypeVpcSecurityGroup,
+    AWSLambdaSourceAccessTypeSaslScram512Auth,
+    AWSLambdaSourceAccessTypeSaslScram256Auth,
 };
 
 typedef NS_ENUM(NSInteger, AWSLambdaState) {
@@ -158,6 +191,9 @@ typedef NS_ENUM(NSInteger, AWSLambdaStateReasonCode) {
     AWSLambdaStateReasonCodeSubnetOutOfIPAddresses,
     AWSLambdaStateReasonCodeInvalidSubnet,
     AWSLambdaStateReasonCodeInvalidSecurityGroup,
+    AWSLambdaStateReasonCodeImageDeleted,
+    AWSLambdaStateReasonCodeImageAccessDenied,
+    AWSLambdaStateReasonCodeInvalidImage,
 };
 
 typedef NS_ENUM(NSInteger, AWSLambdaThrottleReason) {
@@ -183,13 +219,21 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
 @class AWSLambdaAddPermissionResponse;
 @class AWSLambdaAliasConfiguration;
 @class AWSLambdaAliasRoutingConfiguration;
+@class AWSLambdaAllowedPublishers;
+@class AWSLambdaCodeSigningConfig;
+@class AWSLambdaCodeSigningPolicies;
 @class AWSLambdaConcurrency;
 @class AWSLambdaCreateAliasRequest;
+@class AWSLambdaCreateCodeSigningConfigRequest;
+@class AWSLambdaCreateCodeSigningConfigResponse;
 @class AWSLambdaCreateEventSourceMappingRequest;
 @class AWSLambdaCreateFunctionRequest;
 @class AWSLambdaDeadLetterConfig;
 @class AWSLambdaDeleteAliasRequest;
+@class AWSLambdaDeleteCodeSigningConfigRequest;
+@class AWSLambdaDeleteCodeSigningConfigResponse;
 @class AWSLambdaDeleteEventSourceMappingRequest;
+@class AWSLambdaDeleteFunctionCodeSigningConfigRequest;
 @class AWSLambdaDeleteFunctionConcurrencyRequest;
 @class AWSLambdaDeleteFunctionEventInvokeConfigRequest;
 @class AWSLambdaDeleteFunctionRequest;
@@ -208,7 +252,11 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
 @class AWSLambdaGetAccountSettingsRequest;
 @class AWSLambdaGetAccountSettingsResponse;
 @class AWSLambdaGetAliasRequest;
+@class AWSLambdaGetCodeSigningConfigRequest;
+@class AWSLambdaGetCodeSigningConfigResponse;
 @class AWSLambdaGetEventSourceMappingRequest;
+@class AWSLambdaGetFunctionCodeSigningConfigRequest;
+@class AWSLambdaGetFunctionCodeSigningConfigResponse;
 @class AWSLambdaGetFunctionConcurrencyRequest;
 @class AWSLambdaGetFunctionConcurrencyResponse;
 @class AWSLambdaGetFunctionConfigurationRequest;
@@ -224,6 +272,9 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
 @class AWSLambdaGetPolicyResponse;
 @class AWSLambdaGetProvisionedConcurrencyConfigRequest;
 @class AWSLambdaGetProvisionedConcurrencyConfigResponse;
+@class AWSLambdaImageConfig;
+@class AWSLambdaImageConfigError;
+@class AWSLambdaImageConfigResponse;
 @class AWSLambdaInvocationRequest;
 @class AWSLambdaInvocationResponse;
 @class AWSLambdaInvokeAsyncRequest;
@@ -235,10 +286,14 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
 @class AWSLambdaLayersListItem;
 @class AWSLambdaListAliasesRequest;
 @class AWSLambdaListAliasesResponse;
+@class AWSLambdaListCodeSigningConfigsRequest;
+@class AWSLambdaListCodeSigningConfigsResponse;
 @class AWSLambdaListEventSourceMappingsRequest;
 @class AWSLambdaListEventSourceMappingsResponse;
 @class AWSLambdaListFunctionEventInvokeConfigsRequest;
 @class AWSLambdaListFunctionEventInvokeConfigsResponse;
+@class AWSLambdaListFunctionsByCodeSigningConfigRequest;
+@class AWSLambdaListFunctionsByCodeSigningConfigResponse;
 @class AWSLambdaListFunctionsRequest;
 @class AWSLambdaListFunctionsResponse;
 @class AWSLambdaListLayerVersionsRequest;
@@ -257,18 +312,23 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
 @class AWSLambdaPublishLayerVersionRequest;
 @class AWSLambdaPublishLayerVersionResponse;
 @class AWSLambdaPublishVersionRequest;
+@class AWSLambdaPutFunctionCodeSigningConfigRequest;
+@class AWSLambdaPutFunctionCodeSigningConfigResponse;
 @class AWSLambdaPutFunctionConcurrencyRequest;
 @class AWSLambdaPutFunctionEventInvokeConfigRequest;
 @class AWSLambdaPutProvisionedConcurrencyConfigRequest;
 @class AWSLambdaPutProvisionedConcurrencyConfigResponse;
 @class AWSLambdaRemoveLayerVersionPermissionRequest;
 @class AWSLambdaRemovePermissionRequest;
+@class AWSLambdaSelfManagedEventSource;
 @class AWSLambdaSourceAccessConfiguration;
 @class AWSLambdaTagResourceRequest;
 @class AWSLambdaTracingConfig;
 @class AWSLambdaTracingConfigResponse;
 @class AWSLambdaUntagResourceRequest;
 @class AWSLambdaUpdateAliasRequest;
+@class AWSLambdaUpdateCodeSigningConfigRequest;
+@class AWSLambdaUpdateCodeSigningConfigResponse;
 @class AWSLambdaUpdateEventSourceMappingRequest;
 @class AWSLambdaUpdateFunctionCodeRequest;
 @class AWSLambdaUpdateFunctionConfigurationRequest;
@@ -506,6 +566,72 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
 @end
 
 /**
+ <p>List of signing profiles that can sign a code package. </p>
+ Required parameters: [SigningProfileVersionArns]
+ */
+@interface AWSLambdaAllowedPublishers : AWSModel
+
+
+/**
+ <p>The Amazon Resource Name (ARN) for each of the signing profiles. A signing profile defines a trusted user who can sign a code package. </p>
+ */
+@property (nonatomic, strong) NSArray<NSString *> * _Nullable signingProfileVersionArns;
+
+@end
+
+/**
+ <p>Details about a Code signing configuration. </p>
+ Required parameters: [CodeSigningConfigId, CodeSigningConfigArn, AllowedPublishers, CodeSigningPolicies, LastModified]
+ */
+@interface AWSLambdaCodeSigningConfig : AWSModel
+
+
+/**
+ <p>List of allowed publishers.</p>
+ */
+@property (nonatomic, strong) AWSLambdaAllowedPublishers * _Nullable allowedPublishers;
+
+/**
+ <p>The Amazon Resource Name (ARN) of the Code signing configuration.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable codeSigningConfigArn;
+
+/**
+ <p>Unique identifer for the Code signing configuration.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable codeSigningConfigId;
+
+/**
+ <p>The code signing policy controls the validation failure action for signature mismatch or expiry.</p>
+ */
+@property (nonatomic, strong) AWSLambdaCodeSigningPolicies * _Nullable codeSigningPolicies;
+
+/**
+ <p>Code signing configuration description.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable detail;
+
+/**
+ <p>The date and time that the Code signing configuration was last modified, in ISO-8601 format (YYYY-MM-DDThh:mm:ss.sTZD). </p>
+ */
+@property (nonatomic, strong) NSString * _Nullable lastModified;
+
+@end
+
+/**
+ <p>Code signing configuration policies specifies the validation failure action for signature mismatch or expiry.</p>
+ */
+@interface AWSLambdaCodeSigningPolicies : AWSModel
+
+
+/**
+ <p>Code signing configuration policy for deployment validation failure. If you set the policy to <code>Enforce</code>, Lambda blocks the deployment request if signature validation checks fail. If you set the policy to <code>Warn</code>, Lambda allows the deployment and creates a CloudWatch log. </p><p>Default value: <code>Warn</code></p>
+ */
+@property (nonatomic, assign) AWSLambdaCodeSigningPolicy untrustedArtifactOnDeployment;
+
+@end
+
+/**
  
  */
 @interface AWSLambdaConcurrency : AWSModel
@@ -554,11 +680,47 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
 /**
  
  */
+@interface AWSLambdaCreateCodeSigningConfigRequest : AWSRequest
+
+
+/**
+ <p>Signing profiles for this code signing configuration.</p>
+ */
+@property (nonatomic, strong) AWSLambdaAllowedPublishers * _Nullable allowedPublishers;
+
+/**
+ <p>The code signing policies define the actions to take if the validation checks fail. </p>
+ */
+@property (nonatomic, strong) AWSLambdaCodeSigningPolicies * _Nullable codeSigningPolicies;
+
+/**
+ <p>Descriptive name for this code signing configuration.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable detail;
+
+@end
+
+/**
+ 
+ */
+@interface AWSLambdaCreateCodeSigningConfigResponse : AWSModel
+
+
+/**
+ <p>The code signing configuration.</p>
+ */
+@property (nonatomic, strong) AWSLambdaCodeSigningConfig * _Nullable codeSigningConfig;
+
+@end
+
+/**
+ 
+ */
 @interface AWSLambdaCreateEventSourceMappingRequest : AWSRequest
 
 
 /**
- <p>The maximum number of items to retrieve in a single batch.</p><ul><li><p><b>Amazon Kinesis</b> - Default 100. Max 10,000.</p></li><li><p><b>Amazon DynamoDB Streams</b> - Default 100. Max 1,000.</p></li><li><p><b>Amazon Simple Queue Service</b> - Default 10. Max 10.</p></li><li><p><b>Amazon Managed Streaming for Apache Kafka</b> - Default 100. Max 10,000.</p></li></ul>
+ <p>The maximum number of items to retrieve in a single batch.</p><ul><li><p><b>Amazon Kinesis</b> - Default 100. Max 10,000.</p></li><li><p><b>Amazon DynamoDB Streams</b> - Default 100. Max 1,000.</p></li><li><p><b>Amazon Simple Queue Service</b> - Default 10. For standard queues the max is 10,000. For FIFO queues the max is 10.</p></li><li><p><b>Amazon Managed Streaming for Apache Kafka</b> - Default 100. Max 10,000.</p></li><li><p><b>Self-Managed Apache Kafka</b> - Default 100. Max 10,000.</p></li></ul>
  */
 @property (nonatomic, strong) NSNumber * _Nullable batchSize;
 
@@ -588,7 +750,12 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
 @property (nonatomic, strong) NSString * _Nullable functionName;
 
 /**
- <p>(Streams) The maximum amount of time to gather records before invoking the function, in seconds.</p>
+ <p>(Streams) A list of current response type enums applied to the event source mapping.</p>
+ */
+@property (nonatomic, strong) NSArray<NSString *> * _Nullable functionResponseTypes;
+
+/**
+ <p>(Streams and SQS standard queues) The maximum amount of time to gather records before invoking the function, in seconds.</p>
  */
 @property (nonatomic, strong) NSNumber * _Nullable maximumBatchingWindowInSeconds;
 
@@ -613,7 +780,12 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
 @property (nonatomic, strong) NSArray<NSString *> * _Nullable queues;
 
 /**
- <p> (MQ) The Secrets Manager secret that stores your broker credentials. To store your secret, use the following format: <code> { "username": "your username", "password": "your password" }</code></p><p>To reference the secret, use the following format: <code>[ { "Type": "BASIC_AUTH", "URI": "secretARN" } ]</code></p><p>The value of <code>Type</code> is always <code>BASIC_AUTH</code>. To encrypt the secret, you can use customer or service managed keys. When using a customer managed KMS key, the Lambda execution role requires <code>kms:Decrypt</code> permissions.</p>
+ <p>The Self-Managed Apache Kafka cluster to send records.</p>
+ */
+@property (nonatomic, strong) AWSLambdaSelfManagedEventSource * _Nullable selfManagedEventSource;
+
+/**
+ <p>An array of the authentication protocol, or the VPC components to secure your event source.</p>
  */
 @property (nonatomic, strong) NSArray<AWSLambdaSourceAccessConfiguration *> * _Nullable sourceAccessConfigurations;
 
@@ -628,9 +800,14 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
 @property (nonatomic, strong) NSDate * _Nullable startingPositionTimestamp;
 
 /**
- <p> (MSK) The name of the Kafka topic. </p>
+ <p>The name of the Kafka topic.</p>
  */
 @property (nonatomic, strong) NSArray<NSString *> * _Nullable topics;
+
+/**
+ <p>(Streams) The duration in seconds of a processing window. The range is between 1 second up to 900 seconds.</p>
+ */
+@property (nonatomic, strong) NSNumber * _Nullable tumblingWindowInSeconds;
 
 @end
 
@@ -644,6 +821,11 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
  <p>The code for the function.</p>
  */
 @property (nonatomic, strong) AWSLambdaFunctionCode * _Nullable code;
+
+/**
+ <p>To enable code signing for this function, specify the ARN of a code-signing configuration. A code-signing configuration includes a set of signing profiles, which define the trusted publishers for this function.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable codeSigningConfigArn;
 
 /**
  <p>A dead letter queue configuration that specifies the queue or topic where Lambda sends asynchronous events when they fail processing. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html#dlq">Dead Letter Queues</a>.</p>
@@ -676,6 +858,11 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
 @property (nonatomic, strong) NSString * _Nullable handler;
 
 /**
+ <p><a href="https://docs.aws.amazon.com/lambda/latest/dg/images-parms.html">Container image configuration values</a> that override the values in the container image Dockerfile.</p>
+ */
+@property (nonatomic, strong) AWSLambdaImageConfig * _Nullable imageConfig;
+
+/**
  <p>The ARN of the AWS Key Management Service (AWS KMS) key that's used to encrypt your function's environment variables. If it's not provided, AWS Lambda uses a default service key.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable KMSKeyArn;
@@ -686,9 +873,14 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
 @property (nonatomic, strong) NSArray<NSString *> * _Nullable layers;
 
 /**
- <p>The amount of memory that your function has access to. Increasing the function's memory also increases its CPU allocation. The default value is 128 MB. The value must be a multiple of 64 MB.</p>
+ <p>The amount of memory available to the function at runtime. Increasing the function's memory also increases its CPU allocation. The default value is 128 MB. The value can be any multiple of 1 MB.</p>
  */
 @property (nonatomic, strong) NSNumber * _Nullable memorySize;
+
+/**
+ <p>The type of deployment package. Set to <code>Image</code> for container image and set <code>Zip</code> for ZIP archive.</p>
+ */
+@property (nonatomic, assign) AWSLambdaPackageType packageType;
 
 /**
  <p>Set to true to publish the first version of the function during creation.</p>
@@ -761,6 +953,27 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
 /**
  
  */
+@interface AWSLambdaDeleteCodeSigningConfigRequest : AWSRequest
+
+
+/**
+ <p>The The Amazon Resource Name (ARN) of the code signing configuration.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable codeSigningConfigArn;
+
+@end
+
+/**
+ 
+ */
+@interface AWSLambdaDeleteCodeSigningConfigResponse : AWSModel
+
+
+@end
+
+/**
+ 
+ */
 @interface AWSLambdaDeleteEventSourceMappingRequest : AWSRequest
 
 
@@ -768,6 +981,19 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
  <p>The identifier of the event source mapping.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable UUID;
+
+@end
+
+/**
+ 
+ */
+@interface AWSLambdaDeleteFunctionCodeSigningConfigRequest : AWSRequest
+
+
+/**
+ <p>The name of the Lambda function.</p><p class="title"><b>Name formats</b></p><ul><li><p><b>Function name</b> - <code>MyFunction</code>.</p></li><li><p><b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:MyFunction</code>.</p></li><li><p><b>Partial ARN</b> - <code>123456789012:function:MyFunction</code>.</p></li></ul><p>The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable functionName;
 
 @end
 
@@ -955,6 +1181,11 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
 @property (nonatomic, strong) NSString * _Nullable functionArn;
 
 /**
+ <p>(Streams) A list of current response type enums applied to the event source mapping.</p>
+ */
+@property (nonatomic, strong) NSArray<NSString *> * _Nullable functionResponseTypes;
+
+/**
  <p>The date that the event source mapping was last updated, or its state changed.</p>
  */
 @property (nonatomic, strong) NSDate * _Nullable lastModified;
@@ -965,7 +1196,7 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
 @property (nonatomic, strong) NSString * _Nullable lastProcessingResult;
 
 /**
- <p>(Streams) The maximum amount of time to gather records before invoking the function, in seconds. The default value is zero.</p>
+ <p>(Streams and SQS standard queues) The maximum amount of time to gather records before invoking the function, in seconds. The default value is zero.</p>
  */
 @property (nonatomic, strong) NSNumber * _Nullable maximumBatchingWindowInSeconds;
 
@@ -990,9 +1221,24 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
 @property (nonatomic, strong) NSArray<NSString *> * _Nullable queues;
 
 /**
- <p> (MQ) The Secrets Manager secret that stores your broker credentials. To store your secret, use the following format: <code> { "username": "your username", "password": "your password" }</code></p><p>To reference the secret, use the following format: <code>[ { "Type": "BASIC_AUTH", "URI": "secretARN" } ]</code></p><p>The value of <code>Type</code> is always <code>BASIC_AUTH</code>. To encrypt the secret, you can use customer or service managed keys. When using a customer managed KMS key, the Lambda execution role requires <code>kms:Decrypt</code> permissions.</p>
+ <p>The Self-Managed Apache Kafka cluster for your event source.</p>
+ */
+@property (nonatomic, strong) AWSLambdaSelfManagedEventSource * _Nullable selfManagedEventSource;
+
+/**
+ <p>An array of the authentication protocol, or the VPC components to secure your event source.</p>
  */
 @property (nonatomic, strong) NSArray<AWSLambdaSourceAccessConfiguration *> * _Nullable sourceAccessConfigurations;
+
+/**
+ <p>The position in a stream from which to start reading. Required for Amazon Kinesis, Amazon DynamoDB, and Amazon MSK Streams sources. <code>AT_TIMESTAMP</code> is only supported for Amazon Kinesis streams.</p>
+ */
+@property (nonatomic, assign) AWSLambdaEventSourcePosition startingPosition;
+
+/**
+ <p>With <code>StartingPosition</code> set to <code>AT_TIMESTAMP</code>, the time from which to start reading.</p>
+ */
+@property (nonatomic, strong) NSDate * _Nullable startingPositionTimestamp;
 
 /**
  <p>The state of the event source mapping. It can be one of the following: <code>Creating</code>, <code>Enabling</code>, <code>Enabled</code>, <code>Disabling</code>, <code>Disabled</code>, <code>Updating</code>, or <code>Deleting</code>.</p>
@@ -1005,9 +1251,14 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
 @property (nonatomic, strong) NSString * _Nullable stateTransitionReason;
 
 /**
- <p> (MSK) The name of the Kafka topic to consume. </p>
+ <p>The name of the Kafka topic.</p>
  */
 @property (nonatomic, strong) NSArray<NSString *> * _Nullable topics;
+
+/**
+ <p>(Streams) The duration in seconds of a processing window. The range is between 1 second up to 900 seconds.</p>
+ */
+@property (nonatomic, strong) NSNumber * _Nullable tumblingWindowInSeconds;
 
 /**
  <p>The identifier of the event source mapping.</p>
@@ -1036,10 +1287,15 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
 @end
 
 /**
- <p>The code for the Lambda function. You can specify either an object in Amazon S3, or upload a deployment package directly.</p>
+ <p>The code for the Lambda function. You can specify either an object in Amazon S3, upload a .zip file archive deployment package directly, or specify the URI of a container image.</p>
  */
 @interface AWSLambdaFunctionCode : AWSModel
 
+
+/**
+ <p>URI of a container image in the Amazon ECR registry.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable imageUri;
 
 /**
  <p>An Amazon S3 bucket in the same AWS Region as your function. The bucket can be in a different AWS account.</p>
@@ -1070,6 +1326,11 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
 
 
 /**
+ <p>URI of a container image in the Amazon ECR registry.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable imageUri;
+
+/**
  <p>A presigned URL that you can use to download the deployment package.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable location;
@@ -1078,6 +1339,11 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
  <p>The service that's hosting the file.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable repositoryType;
+
+/**
+ <p>The resolved URI for the image.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable resolvedImageUri;
 
 @end
 
@@ -1133,6 +1399,11 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
 @property (nonatomic, strong) NSString * _Nullable handler;
 
 /**
+ <p>The function's image configuration values.</p>
+ */
+@property (nonatomic, strong) AWSLambdaImageConfigResponse * _Nullable imageConfigResponse;
+
+/**
  <p>The KMS key that's used to encrypt the function's environment variables. This key is only returned if you've configured a customer managed CMK.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable KMSKeyArn;
@@ -1168,9 +1439,14 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
 @property (nonatomic, strong) NSString * _Nullable masterArn;
 
 /**
- <p>The memory that's allocated to the function.</p>
+ <p>The amount of memory available to the function at runtime. </p>
  */
 @property (nonatomic, strong) NSNumber * _Nullable memorySize;
+
+/**
+ <p>The type of deployment package. Set to <code>Image</code> for container image and set <code>Zip</code> for .zip file archive.</p>
+ */
+@property (nonatomic, assign) AWSLambdaPackageType packageType;
 
 /**
  <p>The latest updated revision of the function or alias.</p>
@@ -1186,6 +1462,16 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
  <p>The runtime environment for the Lambda function.</p>
  */
 @property (nonatomic, assign) AWSLambdaRuntime runtime;
+
+/**
+ <p>The ARN of the signing job.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable signingJobArn;
+
+/**
+ <p>The ARN of the signing profile version.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable signingProfileVersionArn;
 
 /**
  <p>The current state of the function. When the state is <code>Inactive</code>, you can reactivate the function by invoking it.</p>
@@ -1304,6 +1590,32 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
 /**
  
  */
+@interface AWSLambdaGetCodeSigningConfigRequest : AWSRequest
+
+
+/**
+ <p>The The Amazon Resource Name (ARN) of the code signing configuration. </p>
+ */
+@property (nonatomic, strong) NSString * _Nullable codeSigningConfigArn;
+
+@end
+
+/**
+ 
+ */
+@interface AWSLambdaGetCodeSigningConfigResponse : AWSModel
+
+
+/**
+ <p>The code signing configuration</p>
+ */
+@property (nonatomic, strong) AWSLambdaCodeSigningConfig * _Nullable codeSigningConfig;
+
+@end
+
+/**
+ 
+ */
 @interface AWSLambdaGetEventSourceMappingRequest : AWSRequest
 
 
@@ -1311,6 +1623,37 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
  <p>The identifier of the event source mapping.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable UUID;
+
+@end
+
+/**
+ 
+ */
+@interface AWSLambdaGetFunctionCodeSigningConfigRequest : AWSRequest
+
+
+/**
+ <p>The name of the Lambda function.</p><p class="title"><b>Name formats</b></p><ul><li><p><b>Function name</b> - <code>MyFunction</code>.</p></li><li><p><b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:MyFunction</code>.</p></li><li><p><b>Partial ARN</b> - <code>123456789012:function:MyFunction</code>.</p></li></ul><p>The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable functionName;
+
+@end
+
+/**
+ 
+ */
+@interface AWSLambdaGetFunctionCodeSigningConfigResponse : AWSModel
+
+
+/**
+ <p>The The Amazon Resource Name (ARN) of the code signing configuration.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable codeSigningConfigArn;
+
+/**
+ <p>The name of the Lambda function.</p><p class="title"><b>Name formats</b></p><ul><li><p><b>Function name</b> - <code>MyFunction</code>.</p></li><li><p><b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:MyFunction</code>.</p></li><li><p><b>Partial ARN</b> - <code>123456789012:function:MyFunction</code>.</p></li></ul><p>The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable functionName;
 
 @end
 
@@ -1630,6 +1973,65 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
 @end
 
 /**
+ <p>Configuration values that override the container image Dockerfile settings. See <a href="https://docs.aws.amazon.com/lambda/latest/dg/images-create.html#images-parms">Container settings</a>. </p>
+ */
+@interface AWSLambdaImageConfig : AWSModel
+
+
+/**
+ <p>Specifies parameters that you want to pass in with ENTRYPOINT. </p>
+ */
+@property (nonatomic, strong) NSArray<NSString *> * _Nullable command;
+
+/**
+ <p>Specifies the entry point to their application, which is typically the location of the runtime executable.</p>
+ */
+@property (nonatomic, strong) NSArray<NSString *> * _Nullable entryPoint;
+
+/**
+ <p>Specifies the working directory.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable workingDirectory;
+
+@end
+
+/**
+ <p>Error response to GetFunctionConfiguration.</p>
+ */
+@interface AWSLambdaImageConfigError : AWSModel
+
+
+/**
+ <p>Error code.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable errorCode;
+
+/**
+ <p>Error message.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable message;
+
+@end
+
+/**
+ <p>Response to GetFunctionConfiguration request.</p>
+ */
+@interface AWSLambdaImageConfigResponse : AWSModel
+
+
+/**
+ <p>Error response to GetFunctionConfiguration.</p>
+ */
+@property (nonatomic, strong) AWSLambdaImageConfigError * _Nullable error;
+
+/**
+ <p>Configuration values that override the container image Dockerfile.</p>
+ */
+@property (nonatomic, strong) AWSLambdaImageConfig * _Nullable imageConfig;
+
+@end
+
+/**
  
  */
 @interface AWSLambdaInvocationRequest : AWSRequest
@@ -1747,6 +2149,16 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
  */
 @property (nonatomic, strong) NSNumber * _Nullable codeSize;
 
+/**
+ <p>The Amazon Resource Name (ARN) of a signing job.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable signingJobArn;
+
+/**
+ <p>The Amazon Resource Name (ARN) for a signing profile version.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable signingProfileVersionArn;
+
 @end
 
 /**
@@ -1797,6 +2209,16 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
  <p>A link to the layer archive in Amazon S3 that is valid for 10 minutes.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable location;
+
+/**
+ <p>The Amazon Resource Name (ARN) of a signing job.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable signingJobArn;
+
+/**
+ <p>The Amazon Resource Name (ARN) for a signing profile version.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable signingProfileVersionArn;
 
 @end
 
@@ -1910,6 +2332,42 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
 /**
  
  */
+@interface AWSLambdaListCodeSigningConfigsRequest : AWSRequest
+
+
+/**
+ <p>Specify the pagination token that's returned by a previous request to retrieve the next page of results.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable marker;
+
+/**
+ <p>Maximum number of items to return.</p>
+ */
+@property (nonatomic, strong) NSNumber * _Nullable maxItems;
+
+@end
+
+/**
+ 
+ */
+@interface AWSLambdaListCodeSigningConfigsResponse : AWSModel
+
+
+/**
+ <p>The code signing configurations</p>
+ */
+@property (nonatomic, strong) NSArray<AWSLambdaCodeSigningConfig *> * _Nullable codeSigningConfigs;
+
+/**
+ <p>The pagination token that's included if more results are available.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable nextMarker;
+
+@end
+
+/**
+ 
+ */
 @interface AWSLambdaListEventSourceMappingsRequest : AWSRequest
 
 
@@ -1986,6 +2444,47 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
  <p>A list of configurations.</p>
  */
 @property (nonatomic, strong) NSArray<AWSLambdaFunctionEventInvokeConfig *> * _Nullable functionEventInvokeConfigs;
+
+/**
+ <p>The pagination token that's included if more results are available.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable nextMarker;
+
+@end
+
+/**
+ 
+ */
+@interface AWSLambdaListFunctionsByCodeSigningConfigRequest : AWSRequest
+
+
+/**
+ <p>The The Amazon Resource Name (ARN) of the code signing configuration.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable codeSigningConfigArn;
+
+/**
+ <p>Specify the pagination token that's returned by a previous request to retrieve the next page of results.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable marker;
+
+/**
+ <p>Maximum number of items to return.</p>
+ */
+@property (nonatomic, strong) NSNumber * _Nullable maxItems;
+
+@end
+
+/**
+ 
+ */
+@interface AWSLambdaListFunctionsByCodeSigningConfigResponse : AWSModel
+
+
+/**
+ <p>The function ARNs. </p>
+ */
+@property (nonatomic, strong) NSArray<NSString *> * _Nullable functionArns;
 
 /**
  <p>The pagination token that's included if more results are available.</p>
@@ -2416,6 +2915,42 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
 /**
  
  */
+@interface AWSLambdaPutFunctionCodeSigningConfigRequest : AWSRequest
+
+
+/**
+ <p>The The Amazon Resource Name (ARN) of the code signing configuration.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable codeSigningConfigArn;
+
+/**
+ <p>The name of the Lambda function.</p><p class="title"><b>Name formats</b></p><ul><li><p><b>Function name</b> - <code>MyFunction</code>.</p></li><li><p><b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:MyFunction</code>.</p></li><li><p><b>Partial ARN</b> - <code>123456789012:function:MyFunction</code>.</p></li></ul><p>The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable functionName;
+
+@end
+
+/**
+ 
+ */
+@interface AWSLambdaPutFunctionCodeSigningConfigResponse : AWSModel
+
+
+/**
+ <p>The The Amazon Resource Name (ARN) of the code signing configuration.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable codeSigningConfigArn;
+
+/**
+ <p>The name of the Lambda function.</p><p class="title"><b>Name formats</b></p><ul><li><p><b>Function name</b> - <code>MyFunction</code>.</p></li><li><p><b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:MyFunction</code>.</p></li><li><p><b>Partial ARN</b> - <code>123456789012:function:MyFunction</code>.</p></li></ul><p>The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable functionName;
+
+@end
+
+/**
+ 
+ */
 @interface AWSLambdaPutFunctionConcurrencyRequest : AWSRequest
 
 
@@ -2582,18 +3117,31 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
 @end
 
 /**
- <p> (MQ) The Secrets Manager secret that stores your broker credentials. To store your secret, use the following format: <code> { "username": "your username", "password": "your password" }</code></p>
+ <p>The Self-Managed Apache Kafka cluster for your event source.</p>
+ */
+@interface AWSLambdaSelfManagedEventSource : AWSModel
+
+
+/**
+ <p>The list of bootstrap servers for your Kafka brokers in the following format: <code>"KAFKA_BOOTSTRAP_SERVERS": ["abc.xyz.com:xxxx","abc2.xyz.com:xxxx"]</code>.</p>
+ */
+@property (nonatomic, strong) NSDictionary<NSString *, NSArray<NSString *> *> * _Nullable endpoints;
+
+@end
+
+/**
+ <p>You can specify the authentication protocol, or the VPC components to secure access to your event source.</p>
  */
 @interface AWSLambdaSourceAccessConfiguration : AWSModel
 
 
 /**
- <p>To reference the secret, use the following format: <code>[ { "Type": "BASIC_AUTH", "URI": "secretARN" } ]</code></p><p>The value of <code>Type</code> is always <code>BASIC_AUTH</code>. To encrypt the secret, you can use customer or service managed keys. When using a customer managed KMS key, the Lambda execution role requires <code>kms:Decrypt</code> permissions.</p>
+ <p>The type of authentication protocol or the VPC components for your event source. For example: <code>"Type":"SASL_SCRAM_512_AUTH"</code>.</p><ul><li><p><code>BASIC_AUTH</code> - (MQ) The Secrets Manager secret that stores your broker credentials.</p></li><li><p><code>VPC_SUBNET</code> - The subnets associated with your VPC. Lambda connects to these subnets to fetch data from your Self-Managed Apache Kafka cluster.</p></li><li><p><code>VPC_SECURITY_GROUP</code> - The VPC security group used to manage access to your Self-Managed Apache Kafka brokers.</p></li><li><p><code>SASL_SCRAM_256_AUTH</code> - The Secrets Manager ARN of your secret key used for SASL SCRAM-256 authentication of your Self-Managed Apache Kafka brokers.</p></li><li><p><code>SASL_SCRAM_512_AUTH</code> - The Secrets Manager ARN of your secret key used for SASL SCRAM-512 authentication of your Self-Managed Apache Kafka brokers.</p></li></ul>
  */
 @property (nonatomic, assign) AWSLambdaSourceAccessType types;
 
 /**
- <p>To reference the secret, use the following format: <code>[ { "Type": "BASIC_AUTH", "URI": "secretARN" } ]</code></p><p>The value of <code>Type</code> is always <code>BASIC_AUTH</code>. To encrypt the secret, you can use customer or service managed keys. When using a customer managed KMS key, the Lambda execution role requires <code>kms:Decrypt</code> permissions.</p>
+ <p>The value for your chosen configuration in <code>Type</code>. For example: <code>"URI": "arn:aws:secretsmanager:us-east-1:01234567890:secret:MyBrokerSecretName"</code>.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable URI;
 
@@ -2702,11 +3250,52 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
 /**
  
  */
+@interface AWSLambdaUpdateCodeSigningConfigRequest : AWSRequest
+
+
+/**
+ <p>Signing profiles for this code signing configuration.</p>
+ */
+@property (nonatomic, strong) AWSLambdaAllowedPublishers * _Nullable allowedPublishers;
+
+/**
+ <p>The The Amazon Resource Name (ARN) of the code signing configuration.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable codeSigningConfigArn;
+
+/**
+ <p>The code signing policy.</p>
+ */
+@property (nonatomic, strong) AWSLambdaCodeSigningPolicies * _Nullable codeSigningPolicies;
+
+/**
+ <p>Descriptive name for this code signing configuration.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable detail;
+
+@end
+
+/**
+ 
+ */
+@interface AWSLambdaUpdateCodeSigningConfigResponse : AWSModel
+
+
+/**
+ <p>The code signing configuration</p>
+ */
+@property (nonatomic, strong) AWSLambdaCodeSigningConfig * _Nullable codeSigningConfig;
+
+@end
+
+/**
+ 
+ */
 @interface AWSLambdaUpdateEventSourceMappingRequest : AWSRequest
 
 
 /**
- <p>The maximum number of items to retrieve in a single batch.</p><ul><li><p><b>Amazon Kinesis</b> - Default 100. Max 10,000.</p></li><li><p><b>Amazon DynamoDB Streams</b> - Default 100. Max 1,000.</p></li><li><p><b>Amazon Simple Queue Service</b> - Default 10. Max 10.</p></li><li><p><b>Amazon Managed Streaming for Apache Kafka</b> - Default 100. Max 10,000.</p></li></ul>
+ <p>The maximum number of items to retrieve in a single batch.</p><ul><li><p><b>Amazon Kinesis</b> - Default 100. Max 10,000.</p></li><li><p><b>Amazon DynamoDB Streams</b> - Default 100. Max 1,000.</p></li><li><p><b>Amazon Simple Queue Service</b> - Default 10. For standard queues the max is 10,000. For FIFO queues the max is 10.</p></li><li><p><b>Amazon Managed Streaming for Apache Kafka</b> - Default 100. Max 10,000.</p></li><li><p><b>Self-Managed Apache Kafka</b> - Default 100. Max 10,000.</p></li></ul>
  */
 @property (nonatomic, strong) NSNumber * _Nullable batchSize;
 
@@ -2731,7 +3320,12 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
 @property (nonatomic, strong) NSString * _Nullable functionName;
 
 /**
- <p>(Streams) The maximum amount of time to gather records before invoking the function, in seconds.</p>
+ <p>(Streams) A list of current response type enums applied to the event source mapping.</p>
+ */
+@property (nonatomic, strong) NSArray<NSString *> * _Nullable functionResponseTypes;
+
+/**
+ <p>(Streams and SQS standard queues) The maximum amount of time to gather records before invoking the function, in seconds.</p>
  */
 @property (nonatomic, strong) NSNumber * _Nullable maximumBatchingWindowInSeconds;
 
@@ -2751,9 +3345,14 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
 @property (nonatomic, strong) NSNumber * _Nullable parallelizationFactor;
 
 /**
- <p> (MQ) The Secrets Manager secret that stores your broker credentials. To store your secret, use the following format: <code> { "username": "your username", "password": "your password" }</code></p><p>To reference the secret, use the following format: <code>[ { "Type": "BASIC_AUTH", "URI": "secretARN" } ]</code></p><p>The value of <code>Type</code> is always <code>BASIC_AUTH</code>. To encrypt the secret, you can use customer or service managed keys. When using a customer managed KMS key, the Lambda execution role requires <code>kms:Decrypt</code> permissions.</p>
+ <p>An array of the authentication protocol, or the VPC components to secure your event source.</p>
  */
 @property (nonatomic, strong) NSArray<AWSLambdaSourceAccessConfiguration *> * _Nullable sourceAccessConfigurations;
+
+/**
+ <p>(Streams) The duration in seconds of a processing window. The range is between 1 second up to 900 seconds.</p>
+ */
+@property (nonatomic, strong) NSNumber * _Nullable tumblingWindowInSeconds;
 
 /**
  <p>The identifier of the event source mapping.</p>
@@ -2777,6 +3376,11 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
  <p>The name of the Lambda function.</p><p class="title"><b>Name formats</b></p><ul><li><p><b>Function name</b> - <code>my-function</code>.</p></li><li><p><b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:my-function</code>.</p></li><li><p><b>Partial ARN</b> - <code>123456789012:function:my-function</code>.</p></li></ul><p>The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable functionName;
+
+/**
+ <p>URI of a container image in the Amazon ECR registry.</p>
+ */
+@property (nonatomic, strong) NSString * _Nullable imageUri;
 
 /**
  <p>Set to true to publish a new version of the function after updating the code. This has the same effect as calling <a>PublishVersion</a> separately.</p>
@@ -2847,6 +3451,11 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
 @property (nonatomic, strong) NSString * _Nullable handler;
 
 /**
+ <p><a href="https://docs.aws.amazon.com/lambda/latest/dg/images-parms.html">Container image configuration values</a> that override the values in the container image Dockerfile.</p>
+ */
+@property (nonatomic, strong) AWSLambdaImageConfig * _Nullable imageConfig;
+
+/**
  <p>The ARN of the AWS Key Management Service (AWS KMS) key that's used to encrypt your function's environment variables. If it's not provided, AWS Lambda uses a default service key.</p>
  */
 @property (nonatomic, strong) NSString * _Nullable KMSKeyArn;
@@ -2857,7 +3466,7 @@ typedef NS_ENUM(NSInteger, AWSLambdaTracingMode) {
 @property (nonatomic, strong) NSArray<NSString *> * _Nullable layers;
 
 /**
- <p>The amount of memory that your function has access to. Increasing the function's memory also increases its CPU allocation. The default value is 128 MB. The value must be a multiple of 64 MB.</p>
+ <p>The amount of memory available to the function at runtime. Increasing the function's memory also increases its CPU allocation. The default value is 128 MB. The value can be any multiple of 1 MB.</p>
  */
 @property (nonatomic, strong) NSNumber * _Nullable memorySize;
 

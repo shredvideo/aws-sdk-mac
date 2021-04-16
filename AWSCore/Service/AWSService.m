@@ -24,7 +24,7 @@
 #import "AWSCocoaLumberjack.h"
 #import "AWSCategory.h"
 
-NSString *const AWSiOSSDKVersion = @"2.19.1";
+NSString *const AWSiOSSDKVersion = @"2.23.3";
 NSString *const AWSServiceErrorDomain = @"com.amazonaws.AWSServiceErrorDomain";
 
 static NSString *const AWSServiceConfigurationUnknown = @"Unknown";
@@ -306,6 +306,7 @@ static NSString *const AWSServiceNameTextract = @"textract";
 static NSString *const AWSServiceNameTranscribe = @"transcribe";
 static NSString *const AWSServiceNameTranscribeStreaming = @"transcribe";
 static NSString *const AWSServiceNameTranslate = @"translate";
+static NSString *const AWSServiceNameLocation = @"location";
 
 @interface AWSEndpoint()
 
@@ -572,6 +573,8 @@ static NSString *const AWSServiceNameTranslate = @"translate";
             return AWSServiceNameTranscribeStreaming;
         case AWSServiceTranslate:
             return AWSServiceNameTranslate;
+        case AWSServiceLocation:
+            return AWSServiceNameLocation;
         default:
             return nil;
     }
@@ -642,6 +645,8 @@ static NSString *const AWSServiceNameTranslate = @"translate";
         URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@://transcribestreaming.%@.amazonaws.com", HTTPType, regionName]];
     }  else if (serviceType == AWSServiceConnectParticipant) {
         URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@://participant.connect.%@.amazonaws.com", HTTPType, regionName]];
+    } else if (serviceType == AWSServiceLocation) {
+        URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@://geo.%@.amazonaws.com", HTTPType, regionName]];
     } else {
         URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@://%@.%@.amazonaws.com", HTTPType, serviceName, regionName]];
     }
@@ -653,6 +658,13 @@ static NSString *const AWSServiceNameTranslate = @"translate";
     }
     
     return URL;
+}
+
+- (NSString *)signingName {
+    if (self.serviceType == AWSServiceLocation) {
+        return @"geo";
+    }
+    return self.serviceName;
 }
 
 @end

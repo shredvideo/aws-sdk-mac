@@ -1,5 +1,5 @@
 //
-// Copyright 2010-2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// Copyright 2010-2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License").
 // You may not use this file except in compliance with the License.
@@ -170,6 +170,22 @@
         {\"shape\":\"InternalServerException\"}\
       ],\
       \"documentation\":\"<p>Creates a new document classification request to analyze a single document in real-time, using a previously created and trained custom model and an endpoint.</p>\"\
+    },\
+    \"ContainsPiiEntities\":{\
+      \"name\":\"ContainsPiiEntities\",\
+      \"http\":{\
+        \"method\":\"POST\",\
+        \"requestUri\":\"/\"\
+      },\
+      \"input\":{\"shape\":\"ContainsPiiEntitiesRequest\"},\
+      \"output\":{\"shape\":\"ContainsPiiEntitiesResponse\"},\
+      \"errors\":[\
+        {\"shape\":\"InvalidRequestException\"},\
+        {\"shape\":\"TextSizeLimitExceededException\"},\
+        {\"shape\":\"UnsupportedLanguageException\"},\
+        {\"shape\":\"InternalServerException\"}\
+      ],\
+      \"documentation\":\"<p>Analyzes input text for the presence of personally identifiable information (PII) and returns the labels of identified PII entity types such as name, address, bank account number, or phone number.</p>\"\
     },\
     \"CreateDocumentClassifier\":{\
       \"name\":\"CreateDocumentClassifier\",\
@@ -379,6 +395,22 @@
         {\"shape\":\"InternalServerException\"}\
       ],\
       \"documentation\":\"<p>Provides details about an entity recognizer including status, S3 buckets containing training data, recognizer metadata, metrics, and so on.</p>\"\
+    },\
+    \"DescribeEventsDetectionJob\":{\
+      \"name\":\"DescribeEventsDetectionJob\",\
+      \"http\":{\
+        \"method\":\"POST\",\
+        \"requestUri\":\"/\"\
+      },\
+      \"input\":{\"shape\":\"DescribeEventsDetectionJobRequest\"},\
+      \"output\":{\"shape\":\"DescribeEventsDetectionJobResponse\"},\
+      \"errors\":[\
+        {\"shape\":\"InvalidRequestException\"},\
+        {\"shape\":\"JobNotFoundException\"},\
+        {\"shape\":\"TooManyRequestsException\"},\
+        {\"shape\":\"InternalServerException\"}\
+      ],\
+      \"documentation\":\"<p>Gets the status and details of an events detection job.</p>\"\
     },\
     \"DescribeKeyPhrasesDetectionJob\":{\
       \"name\":\"DescribeKeyPhrasesDetectionJob\",\
@@ -635,6 +667,22 @@
       ],\
       \"documentation\":\"<p>Gets a list of the properties of all entity recognizers that you created, including recognizers currently in training. Allows you to filter the list of recognizers based on criteria such as status and submission time. This call returns up to 500 entity recognizers in the list, with a default number of 100 recognizers in the list.</p> <p>The results of this list are not in any particular order. Please get the list and sort locally if needed.</p>\"\
     },\
+    \"ListEventsDetectionJobs\":{\
+      \"name\":\"ListEventsDetectionJobs\",\
+      \"http\":{\
+        \"method\":\"POST\",\
+        \"requestUri\":\"/\"\
+      },\
+      \"input\":{\"shape\":\"ListEventsDetectionJobsRequest\"},\
+      \"output\":{\"shape\":\"ListEventsDetectionJobsResponse\"},\
+      \"errors\":[\
+        {\"shape\":\"InvalidRequestException\"},\
+        {\"shape\":\"TooManyRequestsException\"},\
+        {\"shape\":\"InvalidFilterException\"},\
+        {\"shape\":\"InternalServerException\"}\
+      ],\
+      \"documentation\":\"<p>Gets a list of the events detection jobs that you have submitted.</p>\"\
+    },\
     \"ListKeyPhrasesDetectionJobs\":{\
       \"name\":\"ListKeyPhrasesDetectionJobs\",\
       \"http\":{\
@@ -766,6 +814,22 @@
       ],\
       \"documentation\":\"<p>Starts an asynchronous entity detection job for a collection of documents. Use the operation to track the status of a job.</p> <p>This API can be used for either standard entity detection or custom entity recognition. In order to be used for custom entity recognition, the optional <code>EntityRecognizerArn</code> must be used in order to provide access to the recognizer being used to detect the custom entity.</p>\"\
     },\
+    \"StartEventsDetectionJob\":{\
+      \"name\":\"StartEventsDetectionJob\",\
+      \"http\":{\
+        \"method\":\"POST\",\
+        \"requestUri\":\"/\"\
+      },\
+      \"input\":{\"shape\":\"StartEventsDetectionJobRequest\"},\
+      \"output\":{\"shape\":\"StartEventsDetectionJobResponse\"},\
+      \"errors\":[\
+        {\"shape\":\"InvalidRequestException\"},\
+        {\"shape\":\"TooManyRequestsException\"},\
+        {\"shape\":\"KmsKeyValidationException\"},\
+        {\"shape\":\"InternalServerException\"}\
+      ],\
+      \"documentation\":\"<p>Starts an asynchronous event detection job for a collection of documents.</p>\"\
+    },\
     \"StartKeyPhrasesDetectionJob\":{\
       \"name\":\"StartKeyPhrasesDetectionJob\",\
       \"http\":{\
@@ -859,6 +923,21 @@
         {\"shape\":\"InternalServerException\"}\
       ],\
       \"documentation\":\"<p>Stops an entities detection job in progress.</p> <p>If the job state is <code>IN_PROGRESS</code> the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state; otherwise the job is stopped and put into the <code>STOPPED</code> state.</p> <p>If the job is in the <code>COMPLETED</code> or <code>FAILED</code> state when you call the <code>StopDominantLanguageDetectionJob</code> operation, the operation returns a 400 Internal Request Exception. </p> <p>When a job is stopped, any documents already processed are written to the output location.</p>\"\
+    },\
+    \"StopEventsDetectionJob\":{\
+      \"name\":\"StopEventsDetectionJob\",\
+      \"http\":{\
+        \"method\":\"POST\",\
+        \"requestUri\":\"/\"\
+      },\
+      \"input\":{\"shape\":\"StopEventsDetectionJobRequest\"},\
+      \"output\":{\"shape\":\"StopEventsDetectionJobResponse\"},\
+      \"errors\":[\
+        {\"shape\":\"InvalidRequestException\"},\
+        {\"shape\":\"JobNotFoundException\"},\
+        {\"shape\":\"InternalServerException\"}\
+      ],\
+      \"documentation\":\"<p>Stops an events detection job in progress.</p>\"\
     },\
     \"StopKeyPhrasesDetectionJob\":{\
       \"name\":\"StopKeyPhrasesDetectionJob\",\
@@ -1380,7 +1459,7 @@
         },\
         \"Labels\":{\
           \"shape\":\"ListOfLabels\",\
-          \"documentation\":\"<p>The labels used the document being analyzed. These are used for multi-label trained models. Individual labels represent different categories that are related in some manner and are not multually exclusive. For example, a movie can be just an action movie, or it can be an action movie, a science fiction movie, and a comedy, all at the same time. </p>\"\
+          \"documentation\":\"<p>The labels used the document being analyzed. These are used for multi-label trained models. Individual labels represent different categories that are related in some manner and are not mutually exclusive. For example, a movie can be just an action movie, or it can be an action movie, a science fiction movie, and a comedy, all at the same time. </p>\"\
         }\
       },\
       \"sensitive\":true\
@@ -1423,6 +1502,32 @@
       },\
       \"documentation\":\"<p>Concurrent modification of the tags associated with an Amazon Comprehend resource is not supported. </p>\",\
       \"exception\":true\
+    },\
+    \"ContainsPiiEntitiesRequest\":{\
+      \"type\":\"structure\",\
+      \"required\":[\
+        \"Text\",\
+        \"LanguageCode\"\
+      ],\
+      \"members\":{\
+        \"Text\":{\
+          \"shape\":\"String\",\
+          \"documentation\":\"<p>Creates a new document classification request to analyze a single document in real-time, returning personally identifiable information (PII) entity labels.</p>\"\
+        },\
+        \"LanguageCode\":{\
+          \"shape\":\"LanguageCode\",\
+          \"documentation\":\"<p>The language of the input documents.</p>\"\
+        }\
+      }\
+    },\
+    \"ContainsPiiEntitiesResponse\":{\
+      \"type\":\"structure\",\
+      \"members\":{\
+        \"Labels\":{\
+          \"shape\":\"ListOfEntityLabels\",\
+          \"documentation\":\"<p>The labels used in the document being analyzed. Individual labels represent personally identifiable information (PII) entity types.</p>\"\
+        }\
+      }\
     },\
     \"CreateDocumentClassifierRequest\":{\
       \"type\":\"structure\",\
@@ -1473,6 +1578,10 @@
         \"Mode\":{\
           \"shape\":\"DocumentClassifierMode\",\
           \"documentation\":\"<p>Indicates the mode in which the classifier will be trained. The classifier can be trained in multi-class mode, which identifies one and only one class for each document, or multi-label mode, which identifies one or more labels for each document. In multi-label mode, multiple labels for an individual document are separated by a delimiter. The default delimiter between labels is a pipe (|).</p>\"\
+        },\
+        \"ModelKmsKeyId\":{\
+          \"shape\":\"KmsKeyId\",\
+          \"documentation\":\"<p>ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses to encrypt trained custom models. The ModelKmsKeyId can be either of the following formats:</p> <ul> <li> <p>KMS Key ID: <code>\\\"1234abcd-12ab-34cd-56ef-1234567890ab\\\"</code> </p> </li> <li> <p>Amazon Resource Name (ARN) of a KMS Key: <code>\\\"arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab\\\"</code> </p> </li> </ul>\"\
         }\
       }\
     },\
@@ -1513,6 +1622,10 @@
         \"Tags\":{\
           \"shape\":\"TagList\",\
           \"documentation\":\"<p>Tags associated with the endpoint being created. A tag is a key-value pair that adds metadata to the endpoint. For example, a tag with \\\"Sales\\\" as the key might be added to an endpoint to indicate its use by the sales department. </p>\"\
+        },\
+        \"DataAccessRoleArn\":{\
+          \"shape\":\"IamRoleArn\",\
+          \"documentation\":\"<p>The Amazon Resource Name (ARN) of the AWS identity and Access Management (IAM) role that grants Amazon Comprehend read access to trained custom models encrypted with a customer managed key (ModelKmsKeyId).</p>\"\
         }\
       }\
     },\
@@ -1566,6 +1679,10 @@
         \"VpcConfig\":{\
           \"shape\":\"VpcConfig\",\
           \"documentation\":\"<p>Configuration parameters for an optional private Virtual Private Cloud (VPC) containing the resources you are using for your custom entity recognizer. For more information, see <a href=\\\"https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html\\\">Amazon VPC</a>. </p>\"\
+        },\
+        \"ModelKmsKeyId\":{\
+          \"shape\":\"KmsKeyId\",\
+          \"documentation\":\"<p>ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses to encrypt trained custom models. The ModelKmsKeyId can be either of the following formats</p> <ul> <li> <p>KMS Key ID: <code>\\\"1234abcd-12ab-34cd-56ef-1234567890ab\\\"</code> </p> </li> <li> <p>Amazon Resource Name (ARN) of a KMS Key: <code>\\\"arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab\\\"</code> </p> </li> </ul>\"\
         }\
       }\
     },\
@@ -1744,6 +1861,25 @@
         \"EntityRecognizerProperties\":{\
           \"shape\":\"EntityRecognizerProperties\",\
           \"documentation\":\"<p>Describes information associated with an entity recognizer.</p>\"\
+        }\
+      }\
+    },\
+    \"DescribeEventsDetectionJobRequest\":{\
+      \"type\":\"structure\",\
+      \"required\":[\"JobId\"],\
+      \"members\":{\
+        \"JobId\":{\
+          \"shape\":\"JobId\",\
+          \"documentation\":\"<p>The identifier of the events detection job.</p>\"\
+        }\
+      }\
+    },\
+    \"DescribeEventsDetectionJobResponse\":{\
+      \"type\":\"structure\",\
+      \"members\":{\
+        \"EventsDetectionJobProperties\":{\
+          \"shape\":\"EventsDetectionJobProperties\",\
+          \"documentation\":\"<p>An object that contains the properties associated with an event detection job.</p>\"\
         }\
       }\
     },\
@@ -2217,6 +2353,10 @@
         \"Mode\":{\
           \"shape\":\"DocumentClassifierMode\",\
           \"documentation\":\"<p>Indicates the mode in which the specific classifier was trained. This also indicates the format of input documents and the format of the confusion matrix. Each classifier can only be trained in one mode and this cannot be changed once the classifier is trained.</p>\"\
+        },\
+        \"ModelKmsKeyId\":{\
+          \"shape\":\"KmsKeyId\",\
+          \"documentation\":\"<p>ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses to encrypt trained custom models. The ModelKmsKeyId can be either of the following formats:</p> <ul> <li> <p>KMS Key ID: <code>\\\"1234abcd-12ab-34cd-56ef-1234567890ab\\\"</code> </p> </li> <li> <p>Amazon Resource Name (ARN) of a KMS Key: <code>\\\"arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab\\\"</code> </p> </li> </ul>\"\
         }\
       },\
       \"documentation\":\"<p>Provides information about a document classifier.</p>\"\
@@ -2350,7 +2490,7 @@
           \"documentation\":\"<p>Specifies a date after which the returned endpoint or endpoints were created.</p>\"\
         }\
       },\
-      \"documentation\":\"<p>The filter used to determine which endpoints are are returned. You can filter jobs on their name, model, status, or the date and time that they were created. You can only set one filter at a time. </p>\"\
+      \"documentation\":\"<p>The filter used to determine which endpoints are returned. You can filter jobs on their name, model, status, or the date and time that they were created. You can only set one filter at a time. </p>\"\
     },\
     \"EndpointProperties\":{\
       \"type\":\"structure\",\
@@ -2386,6 +2526,10 @@
         \"LastModifiedTime\":{\
           \"shape\":\"Timestamp\",\
           \"documentation\":\"<p>The date and time that the endpoint was last modified.</p>\"\
+        },\
+        \"DataAccessRoleArn\":{\
+          \"shape\":\"IamRoleArn\",\
+          \"documentation\":\"<p>The Amazon Resource Name (ARN) of the AWS identity and Access Management (IAM) role that grants Amazon Comprehend read access to trained custom models encrypted with a customer managed key (ModelKmsKeyId).</p>\"\
         }\
       },\
       \"documentation\":\"<p>Specifies information about the specified endpoint.</p>\"\
@@ -2513,6 +2657,20 @@
         }\
       },\
       \"documentation\":\"<p>Provides information about an entity. </p> <p> </p>\"\
+    },\
+    \"EntityLabel\":{\
+      \"type\":\"structure\",\
+      \"members\":{\
+        \"Name\":{\
+          \"shape\":\"PiiEntityType\",\
+          \"documentation\":\"<p>The name of the label.</p>\"\
+        },\
+        \"Score\":{\
+          \"shape\":\"Float\",\
+          \"documentation\":\"<p>The level of confidence that Amazon Comprehend has in the accuracy of the detection.</p>\"\
+        }\
+      },\
+      \"documentation\":\"<p>Specifies one of the label or labels that categorize the personally identifiable information (PII) entity being analyzed.</p>\"\
     },\
     \"EntityRecognizerAnnotations\":{\
       \"type\":\"structure\",\
@@ -2734,6 +2892,10 @@
         \"VpcConfig\":{\
           \"shape\":\"VpcConfig\",\
           \"documentation\":\"<p> Configuration parameters for a private Virtual Private Cloud (VPC) containing the resources you are using for your custom entity recognizer. For more information, see <a href=\\\"https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html\\\">Amazon VPC</a>. </p>\"\
+        },\
+        \"ModelKmsKeyId\":{\
+          \"shape\":\"KmsKeyId\",\
+          \"documentation\":\"<p>ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses to encrypt trained custom models. The ModelKmsKeyId can be either of the following formats: </p> <ul> <li> <p>KMS Key ID: <code>\\\"1234abcd-12ab-34cd-56ef-1234567890ab\\\"</code> </p> </li> <li> <p>Amazon Resource Name (ARN) of a KMS Key: <code>\\\"arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab\\\"</code> </p> </li> </ul>\"\
         }\
       },\
       \"documentation\":\"<p>Describes information about an entity recognizer.</p>\"\
@@ -2759,7 +2921,7 @@
     \"EntityTypeName\":{\
       \"type\":\"string\",\
       \"max\":64,\
-      \"pattern\":\"^(?:(?!\\\\\\\\n+|\\\\\\\\t+|\\\\\\\\r+|[\\\\r\\\\t\\\\n\\\\s,]).)+$\"\
+      \"pattern\":\"^(?:(?!\\\\\\\\n+|\\\\\\\\t+|\\\\\\\\r+|[\\\\r\\\\t\\\\n,]).)+$\"\
     },\
     \"EntityTypesEvaluationMetrics\":{\
       \"type\":\"structure\",\
@@ -2774,7 +2936,7 @@
         },\
         \"F1Score\":{\
           \"shape\":\"Double\",\
-          \"documentation\":\"<p>A measure of how accurate the recognizer results are for for a specific entity type in the test data. It is derived from the <code>Precision</code> and <code>Recall</code> values. The <code>F1Score</code> is the harmonic average of the two scores. The highest score is 1, and the worst score is 0. </p>\"\
+          \"documentation\":\"<p>A measure of how accurate the recognizer results are for a specific entity type in the test data. It is derived from the <code>Precision</code> and <code>Recall</code> values. The <code>F1Score</code> is the harmonic average of the two scores. The highest score is 1, and the worst score is 0. </p>\"\
         }\
       },\
       \"documentation\":\"<p>Detailed information about the accuracy of an entity recognizer for a specific entity type. </p>\"\
@@ -2793,6 +2955,88 @@
         }\
       },\
       \"documentation\":\"<p>An entity type within a labeled training dataset that Amazon Comprehend uses to train a custom entity recognizer.</p>\"\
+    },\
+    \"EventTypeString\":{\
+      \"type\":\"string\",\
+      \"max\":40,\
+      \"min\":1,\
+      \"pattern\":\"[A-Z_]*\"\
+    },\
+    \"EventsDetectionJobFilter\":{\
+      \"type\":\"structure\",\
+      \"members\":{\
+        \"JobName\":{\
+          \"shape\":\"JobName\",\
+          \"documentation\":\"<p>Filters on the name of the events detection job.</p>\"\
+        },\
+        \"JobStatus\":{\
+          \"shape\":\"JobStatus\",\
+          \"documentation\":\"<p>Filters the list of jobs based on job status. Returns only jobs with the specified status.</p>\"\
+        },\
+        \"SubmitTimeBefore\":{\
+          \"shape\":\"Timestamp\",\
+          \"documentation\":\"<p>Filters the list of jobs based on the time that the job was submitted for processing. Returns only jobs submitted before the specified time. Jobs are returned in ascending order, oldest to newest.</p>\"\
+        },\
+        \"SubmitTimeAfter\":{\
+          \"shape\":\"Timestamp\",\
+          \"documentation\":\"<p>Filters the list of jobs based on the time that the job was submitted for processing. Returns only jobs submitted after the specified time. Jobs are returned in descending order, newest to oldest.</p>\"\
+        }\
+      },\
+      \"documentation\":\"<p>Provides information for filtering a list of event detection jobs.</p>\"\
+    },\
+    \"EventsDetectionJobProperties\":{\
+      \"type\":\"structure\",\
+      \"members\":{\
+        \"JobId\":{\
+          \"shape\":\"JobId\",\
+          \"documentation\":\"<p>The identifier assigned to the events detection job.</p>\"\
+        },\
+        \"JobName\":{\
+          \"shape\":\"JobName\",\
+          \"documentation\":\"<p>The name you assigned the events detection job.</p>\"\
+        },\
+        \"JobStatus\":{\
+          \"shape\":\"JobStatus\",\
+          \"documentation\":\"<p>The current status of the events detection job.</p>\"\
+        },\
+        \"Message\":{\
+          \"shape\":\"AnyLengthString\",\
+          \"documentation\":\"<p>A description of the status of the events detection job.</p>\"\
+        },\
+        \"SubmitTime\":{\
+          \"shape\":\"Timestamp\",\
+          \"documentation\":\"<p>The time that the events detection job was submitted for processing.</p>\"\
+        },\
+        \"EndTime\":{\
+          \"shape\":\"Timestamp\",\
+          \"documentation\":\"<p>The time that the events detection job completed.</p>\"\
+        },\
+        \"InputDataConfig\":{\
+          \"shape\":\"InputDataConfig\",\
+          \"documentation\":\"<p>The input data configuration that you supplied when you created the events detection job.</p>\"\
+        },\
+        \"OutputDataConfig\":{\
+          \"shape\":\"OutputDataConfig\",\
+          \"documentation\":\"<p>The output data configuration that you supplied when you created the events detection job.</p>\"\
+        },\
+        \"LanguageCode\":{\
+          \"shape\":\"LanguageCode\",\
+          \"documentation\":\"<p>The language code of the input documents.</p>\"\
+        },\
+        \"DataAccessRoleArn\":{\
+          \"shape\":\"IamRoleArn\",\
+          \"documentation\":\"<p>The Amazon Resource Name (ARN) of the AWS Identify and Access Management (IAM) role that grants Amazon Comprehend read access to your input data.</p>\"\
+        },\
+        \"TargetEventTypes\":{\
+          \"shape\":\"TargetEventTypes\",\
+          \"documentation\":\"<p>The types of events that are detected by the job.</p>\"\
+        }\
+      },\
+      \"documentation\":\"<p>Provides information about an events detection job.</p>\"\
+    },\
+    \"EventsDetectionJobPropertiesList\":{\
+      \"type\":\"list\",\
+      \"member\":{\"shape\":\"EventsDetectionJobProperties\"}\
     },\
     \"Float\":{\"type\":\"float\"},\
     \"IamRoleArn\":{\
@@ -3201,6 +3445,36 @@
         }\
       }\
     },\
+    \"ListEventsDetectionJobsRequest\":{\
+      \"type\":\"structure\",\
+      \"members\":{\
+        \"Filter\":{\
+          \"shape\":\"EventsDetectionJobFilter\",\
+          \"documentation\":\"<p>Filters the jobs that are returned. You can filter jobs on their name, status, or the date and time that they were submitted. You can only set one filter at a time.</p>\"\
+        },\
+        \"NextToken\":{\
+          \"shape\":\"String\",\
+          \"documentation\":\"<p>Identifies the next page of results to return.</p>\"\
+        },\
+        \"MaxResults\":{\
+          \"shape\":\"MaxResultsInteger\",\
+          \"documentation\":\"<p>The maximum number of results to return in each page.</p>\"\
+        }\
+      }\
+    },\
+    \"ListEventsDetectionJobsResponse\":{\
+      \"type\":\"structure\",\
+      \"members\":{\
+        \"EventsDetectionJobPropertiesList\":{\
+          \"shape\":\"EventsDetectionJobPropertiesList\",\
+          \"documentation\":\"<p>A list containing the properties of each job that is returned.</p>\"\
+        },\
+        \"NextToken\":{\
+          \"shape\":\"String\",\
+          \"documentation\":\"<p>Identifies the next page of results to return.</p>\"\
+        }\
+      }\
+    },\
     \"ListKeyPhrasesDetectionJobsRequest\":{\
       \"type\":\"structure\",\
       \"members\":{\
@@ -3262,6 +3536,10 @@
     \"ListOfEntities\":{\
       \"type\":\"list\",\
       \"member\":{\"shape\":\"Entity\"}\
+    },\
+    \"ListOfEntityLabels\":{\
+      \"type\":\"list\",\
+      \"member\":{\"shape\":\"EntityLabel\"}\
     },\
     \"ListOfKeyPhrases\":{\
       \"type\":\"list\",\
@@ -3983,6 +4261,60 @@
         }\
       }\
     },\
+    \"StartEventsDetectionJobRequest\":{\
+      \"type\":\"structure\",\
+      \"required\":[\
+        \"InputDataConfig\",\
+        \"OutputDataConfig\",\
+        \"DataAccessRoleArn\",\
+        \"LanguageCode\",\
+        \"TargetEventTypes\"\
+      ],\
+      \"members\":{\
+        \"InputDataConfig\":{\
+          \"shape\":\"InputDataConfig\",\
+          \"documentation\":\"<p>Specifies the format and location of the input data for the job.</p>\"\
+        },\
+        \"OutputDataConfig\":{\
+          \"shape\":\"OutputDataConfig\",\
+          \"documentation\":\"<p>Specifies where to send the output files.</p>\"\
+        },\
+        \"DataAccessRoleArn\":{\
+          \"shape\":\"IamRoleArn\",\
+          \"documentation\":\"<p>The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that grants Amazon Comprehend read access to your input data.</p>\"\
+        },\
+        \"JobName\":{\
+          \"shape\":\"JobName\",\
+          \"documentation\":\"<p>The identifier of the events detection job.</p>\"\
+        },\
+        \"LanguageCode\":{\
+          \"shape\":\"LanguageCode\",\
+          \"documentation\":\"<p>The language code of the input documents.</p>\"\
+        },\
+        \"ClientRequestToken\":{\
+          \"shape\":\"ClientRequestTokenString\",\
+          \"documentation\":\"<p>An unique identifier for the request. If you don't set the client request token, Amazon Comprehend generates one.</p>\",\
+          \"idempotencyToken\":true\
+        },\
+        \"TargetEventTypes\":{\
+          \"shape\":\"TargetEventTypes\",\
+          \"documentation\":\"<p>The types of events to detect in the input documents.</p>\"\
+        }\
+      }\
+    },\
+    \"StartEventsDetectionJobResponse\":{\
+      \"type\":\"structure\",\
+      \"members\":{\
+        \"JobId\":{\
+          \"shape\":\"JobId\",\
+          \"documentation\":\"<p>An unique identifier for the request. If you don't set the client request token, Amazon Comprehend generates one.</p>\"\
+        },\
+        \"JobStatus\":{\
+          \"shape\":\"JobStatus\",\
+          \"documentation\":\"<p>The status of the events detection job.</p>\"\
+        }\
+      }\
+    },\
     \"StartKeyPhrasesDetectionJobRequest\":{\
       \"type\":\"structure\",\
       \"required\":[\
@@ -4257,6 +4589,29 @@
         }\
       }\
     },\
+    \"StopEventsDetectionJobRequest\":{\
+      \"type\":\"structure\",\
+      \"required\":[\"JobId\"],\
+      \"members\":{\
+        \"JobId\":{\
+          \"shape\":\"JobId\",\
+          \"documentation\":\"<p>The identifier of the events detection job to stop.</p>\"\
+        }\
+      }\
+    },\
+    \"StopEventsDetectionJobResponse\":{\
+      \"type\":\"structure\",\
+      \"members\":{\
+        \"JobId\":{\
+          \"shape\":\"JobId\",\
+          \"documentation\":\"<p>The identifier of the events detection job to stop.</p>\"\
+        },\
+        \"JobStatus\":{\
+          \"shape\":\"JobStatus\",\
+          \"documentation\":\"<p>The status of the events detection job.</p>\"\
+        }\
+      }\
+    },\
     \"StopKeyPhrasesDetectionJobRequest\":{\
       \"type\":\"structure\",\
       \"required\":[\"JobId\"],\
@@ -4464,6 +4819,11 @@
       \"max\":256,\
       \"min\":0\
     },\
+    \"TargetEventTypes\":{\
+      \"type\":\"list\",\
+      \"member\":{\"shape\":\"EventTypeString\"},\
+      \"min\":1\
+    },\
     \"TextSizeLimitExceededException\":{\
       \"type\":\"structure\",\
       \"members\":{\
@@ -4582,7 +4942,7 @@
       \"members\":{\
         \"Message\":{\"shape\":\"String\"}\
       },\
-      \"documentation\":\"<p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English, Spanish, French, Italian, German, or Portuguese are accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>\",\
+      \"documentation\":\"<p>Amazon Comprehend can't process the language of the input text. For custom entity recognition APIs, only English, Spanish, French, Italian, German, or Portuguese are accepted. For a list of supported languages, see <a>supported-languages</a>. </p>\",\
       \"exception\":true\
     },\
     \"UntagResourceRequest\":{\
@@ -4645,7 +5005,7 @@
           \"documentation\":\"<p>The ID for each subnet being used in your private VPC. This subnet is a subset of the a range of IPv4 addresses used by the VPC and is specific to a given availability zone in the VPCâs region. This ID number is preceded by \\\"subnet-\\\", for instance: \\\"subnet-04ccf456919e69055\\\". For more information, see <a href=\\\"https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html\\\">VPCs and Subnets</a>. </p>\"\
         }\
       },\
-      \"documentation\":\"<p> Configuration parameters for an optional private Virtual Private Cloud (VPC) containing the resources you are using for the job. For For more information, see <a href=\\\"https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html\\\">Amazon VPC</a>. </p>\"\
+      \"documentation\":\"<p> Configuration parameters for an optional private Virtual Private Cloud (VPC) containing the resources you are using for the job. For more information, see <a href=\\\"https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html\\\">Amazon VPC</a>. </p>\"\
     }\
   },\
   \"documentation\":\"<p>Amazon Comprehend is an AWS service for gaining insight into the content of documents. Use these actions to determine the topics contained in your documents, the topics they discuss, the predominant sentiment expressed in them, the predominant language used, and more.</p>\"\

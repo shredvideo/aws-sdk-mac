@@ -31,19 +31,62 @@ To get started with the AWS SDK for iOS, check out the [Developer Guide for iOS]
 To use the AWS SDK for iOS, you will need the following installed on your development machine:
 
 * Xcode 11.0 or later
-* Most SDKs require iOS 8 or later. AWSCognitoAuth, AWSMobileClient, and AWSTranscribeStreaming require iOS 9.
+* iOS 9 or later
 
 ## Include the SDK for iOS in an Existing Application
 
 We have a couple [samples](https://github.com/awslabs/aws-sdk-ios-samples) applications which showcase how to use the AWS SDK for iOS.  Please note that the code in these sample applications is not of production quality, and should be considered as exactly what we called them: samples.
 
-There are three ways to integrate the AWS Mobile SDK for iOS into your own project:
+There are several ways to integrate the AWS Mobile SDK for iOS into your own project:
 
+* [Swift Package Manager](https://swift.org/package-manager/)
 * [CocoaPods](https://cocoapods.org/)
 * [Carthage](https://github.com/Carthage/Carthage)
 * [Dynamic Frameworks](https://aws.amazon.com/mobile/sdk/)
 
 You should use ONE and only one of these ways to import the AWS Mobile SDK. Importing the SDK in multiple ways loads duplicate copies of the SDK into the project and causes compiler/linker errors.
+
+> Note: If you are using XCFrameworks (i.e., either Swift Package Manager, Carthage, or Dynamic Frameworks), some modules are named with the `XCF` suffix to work around a [Swift issue](https://bugs.swift.org/browse/SR-11704). `AWSMobileClient` is named as `AWSMobileClientXCF` and `AWSLocation` is named as `AWSLocationXCF`. To use the `AWSMobileClient` or `AWSLocation` SDKs, import them as:
+
+```swift
+import AWSMobileClientXCF
+import AWSLocationXCF
+```
+
+and use it your app code without the `XCF` suffix.
+
+```swift
+AWSMobileClient.default().initialize() 
+let locationClient = AWSLocation.default()
+```
+
+### Swift Package Manager
+
+1. Swift Package Manager is distributed with Xcode. To start adding the AWS SDK to your iOS project, open your project in Xcode and select **File > Swift Packages > Add Package Dependency**.
+
+    ![Add package dependency](readme-images/spm-setup-01-add-package-dependency.png)
+
+1. Enter the URL for the AWS SDK for iOS Swift Package Manager GitHub repo (`https://github.com/aws-amplify/aws-sdk-ios-spm`) into the search bar and click **Next**.
+
+    ![Search for repo](readme-images/spm-setup-02-search-amplify-repo.png)
+
+    **NOTE:** This URL is _not_ the main URL of the SDK. We maintain the Swift Package Manager manifest (`Package.swift`) file for this library in a separate repo so that apps that use the SDK do not have to download the entire source repository in order to consume the binary targets.
+
+1. You'll see the repository rules for which version of the SDK you want Swift Package Manager to install. Choose the first rule, **Version**, and select **Up to Next Minor** as it will use the latest compatible version of the dependency that can be detected from the `main` branch, then click **Next**.
+
+    ![Dependency version options](readme-images/spm-setup-03-dependency-version-options.png)
+
+    **NOTE:** The AWS Mobile SDK for iOS does [not use Semantic Versioning](https://docs.amplify.aws/sdk/configuration/setup-options/q/platform/ios#aws-sdk-version-vs-semantic-versioning), and may introduce breaking API changes on minor version releases. We recommend setting your **Version** rule to **Up to Next Minor** and evaluating minor version releases to ensure they are compatible with your app.
+
+1. Choose which of the libraries you want added to your project. Always select the **AWSCore** SDK. The remaining SDKs to install will vary based on which SDK you're trying to install. Most SDKs rely only on **AWSCore**, but for a full dependency list, see the [README-spm-support file](README-spm-support.md).
+
+    _Note: AWSLex is not currently supported for the `arm64` architecture through Swift Package Manager due to conflicts with a packaged binary dependency._
+
+    ![Select dependencies](readme-images/spm-setup-04-select-dependencies.png)
+
+    Select all that are appropriate, then click **Finish**.
+
+    You can always go back and modify which SPM packages are included in your project by opening the Swift Packages tab for your project: Click on the Project file in the Xcode navigator, then click on your project's icon, then select the **Swift Packages** tab.
 
 ### CocoaPods
 
@@ -86,6 +129,28 @@ For a complete list of our pods, check out the .podspec files in the root direct
 
 ### Carthage
 
+#### XCFrameworks (recommended)
+
+Carthage supports XCFrameworks in Xcode 12 or above. Follow the steps below to consume the AWS SDK for iOS using XCFrameworks:
+
+1. Install Carthage 0.37.0 or greater.
+
+2. Add the following to your `Cartfile`:
+
+        github "aws-amplify/aws-sdk-ios"
+
+3. Then run the following command:
+    
+        $ carthage update --use-xcframeworks --no-use-binaries
+
+> As of Carthage 0.37.0, prebuilt binaries using XCFrameworks are not supported, as mentioned in the Carthage release notes - https://github.com/Carthage/Carthage/releases/tag/0.37.0
+
+4. On your application targets’ General settings tab, in the Embedded Binaries section, drag and drop each xcframework you want to use from the Carthage/Build folder on disk.
+
+#### Frameworks with "fat libraries" (not recommended)
+
+To build platform-specific framework bundles with multiple architectures in the binary, (Xcode 11 and below)
+
 1. Install the latest version of [Carthage](https://github.com/Carthage/Carthage#installing-carthage).
 
 2. Add the following to your `Cartfile`:
@@ -123,7 +188,21 @@ For a complete list of our pods, check out the .podspec files in the root direct
 
 ### Frameworks
 
-1. Download the [latest SDK](https://sdk-for-ios.amazonwebservices.com/latest/aws-ios-sdk.zip). Older SDK versions can be downloaded from `https://sdk-for-ios.amazonwebservices.com/aws-ios-sdk-#.#.#.zip`, where `#.#.#` represents the version number. So for version 2.10.2, the download link is [https://sdk-for-ios.amazonwebservices.com/aws-ios-sdk-2.10.2.zip](https://sdk-for-ios.amazonwebservices.com/aws-ios-sdk-2.10.2.zip).
+#### XCFramework setup
+
+Starting AWS SDK iOS version 2.22.1, SDK binaries are released as XCFrameworks. Follow the steps below to install XCFramework.
+
+1. Download the [latest SDK](https://releases.amplify.aws/aws-sdk-ios/latest/aws-ios-sdk.zip). Older SDK versions can be downloaded from `https://releases.amplify.aws/aws-sdk-ios/aws-ios-sdk-#.#.#.zip`, where `#.#.#` represents the version number. So for version 2.23.3, the download link is [https://releases.amplify.aws/aws-sdk-ios/aws-ios-sdk-2.23.3.zip](https://releases.amplify.aws/aws-sdk-ios/aws-ios-sdk-2.23.3.zip).
+> Note1: If you are using version < 2.22.1 please refer to the "Legacy framework setup" section below.
+> Note2: To download version < 2.23.3 use this link `https://sdk-for-ios.amazonwebservices.com/aws-ios-sdk-#.#.#.zip`
+
+2. Uncompress the ZIP file
+3. On your application targets’ General settings tab, in the Embedded Binaries section, drag and drop each xcframework you want to use from the downloaded folder.
+
+#### Legacy framework setup
+
+1. Download the required SDK using `https://sdk-for-ios.amazonwebservices.com/aws-ios-sdk-#.#.#.zip`, where `#.#.#` represents the version number. So for version 2.10.2, the download link is [https://sdk-for-ios.amazonwebservices.com/aws-ios-sdk-2.10.2.zip](https://sdk-for-ios.amazonwebservices.com/aws-ios-sdk-2.10.2.zip).
+> Note: If you are using version > 2.22.0 please refer to the "XCFramework setup" section above. 
 
 2. With your project open in Xcode, select your **Target**. Under **General** tab, find **Embedded Binaries** and then click the **+** button.
 
@@ -170,14 +249,7 @@ When we release a new version of the SDK, you can pick up the changes as describ
 
 ### Frameworks
 
-1. In Xcode's **Project Navigator**, type "AWS" to find the AWS frameworks that were manually added to your project.  Manually select all of the AWS frameworks and hit **delete** on your keyboard. Then select **Move to Trash**.  If you were following the example from above which uses AWSMobileClient and AWSPinpoint, you would remove:
-
-    * `AWSAuthCore.framework`
-    * `AWSCognitoIdentityProvider.framework`
-    * `AWSCognitoIdentityProviderASF.framework`
-    * `AWSCore.framework`
-    * `AWSMobileClient.framework`
-    * `AWSPinpoint.framework`
+1. In Xcode's **Project Navigator**, type "AWS" to find the AWS Frameworks or XCFrameworks that you manually added to your project. Select all of the AWS Frameworks and hit **Delete** on your keyboard. Then select **Move to Trash**. 
 
 2. Follow the installation process above to include the new version of the SDK.
 
@@ -208,7 +280,6 @@ When we release a new version of the SDK, you can pick up the changes as describ
     import AWSDynamoDB
     import AWSSQS
     import AWSSNS
-    import AWSCognito
     ```
         
 4. Make a call to the AWS services.
@@ -259,26 +330,20 @@ When we release a new version of the SDK, you can pick up the changes as describ
     @import AWSDynamoDB;
     @import AWSSQS;
     @import AWSSNS;
-    @import AWSCognito;
     ```
 
 4. Make a call to the AWS services.
 
     ```objective-c
-    AWSS3TransferManager *transferManager = [AWSS3TransferManager defaultS3TransferManager];
-    AWSS3TransferManagerUploadRequest *uploadRequest = [AWSS3TransferManagerUploadRequest new];
-    uploadRequest.bucket = yourBucket;
-    uploadRequest.key = yourKey;
-    uploadRequest.body = yourDataURL;
-    uploadRequest.contentLength = [NSNumber numberWithUnsignedLongLong:fileSize];
-    
-    [[transferManager upload:uploadRequest] continueWithBlock:^id(AWSTask *task) {
+    AWSSNS *sns = [AWSSNS defaultSNS];
+    AWSSNSListTopicsInput *listTopicsInput = [AWSSNSListTopicsInput new];
+    [[sns listTopics:listTopicsInput] continueWithBlock:^id(AWSTask *task) {
         // Do something with the response
         return nil;
     }];
     ```
 
-**Note**: Most of the service client classes have a singleton method to get a default client. The naming convention is `+ defaultSERVICENAME` (e.g. `+ defaultS3TransferManager` in the above code snippet). This singleton method creates a service client with `defaultServiceConfiguration`, which you set up in step 5, and maintains a strong reference to the client.
+**Note**: Most of the service client classes have a singleton method to get a default client. The naming convention is `+ defaultSERVICENAME` (e.g. `+ defaultS3SNS` in the above code snippet). This singleton method creates a service client with `defaultServiceConfiguration`, which you set up in step 5, and maintains a strong reference to the client.
 
 ## Working with AWSTask
 

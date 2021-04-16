@@ -14,6 +14,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <AuthenticationServices/AuthenticationServices.h>
 #import <AWSAuthCore/AWSSignInProvider.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -32,6 +33,12 @@ API_AVAILABLE(ios(13.0))
  Sets the ViewController used for Apple SignIn.
  */
 - (void)setViewControllerForAppleSignIn:(UIViewController *)signInViewController;
+
+/**
+ Provides access to the ASAuthorizationAppleIDCredential
+ Only upon initial SIWA, Apple returns name and email (if requested by scope) in the ASAuthorizationAppleIDCredential
+ */
+@property (strong, atomic) ASAuthorizationAppleIDCredential *credential;
 
 @end
 

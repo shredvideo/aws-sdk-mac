@@ -1,9 +1,206 @@
----
 # AWS Mobile SDK for iOS CHANGELOG
 
 ## Unreleased
 
 -Features for next release
+
+### Misc. Updates
+
+- Model updates for the following services
+  - AWSAutoScaling
+  - AWSComprehend
+  - AWSEC2
+  - AWSPinpoint
+  - AWSRekognition
+  - AWSLex
+  - AWSSQS
+  - AWSTranscribe
+  
+## 2.23.3
+
+### New Features
+
+- **Swift Package Manager**
+  - The AWS Mobile SDK for iOS can now be installed via Swift Package Manager. See the [README](https://github.com/aws-amplify/aws-sdk-ios/blob/main/README.md) for full details.
+
+### Bug fixes
+
+- **AWSLocation**
+  - Created a new target named `AWSLocationXCF` to support building AWSLocation as an XCFramework. [PR #3475](https://github.com/aws-amplify/aws-sdk-ios/pull/3475)
+
+### Misc. Updates
+- Added CI/CD support for building the AWS Mobile SDK for iOS as a Swift Package Manager binary framework. ([PR #3494](https://github.com/aws-amplify/aws-sdk-ios/pull/3494))
+
+## 2.23.2
+
+### Bug fixes
+
+- **AWSCognitoIdentityProvider**
+  - Fix ignored `isInitialCustomChallenge` parameter in `AWSCognitoIdentityUser` ([PR #3461](https://github.com/aws-amplify/aws-sdk-ios/pull/3461)). Thanks @johntmcintosh!
+
+### Misc. Updates
+
+- Model updates for the following services
+  - AWSEC2
+  - AWSComprehend
+
+## 2.23.1
+
+### Bug fixes
+- **AWSMobileClient**
+  - Fix callback URL scheme in ASWebAuthenticationSession handling ([PR #3456](https://github.com/aws-amplify/aws-sdk-ios/pull/3456))
+
+### Misc. Updates
+
+- Model updates for the following services
+   - AWSPinpointTargeting
+   - AWSAutoScaling
+   - AWSConnect
+   - AWSSageMakerRuntime
+
+## 2.23.0
+
+### Breaking Changes
+
+- **AWSAuthSDK**
+   - Upgrade Facebook SDK to 9.0.0 ([PR #3433](https://github.com/aws-amplify/aws-sdk-ios/pull/3433)). Facebook SDK has removed automatic initialization of the SDK in v9.0.0. Follow the steps provided [here](https://developers.facebook.com/docs/ios/getting-started/#step-3--connect-the-app-delegate) to initialize the Facebook SDK during app setup.
+   Support for `limited` signin configuration will be added in a later release.
+
+### Misc. Updates
+
+- Model updates for the following services
+  - AWSElasticLoadBalancing
+  - AWSPinpointTargeting
+  - AWSEC2
+
+## 2.22.3
+
+### Bug fixes
+
+- **Cognito**
+  - fix(Cognito): Use given vc for signout via SafariViewController. Thanks @kateinoigakukun! (See [PR #3402](https://github.com/aws-amplify/aws-sdk-ios/pull/3402))
+
+### Misc. Updates
+
+- Model updates for the following services
+  - AWSConnect
+  - AWSEC2
+  - AWSElasticLoadBalancing
+  - AWSLambda
+  - AWSLocation
+
+## 2.22.2
+
+### Misc. Updates
+
+- **AWSMobileClientXCF**
+  - Added convenience init method for SignInUIOptions to fix a run time error in AWSMobileClientXCF. [PR #3411](https://github.com/aws-amplify/aws-sdk-ios/pull/3411)
+
+## 2.22.1
+
+### Misc. Updates
+
+Binary versions of the AWS Mobile SDK are now distributed as XCFrameworks. Please refer to the [setup instructions](https://github.com/aws-amplify/aws-sdk-ios#setup) for guidance on installing XCFrameworks from Carthage or standalone binaries.
+
+- **AWSMobileClient**
+  - Created a new target named `AWSMobileClientXCF` to support building AWSMobileClient as an XCFramework. [PR #3334](https://github.com/aws-amplify/aws-sdk-ios/pull/3334)
+- **AWSLex**
+  - Updated the AWSLex with the latest version of libBlueAudioSourceiOS and added arm64 iphonesimulator into Excluded Architecture. [PR #3365](https://github.com/aws-amplify/aws-sdk-ios/pull/3365)
+- Model updates for the following services
+  - AWSCognitoIdentity
+  - AWSEC2
+  - AWSIoT
+  - AWSKMS
+  - AWSPinpoint
+  - AWSSNS
+
+## 2.22.0
+
+### New Features
+
+- AWSMobileClient
+  - Add support for ASWebAuthenticationSession [PR #3310](https://github.com/aws-amplify/aws-sdk-ios/pull/3310)
+
+### Misc. Updates
+
+- Model updates for the following services
+  - AWSAutoScaling
+
+## 2.21.1
+
+### Misc. Updates
+
+- **AWSIoT**
+  - The `generateCSRForCertificate` method now uses SHA256 to sign Certificate Signing Requests. (See [PR #3345](https://github.com/aws-amplify/aws-sdk-ios/pull/3345))
+
+- Model updates for the following services
+  - AWSConnect
+  - AWSConnectParticipant
+  - AWSEC2
+  - AWSIoT
+  - AWSKMS
+  - AWSSQS
+
+## 2.21.0
+
+### New Features
+
+- **AWSAppleSignIn**
+  - Add ASAuthorizationAppleIDCredential as property of AWSAppleSignInProvider. Thanks @BillBunting! (See [Issue #3143](https://github.com/aws-amplify/aws-sdk-ios/pull/3143), [PR #3291](https://github.com/aws-amplify/aws-sdk-ios/pull/3291))
+- **AWSLocation**
+  - Add AWSLocation SDK (See [PR #3311](https://github.com/aws-amplify/aws-sdk-ios/pull/3311))
+  - Add AWSLocationTracker client (See [PR #3314](https://github.com/aws-amplify/aws-sdk-ios/pull/3314))
+
+### Bug fixes
+
+- **AWSS3TransferUtility**
+  - fix: S3TransferUtility uniquely identify completedParts (See [Issue #3173](https://github.com/aws-amplify/aws-sdk-ios/issues/3173), [PR #3282](https://github.com/aws-amplify/aws-sdk-ios/pull/3282))
+
+### Misc. Updates
+
+- **AWSCore**
+  - Remove deprecated iOS 8 API from UICKeyChainStore. Thanks @1mash0! ([Issue #3225](https://github.com/aws-amplify/aws-sdk-ios/issues/3225), [PR #3245](https://github.com/aws-amplify/aws-sdk-ios/pull/3245))
+- Model updates for the following services
+  - AWSAutoScaling
+  - AWSEC2
+  - AWSSageMakerRuntime
+  - AWSLambda
+
+## 2.20.0
+
+### Breaking Changes
+
+- **Removed deprecated clients** AWS Mobile SDK for iOS has removed these deprecated clients ([PR #3281](https://github.com/aws-amplify/aws-sdk-ios/pull/3281)):
+  - `AWSCognito` (Amazon Cognito Sync) - Use [`Amplify DataStore`](https://docs.amplify.aws/lib/datastore/getting-started/q/platform/ios) for data synchronization.
+  - `AWSMobileAnalytics` - Use [`Amplify Analytics`](https://docs.amplify.aws/lib/analytics/getting-started/q/platform/ios) for analytics.
+  - `AWSS3TransferManager` - Use [`Amplify Storage`](https://docs.amplify.aws/lib/storage/getting-started/q/platform/ios) for uploads and downloads with Amazon S3.
+
+- **AWSCore**
+  - Removed deprecated MD5-related extensions to `NSString`: `aws_md5String` and `aws_md5StringLittleEndian`. ([PR #3283](https://github.com/aws-amplify/aws-sdk-ios/pull/3283))
+
+### Bug fixes
+
+- **Amazon Cognito**
+  - Remove cached AWS Credentials when tokens expire (See [PR #3237](https://github.com/aws-amplify/aws-sdk-ios/pull/3237))
+
+### Misc. Updates
+
+- Model updates for the following services
+  - AWSPolly
+  - AWSIoT
+  - AWSElasticLoadBalancing
+  - AWSTextract
+  - AWSSNS
+  - AWSConnect
+  - AWSEC2
+  - AWSLex
+  - AWSAutoScaling
+  - AWSLambda
+  - AWSTranslate
+  - AWSDynamoDB
+  - AWSCognitoIdentity
+  - AWSComprehend
+  - AWSCognitoIdentityProvider
 
 ## 2.19.1
 

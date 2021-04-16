@@ -1,5 +1,5 @@
 //
-// Copyright 2010-2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// Copyright 2010-2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License").
 // You may not use this file except in compliance with the License.
@@ -767,6 +767,21 @@ NSString *const AWSPinpointTargetingErrorDomain = @"com.amazonaws.AWSPinpointTar
         if ([value caseInsensitiveCompare:@"EXCLUSIVE"] == NSOrderedSame) {
             return @(AWSPinpointTargetingAttributeTypeExclusive);
         }
+        if ([value caseInsensitiveCompare:@"CONTAINS"] == NSOrderedSame) {
+            return @(AWSPinpointTargetingAttributeTypeContains);
+        }
+        if ([value caseInsensitiveCompare:@"BEFORE"] == NSOrderedSame) {
+            return @(AWSPinpointTargetingAttributeTypeBefore);
+        }
+        if ([value caseInsensitiveCompare:@"AFTER"] == NSOrderedSame) {
+            return @(AWSPinpointTargetingAttributeTypeAfter);
+        }
+        if ([value caseInsensitiveCompare:@"ON"] == NSOrderedSame) {
+            return @(AWSPinpointTargetingAttributeTypeOn);
+        }
+        if ([value caseInsensitiveCompare:@"BETWEEN"] == NSOrderedSame) {
+            return @(AWSPinpointTargetingAttributeTypeBetween);
+        }
         return @(AWSPinpointTargetingAttributeTypeUnknown);
     } reverseBlock:^NSString *(NSNumber *value) {
         switch ([value integerValue]) {
@@ -774,6 +789,16 @@ NSString *const AWSPinpointTargetingErrorDomain = @"com.amazonaws.AWSPinpointTar
                 return @"INCLUSIVE";
             case AWSPinpointTargetingAttributeTypeExclusive:
                 return @"EXCLUSIVE";
+            case AWSPinpointTargetingAttributeTypeContains:
+                return @"CONTAINS";
+            case AWSPinpointTargetingAttributeTypeBefore:
+                return @"BEFORE";
+            case AWSPinpointTargetingAttributeTypeAfter:
+                return @"AFTER";
+            case AWSPinpointTargetingAttributeTypeOn:
+                return @"ON";
+            case AWSPinpointTargetingAttributeTypeBetween:
+                return @"BETWEEN";
             default:
                 return nil;
         }
@@ -1156,8 +1181,11 @@ NSString *const AWSPinpointTargetingErrorDomain = @"com.amazonaws.AWSPinpointTar
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
 	return @{
              @"body" : @"Body",
+             @"entityId" : @"EntityId",
              @"messageType" : @"MessageType",
+             @"originationNumber" : @"OriginationNumber",
              @"senderId" : @"SenderId",
+             @"templateId" : @"TemplateId",
              };
 }
 
@@ -5810,6 +5838,7 @@ NSString *const AWSPinpointTargetingErrorDomain = @"com.amazonaws.AWSPinpointTar
 	return @{
              @"dailyCap" : @"DailyCap",
              @"endpointReentryCap" : @"EndpointReentryCap",
+             @"endpointReentryInterval" : @"EndpointReentryInterval",
              @"messagesPerSecond" : @"MessagesPerSecond",
              };
 }
@@ -5848,10 +5877,12 @@ NSString *const AWSPinpointTargetingErrorDomain = @"com.amazonaws.AWSPinpointTar
              @"name" : @"Name",
              @"quietTime" : @"QuietTime",
              @"refreshFrequency" : @"RefreshFrequency",
+             @"refreshOnSegmentUpdate" : @"RefreshOnSegmentUpdate",
              @"schedule" : @"Schedule",
              @"startActivity" : @"StartActivity",
              @"startCondition" : @"StartCondition",
              @"state" : @"State",
+             @"waitForQuietTime" : @"WaitForQuietTime",
              @"tags" : @"tags",
              };
 }
@@ -5897,6 +5928,9 @@ NSString *const AWSPinpointTargetingErrorDomain = @"com.amazonaws.AWSPinpointTar
         if ([value caseInsensitiveCompare:@"CLOSED"] == NSOrderedSame) {
             return @(AWSPinpointTargetingStateClosed);
         }
+        if ([value caseInsensitiveCompare:@"PAUSED"] == NSOrderedSame) {
+            return @(AWSPinpointTargetingStatePaused);
+        }
         return @(AWSPinpointTargetingStateUnknown);
     } reverseBlock:^NSString *(NSNumber *value) {
         switch ([value integerValue]) {
@@ -5910,6 +5944,8 @@ NSString *const AWSPinpointTargetingErrorDomain = @"com.amazonaws.AWSPinpointTar
                 return @"CANCELLED";
             case AWSPinpointTargetingStateClosed:
                 return @"CLOSED";
+            case AWSPinpointTargetingStatePaused:
+                return @"PAUSED";
             default:
                 return nil;
         }
@@ -5926,8 +5962,11 @@ NSString *const AWSPinpointTargetingErrorDomain = @"com.amazonaws.AWSPinpointTar
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
 	return @{
+             @"entityId" : @"EntityId",
              @"messageType" : @"MessageType",
+             @"originationNumber" : @"OriginationNumber",
              @"senderId" : @"SenderId",
+             @"templateId" : @"TemplateId",
              };
 }
 
@@ -6015,6 +6054,9 @@ NSString *const AWSPinpointTargetingErrorDomain = @"com.amazonaws.AWSPinpointTar
         if ([value caseInsensitiveCompare:@"CLOSED"] == NSOrderedSame) {
             return @(AWSPinpointTargetingStateClosed);
         }
+        if ([value caseInsensitiveCompare:@"PAUSED"] == NSOrderedSame) {
+            return @(AWSPinpointTargetingStatePaused);
+        }
         return @(AWSPinpointTargetingStateUnknown);
     } reverseBlock:^NSString *(NSNumber *value) {
         switch ([value integerValue]) {
@@ -6028,6 +6070,8 @@ NSString *const AWSPinpointTargetingErrorDomain = @"com.amazonaws.AWSPinpointTar
                 return @"CANCELLED";
             case AWSPinpointTargetingStateClosed:
                 return @"CLOSED";
+            case AWSPinpointTargetingStatePaused:
+                return @"PAUSED";
             default:
                 return nil;
         }
@@ -7211,12 +7255,14 @@ NSString *const AWSPinpointTargetingErrorDomain = @"com.amazonaws.AWSPinpointTar
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
 	return @{
              @"body" : @"Body",
+             @"entityId" : @"EntityId",
              @"keyword" : @"Keyword",
              @"mediaUrl" : @"MediaUrl",
              @"messageType" : @"MessageType",
              @"originationNumber" : @"OriginationNumber",
              @"senderId" : @"SenderId",
              @"substitutions" : @"Substitutions",
+             @"templateId" : @"TemplateId",
              };
 }
 
@@ -9533,10 +9579,12 @@ NSString *const AWSPinpointTargetingErrorDomain = @"com.amazonaws.AWSPinpointTar
              @"name" : @"Name",
              @"quietTime" : @"QuietTime",
              @"refreshFrequency" : @"RefreshFrequency",
+             @"refreshOnSegmentUpdate" : @"RefreshOnSegmentUpdate",
              @"schedule" : @"Schedule",
              @"startActivity" : @"StartActivity",
              @"startCondition" : @"StartCondition",
              @"state" : @"State",
+             @"waitForQuietTime" : @"WaitForQuietTime",
              };
 }
 
@@ -9581,6 +9629,9 @@ NSString *const AWSPinpointTargetingErrorDomain = @"com.amazonaws.AWSPinpointTar
         if ([value caseInsensitiveCompare:@"CLOSED"] == NSOrderedSame) {
             return @(AWSPinpointTargetingStateClosed);
         }
+        if ([value caseInsensitiveCompare:@"PAUSED"] == NSOrderedSame) {
+            return @(AWSPinpointTargetingStatePaused);
+        }
         return @(AWSPinpointTargetingStateUnknown);
     } reverseBlock:^NSString *(NSNumber *value) {
         switch ([value integerValue]) {
@@ -9594,6 +9645,8 @@ NSString *const AWSPinpointTargetingErrorDomain = @"com.amazonaws.AWSPinpointTar
                 return @"CANCELLED";
             case AWSPinpointTargetingStateClosed:
                 return @"CLOSED";
+            case AWSPinpointTargetingStatePaused:
+                return @"PAUSED";
             default:
                 return nil;
         }

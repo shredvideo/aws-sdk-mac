@@ -25,7 +25,7 @@
 #import "AWSTextractResources.h"
 
 static NSString *const AWSInfoTextract = @"Textract";
-NSString *const AWSTextractSDKVersion = @"2.19.1";
+NSString *const AWSTextractSDKVersion = @"2.23.3";
 
 
 @interface AWSTextractResponseSerializer : AWSJSONResponseSerializer
@@ -46,6 +46,7 @@ static NSDictionary *errorCodeDictionary = nil;
                             @"IdempotentParameterMismatchException" : @(AWSTextractErrorIdempotentParameterMismatch),
                             @"InternalServerError" : @(AWSTextractErrorInternalServer),
                             @"InvalidJobIdException" : @(AWSTextractErrorInvalidJobId),
+                            @"InvalidKMSKeyException" : @(AWSTextractErrorInvalidKMSKey),
                             @"InvalidParameterException" : @(AWSTextractErrorInvalidParameter),
                             @"InvalidS3ObjectException" : @(AWSTextractErrorInvalidS3Object),
                             @"LimitExceededException" : @(AWSTextractErrorLimitExceeded),
