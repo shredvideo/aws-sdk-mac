@@ -438,8 +438,12 @@ static AWSS3TransferUtility *_defaultS3TransferUtility = nil;
         }
         
         //Create the NS URL session
+#if TARGET_OS_MAC && !TARGET_OS_IPHONE
+        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+#else
         NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:_sessionIdentifier];
         configuration.allowsCellularAccess = serviceConfiguration.allowsCellularAccess;
+#endif
         configuration.timeoutIntervalForResource = transferUtilityConfiguration.timeoutIntervalForResource;
         
         if(serviceConfiguration.timeoutIntervalForRequest > 0){
