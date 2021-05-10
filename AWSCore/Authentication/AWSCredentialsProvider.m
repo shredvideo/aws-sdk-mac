@@ -798,6 +798,11 @@ static NSString *const AWSCredentialsProviderKeychainIdentityId = @"identityId";
 }
 
 - (void)setInternalCredentials:(AWSCredentials *)internalCredentials {
+    if (!internalCredentials)
+    {
+        AWSDDLogVerbose(@"resetting internal credentials");
+    }
+
     _internalCredentials = internalCredentials;
 
     self.keychain[AWSCredentialsProviderKeychainAccessKeyId] = internalCredentials.accessKey;
