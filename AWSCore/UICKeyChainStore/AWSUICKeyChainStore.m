@@ -754,15 +754,19 @@ static NSString *_defaultService;
 
 - (NSString *)objectForKeyedSubscript:(NSString <NSCopying> *)key
 {
-    return [self stringForKey:key];
+    @synchronized (self) {
+        return [self stringForKey:key];
+    }
 }
 
 - (void)setObject:(NSString *)obj forKeyedSubscript:(NSString <NSCopying> *)key
 {
-    if (!obj) {
-        [self removeItemForKey:key];
-    } else {
-        [self setString:obj forKey:key];
+    @synchronized (self) {
+        if (!obj) {
+            [self removeItemForKey:key];
+        } else {
+            [self setString:obj forKey:key];
+        }
     }
 }
 
